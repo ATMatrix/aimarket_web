@@ -1,2 +1,19 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# production
+/dist
+
+# dependencies
 /node_modules
-/.idea
+
+# misc
+yarn.lock
+npm-debug.log*
+
+# ide
+.idea
+
+# Mac General
+.DS_Store
+.AppleDouble
+.LSOverride

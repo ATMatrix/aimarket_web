@@ -1,0 +1,35 @@
+{
+  "entry": "src/index.js",
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr",
+        "transform-runtime",
+        ["import", { "libraryName": "antd", "style": "css" }]
+      ]
+    },
+    "production": {
+      "extraBabelPlugins": [
+        "transform-runtime",
+        ["import", { "libraryName": "antd", "style": "css" }]
+      ]
+    }
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://jsonplaceholder.typicode.com/",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api" : "" }
+    }
+  },
+     "dllPlugin": {
+       "exclude": [
+         "babel-runtime"
+       ],
+       "include": [
+         "dva/router",
+         "dva/saga",
+         "dva/fetch"
+       ]
+     }
+}

@@ -1,0 +1,41 @@
+.head-light-font {
+  font-family: 'Open Sans';
+  font-size: 15px;
+  font-weight: bold;
+  color: #000000
+}
+
+.search-font {
+  font-family: 'Open Sans';
+}
+
+.image-margin {
+  height: 50px
+}
+
+.head-light-back {
+  background: #FFFFFF;
+  height: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.column1 {
+  flex: 0.1 0.1 1%;
+  background-image: url("../image/logo.png");
+}
+
+.column2 {
+  flex: 0.05 0.1 auto
+}
+
+.column3 {
+  flex: 0.1 0 auto
+}
+
+.column4 {
+  flex: 1 1 auto
+}

@@ -1,0 +1,12 @@
+.menu {
+  background: 'black';
+  height: 100%;
+  borderRight: 0;
+}
+
+.subMenu {
+  background: #0A1A23;
+}
+
+.item {
+}

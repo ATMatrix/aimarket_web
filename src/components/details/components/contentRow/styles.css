@@ -1,0 +1,231 @@
+ .field {
+    position: relative;
+    margin: 0 0 12px;
+    word-break: break-word
+}
+
+ .field:after, .field:before {
+    content: "";
+    display: table
+}
+
+ .field > div:not([class^=edit-]):not([class^=model]) {
+    float: left
+}
+
+ .field > div:not([class^=edit-]):not([class^=model]):first-of-type {
+    width: 33.333333333333336%;
+    min-width: 150px;
+    text-align: right;
+    padding-right: 30px;
+    padding-top: 8px
+}
+
+ .field > div:not([class^=edit-]):not([class^=model]):last-of-type {
+    width: 66.66666666666667%
+}
+
+ .field > div:first-of-type {
+    padding-top: 1px !important
+}
+
+ .field > div:nth-of-type(2) {
+    position: relative
+}
+
+ .field > div:nth-of-type(2) input {
+    padding-right: 30px
+}
+
+ .field > div:nth-of-type(2):after {
+    border-radius: 3px;
+    line-height: 28px;
+    font-weight: 700;
+    text-align: center;
+    width: 30px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    pointer-events: none
+}
+
+/*  .required > div:nth-of-type(2) > input:after { */
+/*     content: '*'; */
+/*     color: #dc4544; */
+/*     position: absolute; */
+/*     top: 5px; */
+/*     right: 1px; */
+/* } */
+
+ .field .name {
+    font-weight: 700
+}
+
+ .field .type {
+    display: block;
+    text-transform: uppercase;
+    color: #808b92
+}
+
+ .field p {
+    margin: 10px 0 0
+}
+
+.request, .response {
+    /* width: 50%; */
+    /* float: left; */
+    padding: 10px 30px 30px;
+    /* border-width: 1px; */
+    /* border-color: #BECCD6; */
+    /* border-style: solid; */
+}
+
+.request {
+    float:left;
+    width:46%;
+    position:relative;
+    left:52%;
+    overflow:hidden;
+
+    /* background: #FFF; */
+    max-width: 800px
+}
+
+.response {
+    float:left;
+		width:46%;
+		position:relative;
+		left:56%;
+		overflow:hidden;
+
+    width: calc(100% - 800px);
+}
+
+@media (max-width:1850px) {
+    .response {
+        width: 50% !important
+    }
+}
+
+.row1 {
+		float:left;
+		width:100%;
+		position:relative;
+		right:50%;
+		background:#FFF;
+		/* background:#fff689; */
+}
+.row2 {
+		clear:left;
+		float:left;
+		width:100%;
+		overflow:hidden;
+    background: #EAF0F3;
+		border-top: 1px solid #BECCD6;
+}
+
+.row1, .row2 {
+		border-right: 1px solid #BECCD6;
+}
+
+.form-title {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.request_buttom {
+    background: #0A1A23;
+    color: #fff;
+    float: right;
+}
+
+ textarea {
+    height: 15em
+}
+
+ .route-container {
+    height: 39px;
+    font-size: 13px
+}
+
+ .route-container.GET {
+    border-color: #61bc51
+}
+
+ .container.GET span.ant-input-group-addon {
+    border-color: #61bc51;
+    background-color: #61bc51
+}
+
+ .route-container.POST {
+    border-color: #0392c9
+}
+
+ .container.POST span.ant-input-group-addon {
+    border-color: #0392c9;
+    background-color: #0392c9
+}
+
+ .route-container.PATCH {
+    border-color: #e3b457
+}
+
+ .container.PATCH span.ant-input-group-addon {
+    border-color: #e3b457;
+    background-color: #e3b457
+}
+
+ .route-container.PUT {
+    border-color: #cb44eb
+}
+
+ .container.PUT span.ant-input-group-addon {
+    border-color: #cb44eb;
+    background-color: #cb44eb
+}
+
+ .route-container.DELETE {
+    border-color: #e5504d
+}
+
+ .container.DELETE span.ant-input-group-addon {
+    border-color: #e5504d;
+    background-color: #e5504d
+}
+
+ .verb {
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase
+}
+
+.container {
+  padding-right: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.container h2 {
+  padding-bottom: 20px;
+}
+
+.status_container.success {
+  border: 2px solid green;
+  color: green;
+}
+
+.status_container.fail {
+  border: 2px solid red;
+  color: red;
+}
+
+.status_container {
+  padding: 4px;
+  margin: 4px;
+}
+
+.status_area {
+  margin-bottom: 10px;
+  font-weight: bold;
+}

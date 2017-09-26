@@ -1,0 +1,101 @@
+
+/* html, body, #root { */
+/*   height: 100%; */
+/* } */
+
+
+.profile_container {
+    background: #0A1A23;
+    height: 220px
+}
+
+.profile {
+    padding: 30px 0;
+    position: relative;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    height: 180px
+}
+
+.profile:after, .profile:before {
+    content: "";
+    display: table
+}
+
+.profile:before {
+    content: ' ';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 100%;
+}
+
+.profile > * {
+    position: relative;
+    z-index: 98
+}
+
+.profile {
+    float: left;
+    margin-left: 30px;
+    width: 80%
+}
+
+.profile .description {
+    padding-top: 15px;
+    height: 74px;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 2em;
+    color: #FFF;
+}
+
+.profile .description a {
+    color: #fff;
+    text-decoration: underline
+}
+
+.meta_data {
+  vertical-align: middle;
+}
+
+.meta_data div {
+  display: inline-block;
+  margin-right: 10px
+}
+
+.meta_data div span {
+  margin-right: 4px
+}
+
+.meta_data div a {
+  color: #9DADB7
+}
+
+.title_container {
+  display: inline-block;
+  /* vertical-align: middle; */
+}
+
+.title_container h1 {
+  color: #fff;
+  padding-bottom: 20px;
+  /* line-height: 200px; */
+  display: inline-block
+}
+
+.title_container span {
+  margin-left: 10px
+}
+
+.ai_logo {
+  background: #fff;
+  display: inline-block
+}
+
+.head_data {
+  margin-left: 20px;
+  display: inline-block
+}

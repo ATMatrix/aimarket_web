@@ -1,0 +1,14 @@
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url("./OpenSans-Light.eot?v=1.1.0");
+    src: url("./OpenSans-Light.eot?#iefix&v=1.1.0") format("embedded-opentype"), url("./OpenSans-Light.woff2?v=1.1.0") format("woff2"), url("./OpenSans-Light.woff?v=1.1.0") format("woff"), url("./OpenSans-Light.ttf?v=1.1.0") format("truetype"), url("./OpenSans-Light.svg?v=1.1.0#Light") format("svg");
+    font-weight: 300;
+    font-style: normal; }
+@font-face {
+    font-family: 'Lato';
+    src: url(./lato-black/lato-black.eot);
+    src: local('Lato Black'), local('Lato-Black'), url(./lato-black/lato-black.eot?#iefix) format('embedded-opentype'), url(./lato-black/lato-black.woff2) format('woff2'), url(./lato-black/lato-black.woff) format('woff'), url(./lato-black/lato-black.ttf) format('truetype'), url(./lato-black/lato-black.svg#lato) format('svg');
+    font-weight: 900;
+    font-style: normal;
+}

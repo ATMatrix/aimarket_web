@@ -1,0 +1,101 @@
+
+
+.head_dark_font {
+    font-family: 'Open Sans';
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.head_light_font {
+    font-family: 'Open Sans';
+    font-size: 15px;
+    font-weight: bold;
+    color: #000000
+}
+
+.search_font {
+    font-family: 'Open Sans';
+}
+
+.image_margin {
+  height: 50px;
+}
+
+.head_dark_back {
+    background: #404040;
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.head_dark_back2 {
+    background: #404040;
+    width: 300px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.head_light_back2 {
+    background: #FFFFFF;
+    width: 300px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.image_margin {
+    height: 40px
+}
+
+.head_light_back {
+    background: #FFFFFF;
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.login_form {
+    alignSelf: "center"
+}
+
+.modal {
+    width: 300px;
+    height: 1420px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.column1 {
+    flex: 0.1 0.1 1%
+}
+
+.column2 {
+    flex: 0.05 0.1 auto
+}
+
+.column3 {
+    flex: 0.1 0 auto
+}
+
+.column4 {
+    flex: 1 1 auto
+}
+
+
+
+
+

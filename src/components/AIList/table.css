@@ -1,0 +1,117 @@
+.selectors {
+    width: 100%;
+    height: 50px;
+    background: #E9EFF2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.selector {
+    width: 120px;
+    flex: 10%;
+    margin-right: 50px;
+}
+
+.center_style {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.image_style {
+  height: 60px;
+  width: 60px;
+}
+
+.image_style1 {
+  width: 60px;
+  height: 60px;
+  background: url(../../assets/images/temp1.jpeg) no-repeat center 0;
+  background-size: 100%, 100%;
+}
+
+
+.image_layout {
+  height: 60px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.table_style {
+    background: #FFFFFF;
+}
+
+.ai_name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.by_style {
+    color: #808b92;
+    font-style:italic;
+}
+
+.author_style {
+    font-family: "Open Sans";
+    font-size: 12px;
+    font-weight: bolder;
+    color: #428bca;
+}
+
+.cell_val {
+    font-weight: 700;
+    font-size: 10px;
+    font-family: 'Lato';
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell_name {
+    color: #808b92;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.up_time{
+    font-weight: 700;
+    font-size: 10px;
+    font-family: 'Lato';
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6cc148;
+}
+
+
+.icon_style1 {
+    font-size: 30px;
+    color: #000000
+}
+
+.icon_style2 {
+    font-size: 30px;
+    color: #ffae01;
+}
+
+.table_style1{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: row;
+}
+.column_style2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

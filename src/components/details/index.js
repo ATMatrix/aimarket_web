@@ -6,7 +6,7 @@ import { Layout, Icon } from 'antd'
 
 import Menu from './components/menu'
 import HorizotalMenu from './components/horizontalMenu'
-import Header from './components/header'
+import Header from '../Header/HeaderLight'
 import ContentRow from './components/contentRow'
 
 import data from './mock_data'

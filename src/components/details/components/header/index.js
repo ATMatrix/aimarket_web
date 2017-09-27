@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './styles/css/font.css'
-import './styles/css/header.css'
+import style from './styles/css/header.css'
 
 import { Row, Col, Input } from 'antd'
 
@@ -10,38 +10,38 @@ const { Search } = Input
 export default class extends React.Component {
   render() {
     return(
-      <Row  className={"head-light-back"} >
-        <Col className={"column1"}>
+      <Row  className={style.head_light_back} >
+        <Col className={style.column1}>
         </Col>
 
-        <Col className={"column2"}>
+        <Col className={style.column2}>
         </Col>
 
-        <Col className={"column3"}>
+        <Col className={style.column3}>
           <Search
             placeholder={"Search AIs"}
-            className={"search-font"}/>
+            className={style.search_font}/>
         </Col>
 
-        <Col className={"column1"}>
+        <Col className={style.column1}>
         </Col>
 
-        <Col className={"column2"}>
-          <a href="#" className={"head-light-font"} >Explore AIs</a>
+        <Col className={style.column2}>
+          <a href="#" className={style.head_light_font} >Explore AIs</a>
         </Col>
 
-        <Col className={"column2"}>
-          <a href="#" className={"head-light-font"}>Docs</a>
+        <Col className={style.column2}>
+          <a href="#" className={style.head_light_font}>Docs</a>
         </Col>
 
-        <Col className={"column4"}>
+        <Col className={style.column4}>
         </Col>
 
-        <Col className={"column2"}>
-          <a href="#" className={"head-light-font"} >Sign In</a>
+        <Col className={style.column2}>
+          <a href="#" className={style.head_light_font} >Sign In</a>
         </Col>
-        <Col className={"column2"}>
-          <a href="#" className={"head-light-font"}>Sign Up</a>
+        <Col className={style.column2}>
+          <a href="#" className={style.head_light_font}>Sign Up</a>
         </Col>
       </Row>
     )

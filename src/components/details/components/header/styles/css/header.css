@@ -1,19 +1,19 @@
-.head-light-font {
+.head_light_font {
   font-family: 'Open Sans';
   font-size: 15px;
   font-weight: bold;
   color: #000000
 }
 
-.search-font {
+.search_font {
   font-family: 'Open Sans';
 }
 
-.image-margin {
+.image_margin {
   height: 50px
 }
 
-.head-light-back {
+.head_light_back {
   background: #FFFFFF;
   height: 70px;
   width: 100%;

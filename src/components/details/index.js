@@ -1,6 +1,6 @@
 import React from 'react'
 // import ReactDOM from 'react-dom'
-import './index.css'
+import style from './index.css'
 
 import { Layout, Icon } from 'antd'
 
@@ -19,43 +19,43 @@ const {
 class Profile extends React.Component {
   constructor(props) {
     super(props)
-    this.state = props.data
+    this.state =props.data
   }
 
   render() {
     return (
-      <div className="profile_container" >
-        <div className="profile">
+      <div className={style.profile_container} >
+        <div className={style.profile}>
           <div>
-            <div className="ai_logo">
-              <img src={this.state.logoSrc} />
+            <div className={style.ai_logo}>
+              <img alt={this.state.title} src={this.state.logoSrc} />
             </div>
-            <div className="head_data">
-              <div className="title_container">
+            <div className={style.head_data}>
+              <div className={style.title_container}>
                 <h1>{this.state.title}</h1>
                 <span><Icon type="star-o" /></span>
               </div>
-              <div className="meta_data">
+              <div className={style.meta_data}>
                 <div>
                   <span><Icon type="user" /></span>
-                  <a href="#">{this.state.creator}</a>
+                  <a href="www.google.com">{this.state.creator}</a>
                 </div>
                 <div>
                   <span><Icon type="global" /></span>
-                  <a href="#">{this.state.host}</a>
+                  <a href="www.google.com">{this.state.host}</a>
                 </div>
                 <div>
                   <span><Icon type="tag" /></span>
-                  <a href="#">{this.state.tag}</a>
+                  <a href="www.google.com">{this.state.tag}</a>
                 </div>
                 <div>
                   <span><Icon type="clock-circle-o" /></span>
-                  <a href="#">{this.state.createAt}</a>
+                  <a href="www.google.com">{this.state.createAt}</a>
                 </div>
               </div>
             </div>
           </div>
-          <p className="description">{this.state.describe}</p>
+          <p className={style.description}>{this.state.describe}</p>
         </div>
       </div>
     )
@@ -65,7 +65,7 @@ class Profile extends React.Component {
 export default class Details extends React.Component {
   constructor(props) {
     super(props)
-    this.state = props.data
+    this.state = data
   }
 
   render() {

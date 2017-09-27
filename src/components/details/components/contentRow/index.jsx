@@ -4,7 +4,7 @@ import { Row, Col, Input, Button, Select, Icon } from 'antd'
 const { Group, TextArea } = Input
 const { Option } = Select
 
-import './styles.css'
+import style from './styles.css'
 
 class Form extends React.Component {
   constructor(props) {
@@ -16,12 +16,12 @@ class Form extends React.Component {
     const thisFields = this.state.fields.map((field, idx) => {
       return (
         <div
-          className="field"
+          className={style.field}
           key={idx}
         >
           <div style={{align: 'right'}}>
-            <span className="name">{field.name}</span>
-            <span className="type">{field.type}</span>
+            <span className={style.name}>{field.name}</span>
+            <span className={style.type}>{field.type}</span>
           </div>
           <div>
             <Input
@@ -41,7 +41,7 @@ class Form extends React.Component {
 
     return (
       <div>
-        <div className="form-title">
+        <div className={style.form_title}>
           <h2>{this.state.title.toUpperCase()}</h2>
         </div>
         <div>
@@ -70,7 +70,7 @@ class Request extends React.Component {
     })
 
     return (
-      <Col span={12} className="request" type="flex">
+      <Col span={12} className={style.request} type="flex">
         <div>
           <div>
             <h3>{this.state.title}</h3>
@@ -78,7 +78,7 @@ class Request extends React.Component {
           </div>
           {forms}
         </div>
-        <Button className="request_buttom">Test EndPoint</Button>
+        <Button className={style.request_buttom}>Test EndPoint</Button>
       </Col>
     )
   }
@@ -92,17 +92,20 @@ class Response extends React.Component {
 
   render() {
     return (
-      <Col span={12} className="response" type="flex">
-        <div className={"container " + this.state.method.toUpperCase()}>
+      <Col span={12} className={style.response} type="flex">
+        <div className={
+          style.container + ' ' + style[this.state.method.toUpperCase()]
+        }>
           <h2>ENDPOINT DEFINITION</h2>
           <Input
             className={
-              "route-container " + this.state.method.toUpperCase()
+              style.route_container + ' ' + style[this.state.method.toUpperCase()]
             }
             addonBefore={
               <span
-                className={"verb " + this.state.method.toUpperCase()}
-              >
+                className={
+                  style.verb + ' ' + style[this.state.method.toUpperCase()]
+                }>
                 {this.state.method.toUpperCase()}
               </span>
             }
@@ -110,7 +113,7 @@ class Response extends React.Component {
             readOnly="readonly"
           />
         </div>
-        <div className="container">
+        <div className={style.container}>
           <h2>REQUEST EXAMPLE</h2>
           <TextArea
             rows='12'
@@ -118,15 +121,15 @@ class Response extends React.Component {
             readOnly="readonly"
           />
         </div>
-        <div className="container">
+        <div className={style.container}>
           <h2>RESPONSE BODY</h2>
-          <div className="status_area">
+          <div className={style.status_area}>
             <span
               className={
-                "status_container " + (/2..$/
+                style.status_container + ' ' + (/2..$/
                   .test(this.state.statusCode.toString())
-                  ? "success"
-                  : "fail")
+                  ? style.success
+                  : style.fail)
               }
             >
               {
@@ -154,8 +157,8 @@ export default class extends React.Component {
 
   render() {
     return (
-      <Row className="row2">
-        <Row className='row1'>
+      <Row className={style.row2}>
+        <Row className={style.row1}>
           <Request data={this.state.request} />
           <Response data={this.state.response} />
         </Row>

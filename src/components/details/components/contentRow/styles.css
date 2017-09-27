@@ -50,14 +50,6 @@
     pointer-events: none
 }
 
-/*  .required > div:nth-of-type(2) > input:after { */
-/*     content: '*'; */
-/*     color: #dc4544; */
-/*     position: absolute; */
-/*     top: 5px; */
-/*     right: 1px; */
-/* } */
-
  .field .name {
     font-weight: 700
 }
@@ -73,12 +65,7 @@
 }
 
 .request, .response {
-    /* width: 50%; */
-    /* float: left; */
     padding: 10px 30px 30px;
-    /* border-width: 1px; */
-    /* border-color: #BECCD6; */
-    /* border-style: solid; */
 }
 
 .request {
@@ -87,8 +74,6 @@
     position:relative;
     left:52%;
     overflow:hidden;
-
-    /* background: #FFF; */
     max-width: 800px
 }
 
@@ -114,7 +99,6 @@
 		position:relative;
 		right:50%;
 		background:#FFF;
-		/* background:#fff689; */
 }
 .row2 {
 		clear:left;
@@ -129,7 +113,7 @@
 		border-right: 1px solid #BECCD6;
 }
 
-.form-title {
+.form_title {
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -144,52 +128,52 @@
     height: 15em
 }
 
- .route-container {
+ .route_container {
     height: 39px;
     font-size: 13px
 }
 
- .route-container.GET {
+ .route_container.GET {
     border-color: #61bc51
 }
 
- .container.GET span.ant-input-group-addon {
+ .container.GET span span span {
     border-color: #61bc51;
     background-color: #61bc51
 }
 
- .route-container.POST {
+ .route_container.POST {
     border-color: #0392c9
 }
 
- .container.POST span.ant-input-group-addon {
+ .container.POST span span span {
     border-color: #0392c9;
     background-color: #0392c9
 }
 
- .route-container.PATCH {
+ .route_container.PATCH {
     border-color: #e3b457
 }
 
- .container.PATCH span.ant-input-group-addon {
+ .container.PATCH span span span {
     border-color: #e3b457;
     background-color: #e3b457
 }
 
- .route-container.PUT {
+ .route_container.PUT {
     border-color: #cb44eb
 }
 
- .container.PUT span.ant-input-group-addon {
+ .container.PUT span span span {
     border-color: #cb44eb;
     background-color: #cb44eb
 }
 
- .route-container.DELETE {
+ .route_container.DELETE {
     border-color: #e5504d
 }
 
- .container.DELETE span.ant-input-group-addon {
+ .container.DELETE span span span {
     border-color: #e5504d;
     background-color: #e5504d
 }

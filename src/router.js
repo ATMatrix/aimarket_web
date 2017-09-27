@@ -1,10 +1,12 @@
 import React from 'react';
 import {Router, Route, Switch} from 'dva/router';
-import IndexPage from './routes/IndexPage';
+// import IndexPage from './routes/IndexPage';
 
 import Users from "./routes/Users.js";
 
 import Tester from "./routes/Tester.js";
+
+import IndexPage from './components/details';
 
 function RouterConfig({history}) {
     return (

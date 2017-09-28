@@ -17,21 +17,21 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
   function pageChangeHandler(page) {
     dispatch(routerRedux.push({
       pathname: '/users',
-      query: { page },
+      query: { page }
     }));
   }
 
   function editHandler(id, values) {
     dispatch({
       type: 'users/patch',
-      payload: { id, values },
+      payload: { id, values }
     });
   }
 
   function createHandler(values) {
     dispatch({
       type: 'users/create',
-      payload: values,
+      payload: values
     });
   }
 
@@ -40,17 +40,17 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a href="">{text}</a>,
+      render: text => <a href="">{text}</a>
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      key: 'email',
+      key: 'email'
     },
     {
       title: 'Website',
       dataIndex: 'website',
-      key: 'website',
+      key: 'website'
     },
     {
       title: 'Operation',
@@ -64,8 +64,8 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
             <a href="">Delete</a>
           </Popconfirm>
         </span>
-      ),
-    },
+      )
+    }
   ];
 
   return (

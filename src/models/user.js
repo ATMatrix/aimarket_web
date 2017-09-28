@@ -7,16 +7,15 @@
 import * as usersService from '../services/users';
 
 export default {
-  namespace: 'users',
+  namespace: 'user',
   state: {
-    list: [],
-    total: null,
-    page: null
+    username: null,
+    email: null
   },
   reducers: {
-    save(state, { payload: { data: list, total, page } }) {
+    save(state, { payload: { username: username, email } }) {
       return { ...state, list, total, page };
-    },
+    }
   },
   effects: {
     *fetch({ payload: { page = 1 } }, { call, put }) {
@@ -38,14 +37,17 @@ export default {
       yield call(usersService.patch, id, values);
       yield put({ type: 'reload' });
     },
-    *create({ payload: values }, { call, put }) {
-      yield call(usersService.create, values);
-      yield put({ type: 'reload' });
+    *add({ payload: values }, { call, put }) {
+      const { data, headers } = yield call(usersService.add, { user });
+      yield put({ type: 'save',
+        payload: {
+        user:user
+      }});
     },
     *reload(action, { put, select }) {
       const page = yield select(state => state.users.page);
       yield put({ type: 'fetch', payload: { page } });
-    },
+    }
   },
   subscriptions: {
     setup({ dispatch, history }) {

@@ -17,7 +17,7 @@
   },
   "proxy": {
     "/api": {
-      "target": "http://jsonplaceholder.typicode.com/",
+      "target": "http://localhost:4000/graphql/",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }

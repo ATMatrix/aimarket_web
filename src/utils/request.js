@@ -1,3 +1,6 @@
+
+'use strict';
+
 import fetch from 'dva/fetch';
 
 function checkStatus(response) {

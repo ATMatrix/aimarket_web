@@ -1,3 +1,9 @@
+/**
+ * Created by zhubg on 2017/9/28.
+ */
+
+'use strict';
+
 import request from '../utils/request';
 import { PAGE_SIZE } from '../constants';
 
@@ -18,9 +24,11 @@ export function patch(id, values) {
   });
 }
 
-export function create(values) {
+export function add(values) {
   return request('/api/users', {
     method: 'POST',
-    body: JSON.stringify(values),
+    body: JSON.stringify(values)
   });
 }
+
+

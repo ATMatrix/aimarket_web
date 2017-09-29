@@ -10,15 +10,17 @@ import IndexPage from './routes/HomePage'
 import List from './components/AIList/List'
 import Details from './components/details';
 
+
+
 function RouterConfig({history}) {
     return (
-        <Router history={history}>
+        <Router history={history} >
             <Switch>
                 <Route path="/" exact component={IndexPage}/>
                 <Route path="/list" exact component={List}/>
                 <Route path="/details" exact component={Details}/>
                 <Route path="/users" component={Users}/>
-                <Route path="/tester" component={Tester} />
+                <Route path="/test" component={Tester} />
             </Switch>
         </Router>
     );

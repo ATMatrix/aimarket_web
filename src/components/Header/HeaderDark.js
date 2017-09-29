@@ -3,9 +3,9 @@ import '../font/font.css'
 import styles from './header.css'
 import logo_dark from '../../assets/images/logo_dark.png'
 import { Row, Col } from 'antd';
-import { Input, Modal } from 'antd';
+import { Input, Form, Modal } from 'antd';
 import LoginForm from './Login'
-import RegisterForm from './Register'
+import {RegisterForm} from './Register'
 const Search = Input.Search;
 import { Link } from 'dva/router';
 
@@ -17,8 +17,12 @@ export default class HeaderDark extends React.Component {
     //         current: e.key,
     //     });
     // }
-    state = { loginVisible: false, registerVisible: false }
 
+
+  constructor(props) {
+    super(props)
+    this.state = { loginVisible: false, registerVisible: false }
+  }
     showLoginModal = () => {
         this.setState({
           loginVisible: true,
@@ -36,6 +40,11 @@ export default class HeaderDark extends React.Component {
           loginVisible: false,
           registerVisible: false
         });
+      // let user = {}
+      // dispatch({
+      //   type: 'signup/signup',
+      //   payload: {user:user}
+      // });
     }
     handleCancel = (e) => {
         this.setState({
@@ -45,6 +54,7 @@ export default class HeaderDark extends React.Component {
     }
 
     render() {
+      const AntForm = Form.create()(RegisterForm)
         return(
     //       <div>
     //       <Test test="tester"/>
@@ -106,7 +116,7 @@ export default class HeaderDark extends React.Component {
                     footer={null}
                     closable={false}
                 >
-                    <div className={styles.login_form}><RegisterForm /></div>
+                    <div className={styles.login_form}><AntForm /></div>
                 </Modal>
             </div>
 

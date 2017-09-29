@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { connect } from 'dva';
 import styles from './Tester.css';
 
-function Tester({ dispatch}) {
+function Tester({ dispatch ,signupFlag}) {
   function signUp(user) {
     dispatch({
       type: 'signup/signup',
@@ -13,7 +13,7 @@ function Tester({ dispatch}) {
 
   return (
     <div className={styles.normal}>
-      Route Component: Tester
+      signupFlag: {signupFlag}
       <div>
         <Button onClick={signUp.bind(null, {username:"username1",email:"email",password:"password"})}>test</Button>
       </div>
@@ -22,8 +22,11 @@ function Tester({ dispatch}) {
 }
 
 function mapStateToProps(state) {
-  const { list, total, page } = state.users;
-  return { };
+  const { signupFlag } = state.signup;
+  return {
+    loading: state.loading.models.signup,
+    signupFlag
+  };
 }
 
 export default connect(mapStateToProps)(Tester);

@@ -2,10 +2,10 @@ import dva from 'dva';
 import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
 import { message } from 'antd';
+import {proxy} from './utils/global/index';
 import './index.css';
 
 const ERROR_MSG_DURATION = 3; // 3 秒
-
 
 // 1. Initialize
 const app = dva({

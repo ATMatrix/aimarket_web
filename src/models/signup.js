@@ -12,8 +12,14 @@ import {SINUP_GQl} from '../utils/gql/gql_template/index';
 export default {
   namespace: 'signup',
 
-  state: {},
-
+  state: {
+    signupFlag:'signupFlag_null'
+  },
+  reducers: {
+    saveSignupFlag(state, { payload: { signupFlag } }) {
+      return { ...state, signupFlag };
+    }
+  },
   effects: {
     * signup ({
       payload,
@@ -29,12 +35,36 @@ export default {
         if(dataContent.flag){
           //signup success
           console.log("signup success");
+          yield put({
+            type: 'saveSignupFlag',
+            payload: {
+              signupFlag:"signupFlag_true"
+            }
+          });
+          let signupFlagTemp = yield select(state => state.signup);
+          console.log(signupFlagTemp);
         }else {
           //signup fail
           console.log("signup failed");
+          yield put({
+            type: 'saveSignupFlag',
+            payload: {
+              signupFlag:"signupFlag_false"
+            }
+          });
+          let signupFlagTemp = yield select(state => state.signup);
+          console.log(signupFlagTemp);
         }
       }else {
-        //fail
+        //request fail
+        yield put({
+          type: 'saveSignupFlag',
+          payload: {
+            signupFlag:"signupFlag_false"
+          }
+        });
+        let signupFlagTemp = yield select(state => state.signup);
+        console.log(signupFlagTemp);
       }
 
       // const { locationQuery } = yield select(_ => _.app);

@@ -18,7 +18,8 @@ export default {
     filteredInfo:"",
     tableData: mock_data.tableData,
     callAIResult:{},
-    value: "ALL"
+    value: "ALL",
+    isCollected: "false"
   },
   reducers: {
     saveTableData(state, { payload: { tableData } }) {
@@ -84,6 +85,63 @@ export default {
         //   };
         // }).filter(record => !!record);
 
+        yield put({
+          type: 'saveTableData',
+          payload: {
+            tableData:tempData
+          }
+        });
+      }
+
+    }
+    ,
+    * setIsCollected ({
+                      payload
+                    }, { put, call, select }) {
+      const tableDataBack = mock_data.tableData;
+      let isCollected = payload;
+
+      if(isCollected === false) {
+        const dataTemp = tableData.slice()
+        setState({
+          tableData: dataTemp.map((record) => {
+            if(record.key === opt.key) {
+              record.isCollected = true
+              record.iconStyle = 'icon_style2'
+              record.iconType = 'star'
+            }
+            return record
+          })
+        })
+      }
+      else {
+        const dataTemp = tableData.slice()
+        setState({
+          tableData: dataTemp.map((record) => {
+            if(record.key === opt.key) {
+              record.isCollected = false
+              record.iconStyle = 'icon_style1'
+              record.iconType = 'star_o'
+            }
+            return record
+          })
+        })
+      }
+      if(value === "ALL") {
+        yield put({
+          type: 'saveTableData',
+          payload: {
+            tableData:tableDataBack
+          }
+        });
+      }
+      else {
+        let tempData = [];
+        for (let record in tableDataBack) {
+          if(tableDataBack[record].price === value) {
+            tempData.push(tableDataBack[record])
+          }
+        }
         yield put({
           type: 'saveTableData',
           payload: {

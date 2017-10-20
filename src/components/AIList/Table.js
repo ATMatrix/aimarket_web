@@ -60,33 +60,11 @@ function TableDemo ({ dispatch, aiName, tableData}) {
     }
 
     function collectIcon(opt){
-        // console.log(opt)
-        // if(opt.isCollected === false) {
-        //     const dataTemp = tableData.slice()
-        //     setState({
-        //       tableData: dataTemp.map((record) => {
-        //             if(record.key === opt.key) {
-        //                 record.isCollected = true
-        //                 record.iconStyle = 'icon_style2'
-        //                 record.iconType = 'star'
-        //             }
-        //             return record
-        //         })
-        //     })
-        // }
-        // else {
-        //     const dataTemp = tableData.slice()
-        //     setState({
-        //       tableData: dataTemp.map((record) => {
-        //             if(record.key === opt.key) {
-        //                 record.isCollected = false
-        //                 record.iconStyle = 'icon_style1'
-        //                 record.iconType = 'star_o'
-        //             }
-        //             return record
-        //         })
-        //     })
-        // }
+        console.log(opt)
+        dispatch({
+          type: 'aiList/setIsCollected',
+          payload: opt.isCollected
+        });
 
     }
 
@@ -95,7 +73,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
              type: 'ai/setAIName',
              payload: name
            });
-    }
+      }
 
 
 
@@ -108,7 +86,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
             dataIndex: 'img',
             key: 'img',
             render: (text, record) =>
-              <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+              <Link to='/list' onClick={renderToDetails.bind(null,record.params)}>
                 <span className={styles.image_layout}><span className={styles.image_style2}>{text}</span></span>
               </Link>
               ,
@@ -119,7 +97,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
             render: (text, record) => (
 
               <span>
-                <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+                <Link to='/list' onClick={renderToDetails.bind(null,record.params)}>
                   <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}>  by  </span>&nbsp;
                 </Link>
                   <a href={record.url} className={styles.author_style}>{record.author}</a><br />
@@ -183,7 +161,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
         return (
 
             <div>
-              {/*aiName: {aiName}*/}
+              aiName: {aiName}
                 <div id="selector" className={styles.selectors}>
                     <div>
 

@@ -57,6 +57,18 @@ export default {
         }
       });
     }
+    ,
+    * setcallAIResult ({
+      payload
+    }, { put, call, select }) {
+      console.log(payload);
+      yield put({
+        type: 'saveCallAIResult',
+        payload: {
+          aiName:payload
+        }
+      });
+    }
     
   }
 

@@ -45,7 +45,7 @@ const baiduApis = {
 const baiduForms = [
   {
     title: '请求参数',
-    baiduFields,
+    fields: baiduFields,
   },
 
 ]
@@ -56,13 +56,31 @@ const baiduRequest = {
   describe: '提供多种场景下精准的图像文字识别技术服务\n' +
   '让您的应用看图识字，提升输入效率，优化用户体验',
   type: 'baiduOcr',
-  baiduForms,
+  forms: baiduForms,
+}
+
+const baiduResponse = {
+  method: 'put',
+  url: 'www.google.com',
+  requestExample: `// These code snippets use an open-source library. http://unirest.io/php
+  $response = Unirest.Request::get("https://23andme-23andme.p.mashape.com/names/a42e94634e3f7683/",
+    array(
+        "X-Mashape-Key" => "<required>",
+        "Authorization" => "<required>",
+        "Accept" => "text/plain"
+      )
+  );`,
+    statusCode: 200,
+    contentType: 'TEXT',
+    endPointTitle: 'publish get by link',
+    responseBody: 'No sample was provided with this model.'
 }
 
 const baiduParams = {
   apis: baiduApis,
   request: baiduRequest,
   profile: baiduProfiles,
+  response: baiduResponse
 }
 
 export default {

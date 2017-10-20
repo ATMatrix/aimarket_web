@@ -74,12 +74,11 @@ const apiSubMenu = (opts) => {
 
 export default class extends React.Component {
   constructor(props) {
-    super()
-    this.state = props
+    super(props)
   }
 
   render() {
-    const { apis } = this.state
+    const { apis } = this.props
 
     return (
       <Menu

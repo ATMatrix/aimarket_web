@@ -11,15 +11,18 @@ import ContentRow from './components/contentRow'
 
 import data from './mock_data'
 
+
 const {
   Sider,
   Content,
 } = Layout
 
 class Profile extends React.Component {
+  params = JSON.parse(this.props.params);
   constructor(props) {
     super(props)
-    this.state =props.data
+    this.state = props
+    // params
   }
 
   render() {

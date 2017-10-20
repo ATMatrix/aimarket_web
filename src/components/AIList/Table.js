@@ -4,10 +4,12 @@ import '../font/font.css'
 import styles from './table.css'
 import mock_data from './mock_data/data'
 import { Link } from 'dva/router';
+import { connect } from 'dva';
+
 
 let data = mock_data.tableData
-export default class TableDemo extends React.Component {
-    attribute = {
+function TableDemo ({ dispatch, aiName}) {
+    const attribute = {
         bordered: true,
         loading: false,
         pagination: false,
@@ -16,17 +18,16 @@ export default class TableDemo extends React.Component {
         scroll: undefined,
     };
 
-    state = {
+    let state = {
         data,
         filteredInfo: null,
         sortedInfo: null,
-
     };
 
-    sortChange = (value) => {
+    function sortChange(value){
         const val = `${value}`;
         if(val == 'Popular') {
-            this.setState({
+            setState({
                 sortedInfo: {
                     order: 'descend',
                     columnKey: 'followers',
@@ -35,16 +36,18 @@ export default class TableDemo extends React.Component {
         }
     }
 
-    filterChange = (value) => {
+  // hashHistory.push(path);
+
+    function filterChange(value){
         if(value === 'All') {
-            this.setState({
+            setState({
                 data: data.slice()
             })
             return;
         }
         const val = `^${value}$`;
         const reg = new RegExp(val, 'gi')
-        this.setState({
+        setState({
             data: data.map((record) => {
                 const match = record.price.match(reg)
                 if (!match) return null;
@@ -55,11 +58,11 @@ export default class TableDemo extends React.Component {
         });
     }
 
-    collectIcon = (opt) => {
+    function collectIcon(opt){
         console.log(opt)
         if(opt.isCollected === false) {
             const dataTemp = data.slice()
-            this.setState({
+            setState({
                 data: dataTemp.map((record) => {
                     if(record.key === opt.key) {
                         record.isCollected = true
@@ -72,7 +75,7 @@ export default class TableDemo extends React.Component {
         }
         else {
             const dataTemp = data.slice()
-            this.setState({
+            setState({
                 data: dataTemp.map((record) => {
                     if(record.key === opt.key) {
                         record.isCollected = false
@@ -86,9 +89,16 @@ export default class TableDemo extends React.Component {
 
     }
 
-    render() {
+  function renderToDetails(name){
+       dispatch({
+             type: 'ai/setAIName',
+             payload: name
+           });
+    }
 
-        let { sortedInfo, filteredInfo } = this.state;
+
+
+        let { sortedInfo, filteredInfo } = state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
 
@@ -107,7 +117,7 @@ export default class TableDemo extends React.Component {
 
               <span>
 
-                <Link to='/details'>
+                <Link to='/list' onClick={renderToDetails.bind(null,record.params)}>
                   <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}> by</span>&nbsp;
                 </Link>
                   <a href="#" className={styles.author_style}>{record.author}</a><br />
@@ -162,28 +172,29 @@ export default class TableDemo extends React.Component {
             key: 'action',
             render: (text, record) => (
                 <span className={styles.center_style}>
-                    <a onClick={this.collectIcon.bind(this, record)}><Icon className={record.isCollected === false ? styles.icon_style1 : styles.icon_style2} type={record.isCollected === false ? 'star-o' : 'star'}></Icon></a>
+                    <a onClick={collectIcon.bind(null, record)}><Icon className={record.isCollected === false ? styles.icon_style1 : styles.icon_style2} type={record.isCollected === false ? 'star-o' : 'star'}></Icon></a>
                 </span>
             ),
 
         }];
-
+        console.log(columns);
 
         return (
 
             <div>
-
+              aiName: {aiName}
                 <div id="selector" className={styles.selectors}>
                     <div>
+
                         Sort By:&nbsp;&nbsp;&nbsp;
-                        <Select defaultValue="Relevant" className={styles.selector} onSelect={this.sortChange}>
+                        <Select defaultValue="Relevant" className={styles.selector} onSelect={sortChange}>
                             <Select.Option value="Popular">Popular</Select.Option>
                             <Select.Option value="Relevant">Relevant</Select.Option>
                             <Select.Option value="Recent" >Recent</Select.Option>
                             <Select.Option value="My AIs">My AIs</Select.Option>
                         </Select>
 
-                        Price Range:&nbsp;&nbsp;&nbsp;<Select defaultValue="All" className={styles.selector}  onSelect={this.filterChange}>
+                        Price Range:&nbsp;&nbsp;&nbsp;<Select defaultValue="All" className={styles.selector}  onSelect={filterChange}>
                         <Select.Option value="All">All</Select.Option>
                         <Select.Option value="Free">Free</Select.Option>
                         <Select.Option value="Freemium" >Freemium</Select.Option>
@@ -193,12 +204,22 @@ export default class TableDemo extends React.Component {
                 </div>
 
                 <div className={styles.table_style}>
-                    <Table  {...this.attribute} columns={columns} dataSource={this.state.data} />
+                    <Table  {...attribute} columns={columns} dataSource={state.data} />
                 </div>
 
             </div>
-        );
-    }
+        )
+
 
 }
+function mapStateToProps(state) {
+  const { aiName } = state.ai;
+  return {
+    loading: state.loading.models.ai,
+    aiName
+  };
+}
+
+export default connect(mapStateToProps)(TableDemo);
+
 // ReactDOM.render(<TableDemo />, document.getElementById('root'));

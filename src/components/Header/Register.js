@@ -13,11 +13,11 @@ proxyGlobal.once('signupFlag_false', function () {
 });
 
 proxyGlobal.once('signupFlag_true', function () {
-  message.success("Sign up success! ", 2, onClose);
+  message.success("Sign up success! ", 0.5, onClose);
 });
 
 const onClose = () => {
-  window.location.href='/'
+  // window.location.href='/'
 }
 
 function Register({dispatch,form, signupFlag}) {
@@ -36,8 +36,9 @@ function Register({dispatch,form, signupFlag}) {
             type: 'signup/signup',
             payload: {user:user}
           });
-        });
 
+        });
+     // dispatch(routerRedux.goBack())
     }
 
 

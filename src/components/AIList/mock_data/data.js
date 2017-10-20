@@ -1,92 +1,9 @@
 import styles from '../table.css'
 
-const baiduProfiles = {
-  creator: '百度',
-  logoSrc: 'https://zh.wikipedia.org/wiki/%E7%99%BE%E5%BA%A6#/media/File:Baidu.svg',
-  title: '百度',
-  host: 'https://ai.baidu.com/tech/ocr/general',
-  tag: 'Medical',
-  createAt: 'Created: April 2015',
-  describe: `基于业界领先的深度学习技术，依托全网海量优质数据为您提供多场景、多语种、高精度的整图文字检测和识别服务.支持多场景下的文字检测识别，多项ICDAR指标世界第一
-支持中、英、葡、法、德、意、西、俄、日、中英混合识别，整体识别准确率高达90%以上`,
-};
-
-const xiaoiParams = JSON.stringify({
-  creator: 'xiaoi',
-  logoSrc: 'http://nlp.xiaoi.com/ask.do',
-  title: 'xiaoi',
-  host: 'http://nlp.xiaoi.com/ask.do',
-  tag: 'Medical',
-  createAt: 'Created: April 2013',
-  describe: `智能客服机器人以人工智能技术为基础，通过网页、即时通讯工具、社交媒体工具等形式，实现一对多7X24小时服务，大幅降低服务成本，增强用户体验，提升服务质量和企业创新形象`,
-});
-
-const baiduFields = [
-  {
-    name: 'url',
-    type: 'STRING',
-    describe: '图片地址',
-    required: true,
-    place_holder: 'http://imgs4.iaweg.com/pic/HTTP2ltZzIuM2xpYW4uY29tLzIwMTQvZjIvMTY5L2QvMTA0LmpwZwloglog.jpg',
-  },
-
-]
-
-const baiduApis = {
-  items: [
-    {
-      method: 'get',
-      title: '文字识别',
-    },
-
-  ]
-}
-
-const baiduForms = [
-  {
-    title: '请求参数',
-    fields: baiduFields,
-  },
-
-]
-
-
-const baiduRequest = {
-  title: '文字识别',
-  describe: '提供多种场景下精准的图像文字识别技术服务\n' +
-  '让您的应用看图识字，提升输入效率，优化用户体验',
-  type: 'baiduOcr',
-  forms: baiduForms,
-}
-
-const baiduResponse = {
-  method: 'put',
-  url: 'www.google.com',
-  requestExample: `// These code snippets use an open-source library. http://unirest.io/php
-  $response = Unirest.Request::get("https://23andme-23andme.p.mashape.com/names/a42e94634e3f7683/",
-    array(
-        "X-Mashape-Key" => "<required>",
-        "Authorization" => "<required>",
-        "Accept" => "text/plain"
-      )
-  );`,
-    statusCode: 200,
-    contentType: 'TEXT',
-    endPointTitle: 'publish get by link',
-    responseBody: 'No sample was provided with this model.'
-}
-
-const baiduParams = {
-  apis: baiduApis,
-  request: baiduRequest,
-  profile: baiduProfiles,
-  response: baiduResponse
-}
-
 export default {
   tableData: [{
     key: '1',
-    params: baiduParams,
+    params: 'baidu',
     img: <img className={styles.image_style} src={require('../../../assets/images/baidu2.jpg')}/>,
     name: '通用文字识别',
     author: '百度',
@@ -100,6 +17,7 @@ export default {
   },
     {
       key: '2',
+      params: 'ali',
       img: <img className={styles.image_style} src={require('../../../assets/images/aliyun2.jpg')}/>,
       name: '人脸分析AI',
       author: '阿里AI云',
@@ -113,6 +31,7 @@ export default {
   },
     {
       key: '3',
+      params: 'xunfei',
       img: <img className={styles.image_style} src={require('../../../assets/images/xunfei2.png')}/>,
       name: 'AIUI',
       author: '讯飞科大',
@@ -126,7 +45,7 @@ export default {
   },
     {
       key: '4',
-      params: xiaoiParams,
+      params: 'xiaoi',
       img: <img className={styles.image_style} src={require('../../../assets/images/temp6.jpeg')}/>,
       name: '小i机器人',
       author: '小 i',

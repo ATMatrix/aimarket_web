@@ -9,6 +9,7 @@ import HorizotalMenu from './components/horizontalMenu'
 import Header from '../Header/HeaderLight'
 import ContentRow from './components/contentRow'
 
+import mock from './mock_data'
 
 
 const {
@@ -27,9 +28,9 @@ class Profile extends React.Component {
       <div className={style.profile_container} >
         <div className={style.profile}>
           <div>
-            <div className={style.ai_logo}>
-              <img alt={data.title} src={data.logoSrc} />
-            </div>
+        {/*     <div className={style.ai_logo}> */}
+        {/* {data.logoSrc} */}
+        {/*     </div> */}
             <div className={style.head_data}>
               <div className={style.title_container}>
                 <h1>{data.title}</h1>
@@ -68,20 +69,21 @@ class Details extends React.Component {
   }
 
   render() {
+    const data = mock[this.props.name]
     return (
       <Layout>
         <Header />
-        <Profile data={this.props.profile} />
+        <Profile data={data.profile} />
         <HorizotalMenu />
         <Layout>
           <Sider width={200}>
-            <Menu apis={this.props.apis} />
+            <Menu apis={data.apis} />
           </Sider>
           <Content>
             <ContentRow
-              request={this.props.request}
+              request={data.request}
               dispatch={this.props.dispatch}
-              response={this.props.response}
+              response={data.response}
             />
           </Content>
         </Layout>
@@ -90,6 +92,8 @@ class Details extends React.Component {
   }
 }
 
-const mapStateToProps = state => state.ai.aiName
+const mapStateToProps = state => ({
+  name: state.ai.aiName
+})
 
 export default connect(mapStateToProps)(Details)

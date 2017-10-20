@@ -1,5 +1,6 @@
 import React from 'react'
 import { Row, Col, Input, Button, Select, Icon } from 'antd'
+import { connect } from 'dva';
 
 const { Group, TextArea } = Input
 const { Option } = Select
@@ -114,65 +115,78 @@ class Response extends React.Component {
 
   render() {
     const data = this.props.data
+
+
+    function isEmpty(obj)
+    {
+      for (let name in obj)
+      {
+        return false
+      }
+      return true
+    }
+
     return (
       <Col span={12} className={style.response} type="flex">
-        <div className={
-          style.container + ' ' + style[data.method.toUpperCase()]
-        }>
-          <h2>ENDPOINT DEFINITION</h2>
-          <Input
-            className={
-              style.route_container + ' ' + style[data.method.toUpperCase()]
-            }
-            addonBefore={
-              <span
-                className={
-                  style.verb + ' ' + style[data.method.toUpperCase()]
-                }>
-                {data.method.toUpperCase()}
-              </span>
-            }
-            value={data.url}
-            readOnly="readonly"
-          />
-        </div>
-        <div className={style.container}>
-          <h2>REQUEST EXAMPLE</h2>
+        {/* <div className={ */}
+        {/*   style.container + ' ' + style[data.method.toUpperCase()] */}
+        {/* }> */}
+        {/*   <h2>ENDPOINT DEFINITION</h2> */}
+        {/*   <Input */}
+        {/*     className={ */}
+        {/*       style.route_container + ' ' + style[data.method.toUpperCase()] */}
+        {/*     } */}
+        {/*     addonBefore={ */}
+        {/*       <span */}
+        {/*         className={ */}
+        {/*           style.verb + ' ' + style[data.method.toUpperCase()] */}
+        {/*         }> */}
+        {/*         {data.method.toUpperCase()} */}
+        {/*       </span> */}
+        {/*     } */}
+        {/*     value={data.url} */}
+        {/*     readOnly="readonly" */}
+        {/*   /> */}
+        {/* </div> */}
+        {/* <div className={style.container}> */}
+        {/*   <h2>REQUEST EXAMPLE</h2> */}
+        {/*   <TextArea */}
+        {/*     rows='12' */}
+        {/*     value={data.requestExample} */}
+        {/*     readOnly="readonly" */}
+        {/*   /> */}
+        {/* </div> */}
+        {/* <div className={style.container}> */}
+          <h2>返回结果</h2>
+          {/* <div classname={style.status_area}> */}
+          {/*   <span */}
+          {/*     classname={ */}
+          {/*       style.status_container + ' ' + style.success */}
+          {/*       style.status_container + ' ' + (/2..$/ */}
+          {/*         .test(data.statuscode.tostring()) */}
+          {/*         ? style.success */}
+          {/*         : style.fail) */}
+          {/*     } */}
+          {/*   > */}
+          {/*     { */}
+          {/*       `${data.statuscode} / ${data.contenttype}` */}
+          {/*       '200 / json/application' */}
+          {/*     } */}
+          {/*   </span> */}
+          {/*   {data.endpointtitle.split(' ').join('_')} */}
+          {/* </div> */}
           <TextArea
-            rows='12'
-            value={data.requestExample}
+            rows='24'
+            value={data}
             readOnly="readonly"
           />
-        </div>
-        <div className={style.container}>
-          <h2>RESPONSE BODY</h2>
-          <div className={style.status_area}>
-            <span
-              className={
-                style.status_container + ' ' + (/2..$/
-                  .test(data.statusCode.toString())
-                  ? style.success
-                  : style.fail)
-              }
-            >
-              {
-                `${data.statusCode} / ${data.contentType}`
-              }
-            </span>
-            {data.endPointTitle.split(' ').join('_')}
-          </div>
-          <TextArea
-            rows='12'
-            value={data.responseBody}
-            readOnly="readonly"
-          />
-        </div>
+        {/* </div> */}
       </Col>
     )
   }
 }
 
-export default class extends React.Component {
+class ContentRow extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -188,3 +202,17 @@ export default class extends React.Component {
     )
   }
 }
+
+// const mapStateToProps = state => state.ai.aiName
+
+// export default connect(mapStateToProps)(Details)
+function mapStateToProps(state) {
+  // const { callAIResult,signupFlag } = state.ai;
+  return {
+    // loading: state.loading.models.ai,
+    response: JSON.stringify(state.ai.callAIResult),
+    // signupFlag
+  }
+}
+
+export default connect(mapStateToProps)(ContentRow);

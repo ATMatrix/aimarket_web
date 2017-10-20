@@ -13,7 +13,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
 
     // tableData = JSON.stringify(tableData)
     console.log("tableDataBack: \n" + tableDataBack)
-    console.log("((((((tableData: \n" + JSON.stringify(tableData))
+    console.log("((((((tableData: \n" + tableData)
     const attribute = {
         bordered: true,
         loading: false,
@@ -53,33 +53,35 @@ function TableDemo ({ dispatch, aiName, tableData}) {
   // hashHistory.push(path);
 
     function filterChange(value){
-        if(value === 'All') {
-            tableData = JSON.parse(JSON.stringify(tableDataBack))
-            return;
-        }
-        const val = `^${value}$`;
-        const reg = new RegExp(val, 'gi')
+        // if(value === 'All') {
+        //     tableData = JSON.parse(JSON.stringify(tableDataBack))
+        //     return;
+        // }
+        // const val = `^${value}$`;
+        // const reg = new RegExp(val, 'gi')
         // setState({
-      console.log(">>>>>>tableData<<<<<<")
-      console.log(tableData)
-        tableData = JSON.parse(JSON.stringify(tableDataBack));
-        console.log("----tableDataBack----")
-        console.log(tableDataBack)
-        let tempData = tableData.map((record) => {
-          console.log("record")
-          console.log(record)
-          const match = record.price.match(reg)
-          console.log("match")
-          console.log(match)
-          if (!match) return null;
-          return {
-            ...record,
-          };
-        }).filter(record => !!record)
+      // console.log(">>>>>>tableData<<<<<<")
+      // console.log(tableData)
+      //   tableData = JSON.parse(JSON.stringify(tableDataBack));
+        // console.log("----tableDataBack----")
+        // console.log(tableDataBack)
+        // let tempData = tableData.map((record) => {
+          // console.log("record")
+          // console.log(record)
+          // const match = record.price.match(reg)
+          // console.log("match")
+          // console.log(match)
+          // if (!match) return null;
+          // return {
+          //   ...record,
+          // };
+        // }).filter(record => !!record)
         // });
+      console.log("====value====")
+      console.log(value)
         dispatch({
           type: 'aiList/setTableData',
-          payload: tempData
+          payload: value
         });
       console.log("====tableData====")
       console.log(tableData)
@@ -206,6 +208,20 @@ function TableDemo ({ dispatch, aiName, tableData}) {
 
         }];
         // console.log(columns);
+  const val = `^${"FREE"}$`;
+  const reg = new RegExp(val, 'gi')
+   tableData = tableData.map((record) => {
+    // console.log("record")
+    // console.log(record)
+    const match = record.price.match(reg)
+    // console.log("match")
+    // console.log(match)
+    if (!match) return null;
+    return {
+      ...record,
+    };
+  }).filter(record => !!record)
+  // });
 
         return (
 

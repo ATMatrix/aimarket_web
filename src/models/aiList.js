@@ -9,7 +9,7 @@ import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {CALLAI_GQl} from '../utils/gql/gql_template/index';
 import mock_data from '../components/AIList/mock_data/data'
-
+import mock_data2 from '../components/AIList/mock_data/data2'
 export default {
   namespace: 'aiList',
 
@@ -17,7 +17,8 @@ export default {
     sortedInfo:"",
     filteredInfo:"",
     tableData: mock_data.tableData,
-    callAIResult:{}
+    callAIResult:{},
+    value: "ALL"
   },
   reducers: {
     saveTableData(state, { payload: { tableData } }) {
@@ -51,12 +52,51 @@ export default {
     * setTableData ({
                    payload
                  }, { put, call, select }) {
-      console.log("payload");
-      console.log(payload);
+      // console.log("000000000payload0000");
+      // console.log(payload);
+      const tableDataBack = mock_data.tableData;
+      let value = payload.toString().toUpperCase();
+      if(value === "ALL") {
+        yield put({
+          type: 'saveTableData',
+          payload: {
+            tableData:tableDataBack
+          }
+        });
+        return;
+      }
+      const val = `^${value}$`;
+      const reg = new RegExp(val, 'gi')
+
+      let tableData = JSON.parse(JSON.stringify(tableDataBack));
+      // console.log("----tableDataBack----")
+      // console.log(tableDataBack)
+      const a = mock_data2.tableData;
+      let tempData = [];
+      for (let record in tableDataBack) {
+         if(tableDataBack[record].price === value) {
+           tempData.push(tableDataBack[record])
+         }
+      }
+      // let tempData = tableData.map((record) => {
+      //   // console.log("record")
+      //   // console.log(record)
+      //   const match = record.price.match(reg)
+      //   console.log("match")
+      //   console.log(match)
+      //   if (!match) return null;
+      //   return {
+      //     ...record,
+      //   };
+      // }).filter(record => !!record);
+
+      // console.log(tempData);
+      // console.log("000000000tableData20000\n" + tempData);
+
       yield put({
         type: 'saveTableData',
         payload: {
-          tableData:payload
+          tableData:tempData
         }
       });
     }
@@ -64,7 +104,6 @@ export default {
     * setcallAIResult ({
                          payload
                        }, { put, call, select }) {
-      console.log(payload);
       yield put({
         type: 'saveCallAIResult',
         payload: {

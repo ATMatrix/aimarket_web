@@ -8,10 +8,12 @@ import { connect } from 'dva';
 const _ = require('lodash')
 
 const tableDataBack = mock_data.tableData;
-console.log("tableDataBack: \n" + tableDataBack)
 
 function TableDemo ({ dispatch, aiName, tableData}) {
 
+    // tableData = JSON.stringify(tableData)
+    console.log("tableDataBack: \n" + tableDataBack)
+    console.log("((((((tableData: \n" + JSON.stringify(tableData))
     const attribute = {
         bordered: true,
         loading: false,
@@ -58,15 +60,17 @@ function TableDemo ({ dispatch, aiName, tableData}) {
         const val = `^${value}$`;
         const reg = new RegExp(val, 'gi')
         // setState({
+      console.log(">>>>>>tableData<<<<<<")
+      console.log(tableData)
         tableData = JSON.parse(JSON.stringify(tableDataBack));
-        console.log("tableDataBack")
+        console.log("----tableDataBack----")
         console.log(tableDataBack)
         let tempData = tableData.map((record) => {
-          // console.log("record")
-          // console.log(record)
+          console.log("record")
+          console.log(record)
           const match = record.price.match(reg)
-          // console.log("match")
-          // console.log(match)
+          console.log("match")
+          console.log(match)
           if (!match) return null;
           return {
             ...record,
@@ -77,7 +81,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
           type: 'aiList/setTableData',
           payload: tempData
         });
-      console.log("tableData")
+      console.log("====tableData====")
       console.log(tableData)
     }
 

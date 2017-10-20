@@ -70,6 +70,10 @@ class Request extends React.Component {
       params[field.name] = field.value
     }
     console.log(params)
+    console.log({
+      type: 'ai/callai',
+      payload: {params:JSON.stringify(params)}
+    })
     this.props.dispatch({
       type: 'ai/callai',
       payload: {params:JSON.stringify(params)}

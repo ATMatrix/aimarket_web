@@ -8,12 +8,11 @@ import style from './styles.css'
 
 class Form extends React.Component {
   constructor(props) {
-    super()
-    this.state = props
+    super(props)
   }
 
   render() {
-    const thisFields = this.state.fields.map((field, idx) => {
+    const thisFields = this.props.fields.map((field, idx) => {
       return (
         <div
           className={style.field}
@@ -42,7 +41,7 @@ class Form extends React.Component {
     return (
       <div>
         <div className={style.form_title}>
-          <h2>{this.state.title.toUpperCase()}</h2>
+          <h2>{this.props.title.toUpperCase()}</h2>
         </div>
         <div>
           {thisFields}
@@ -55,11 +54,11 @@ class Form extends React.Component {
 class Request extends React.Component {
   constructor(props) {
     super(props)
-    this.state = props.data
+    this.props = props.data
   }
 
   render() {
-    const forms = this.state.forms.map((form, idx) => {
+    const forms = this.props.forms.map((form, idx) => {
       return (
         <Form
           key={idx}
@@ -73,8 +72,8 @@ class Request extends React.Component {
       <Col span={12} className={style.request} type="flex">
         <div>
           <div>
-            <h3>{this.state.title}</h3>
-            <p>{this.state.describe}</p>
+            <h3>{this.props.title}</h3>
+            <p>{this.props.describe}</p>
           </div>
           {forms}
         </div>
@@ -87,29 +86,29 @@ class Request extends React.Component {
 class Response extends React.Component {
   constructor(props) {
     super(props)
-    this.state = props.data
+    this.props = props.data
   }
 
   render() {
     return (
       <Col span={12} className={style.response} type="flex">
         <div className={
-          style.container + ' ' + style[this.state.method.toUpperCase()]
+          style.container + ' ' + style[this.props.method.toUpperCase()]
         }>
           <h2>ENDPOINT DEFINITION</h2>
           <Input
             className={
-              style.route_container + ' ' + style[this.state.method.toUpperCase()]
+              style.route_container + ' ' + style[this.props.method.toUpperCase()]
             }
             addonBefore={
               <span
                 className={
-                  style.verb + ' ' + style[this.state.method.toUpperCase()]
+                  style.verb + ' ' + style[this.props.method.toUpperCase()]
                 }>
-                {this.state.method.toUpperCase()}
+                {this.props.method.toUpperCase()}
               </span>
             }
-            value={this.state.url}
+            value={this.props.url}
             readOnly="readonly"
           />
         </div>
@@ -117,7 +116,7 @@ class Response extends React.Component {
           <h2>REQUEST EXAMPLE</h2>
           <TextArea
             rows='12'
-            value={this.state.requestExample}
+            value={this.props.requestExample}
             readOnly="readonly"
           />
         </div>
@@ -127,20 +126,20 @@ class Response extends React.Component {
             <span
               className={
                 style.status_container + ' ' + (/2..$/
-                  .test(this.state.statusCode.toString())
+                  .test(this.props.statusCode.toString())
                   ? style.success
                   : style.fail)
               }
             >
               {
-                `${this.state.statusCode} / ${this.state.contentType}`
+                `${this.props.statusCode} / ${this.props.contentType}`
               }
             </span>
-            {this.state.endPointTitle.split(' ').join('_')}
+            {this.props.endPointTitle.split(' ').join('_')}
           </div>
           <TextArea
             rows='12'
-            value={this.state.responseBody}
+            value={this.props.responseBody}
             readOnly="readonly"
           />
         </div>
@@ -152,15 +151,14 @@ class Response extends React.Component {
 export default class extends React.Component {
   constructor(props) {
     super(props)
-    this.state = props
   }
 
   render() {
     return (
       <Row className={style.row2}>
         <Row className={style.row1}>
-          <Request data={this.state.request} />
-          <Response data={this.state.response} />
+          <Request data={this.props.request} />
+          <Response data={this.props.response} />
         </Row>
       </Row>
     )

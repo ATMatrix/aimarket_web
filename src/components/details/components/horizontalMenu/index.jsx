@@ -5,8 +5,7 @@ const { SubMenu, Item } = Menu
 
 class HorizotalMenu extends React.Component {
   constructor(props) {
-    super()
-    this.state = props
+    super(props)
   }
 
   render() {

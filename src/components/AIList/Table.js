@@ -12,8 +12,8 @@ const tableDataBack = mock_data.tableData;
 function TableDemo ({ dispatch, aiName, tableData}) {
 
     // tableData = JSON.stringify(tableData)
-    console.log("tableDataBack: \n" + tableDataBack)
-    console.log("((((((tableData: \n" + tableData)
+    // console.log("tableDataBack: \n" + tableDataBack)
+    // console.log("((((((tableData: \n" + tableData)
     const attribute = {
         bordered: true,
         loading: false,
@@ -161,7 +161,7 @@ function TableDemo ({ dispatch, aiName, tableData}) {
         return (
 
             <div>
-              aiName: {aiName}
+              {/*aiName: {aiName}*/}
                 <div id="selector" className={styles.selectors}>
                     <div>
 

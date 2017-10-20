@@ -11,7 +11,7 @@ const baiduProfiles = {
 支持中、英、葡、法、德、意、西、俄、日、中英混合识别，整体识别准确率高达90%以上`,
 };
 
-const xiaoiParams = JSON.stringify({
+const xiaoiProfiles = JSON.stringify({
   creator: 'xiaoi',
   logoSrc: 'http://nlp.xiaoi.com/ask.do',
   title: 'xiaoi',
@@ -83,6 +83,13 @@ const baiduParams = {
   response: baiduResponse
 }
 
+const xiaoiParams = {
+  apis: baiduApis,
+  request: baiduRequest,
+  profile: xiaoiProfiles,
+  response: baiduResponse
+}
+
 export default {
   tableData: [{
     key: '1',
@@ -138,18 +145,21 @@ export default {
       uptime: '100%',
       isCollected: false,
     },
+    {
+      key: '5',
+      img: <img className={styles.image_style} src={require('../../../assets/images/baidu2.jpg')}/>,
+      name: '百度语音合成',
+      author: '百度',
+      url: 'https://ai.baidu.com/tech/speech/tts',
+      intro: '基于业界领先的深度神经网络技术，提供流畅自然的语音合成服务\n' +
+      '让您的应用开口说话',
+      price: 'FREE',
+      developers: '1007',
+      followers: '980',
+      uptime: '100%',
+      isCollected: false,
+  },
     // {
-  //   key: '5',
-  //   img: <img className={styles.image_style} src={require('../../../assets/images/temp5.png')}/>,
-  //   name: 'Bestquotes',
-  //   author: 'eyespy',
-  //   intro: 'An API for interesting facts about numbers. Provides trivia, math, date, and year...',
-  //   price: 'FREE',
-  //   developers: '1007',
-  //   followers: '980',
-  //   uptime: '100%',
-  //   isCollected: false,
-  // }, {
   //   key: '6',
   //   img: <img className={styles.image_style} src={require('../../../assets/images/temp6.jpeg')}/>,
   //   name: 'EyeSpy',

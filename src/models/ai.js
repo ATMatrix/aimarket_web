@@ -46,6 +46,8 @@ export default {
             callAIResult:dataContent
           }
         });
+      } else {
+        console.log("request fail!");
       }
 
     }

@@ -32,19 +32,22 @@ export default {
     * callai ({
       payload
     }, { put, call, select }) {
-      console.log(payload)
       //request start
       const result = yield call(commonService.service,gqlBody_builder(CALLAI_GQl,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
-      let dataContent = JSON.parse(result.data.data.callAI.content);
-      console.log(dataContent);
+      console.log(result);
 
-      yield put({
-        type: 'saveCallAIResult',
-        payload: {
-          callAIResult:dataContent
-        }
-      });
+      if(result.data && result.data.data.callAI.content && (result.data.data.callAI.type !== "error")){
+        let dataContent = JSON.parse(result.data.data.callAI.content);
+
+        yield put({
+          type: 'saveCallAIResult',
+          payload: {
+            callAIResult:dataContent
+          }
+        });
+      }
+
     }
     ,
     * setAIName ({

@@ -21,7 +21,7 @@ function Tester({ dispatch ,callAIResult,signupFlag}) {
       <br/>
       callAIResult: {JSON.stringify(callAIResult)}
       <div>
-        <Button onClick={signUp.bind(null, {type:'AipOcrClient',url:'http://img2.3lian.com/2014/f6/176/d/89.jpg'})}>callai</Button>
+        <Button onClick={signUp.bind(null, {type:'baiduOrc',url:'http://img2.3lian.com/2014/f6/176/d/89.jpg'})}>callai</Button>
       </div>
     </div>
   );

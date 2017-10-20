@@ -20,24 +20,24 @@
 
 
 .image_style {
-  height: 60px;
-  width: 60px;
+  height: 70px;
+  width: 70px;
 }
 
-.image_style1 {
-  width: 60px;
-  height: 60px;
-  background: url(../../assets/images/temp1.jpeg) no-repeat center 0;
-  background-size: 100%, 100%;
-}
+/*.image_style1 {*/
+  /*width: 60px;*/
+  /*height: 60px;*/
+  /*background: url(../../assets/images/temp1.jpeg) no-repeat center 0;*/
+  /*background-size: 100%, 100%;*/
+/*}*/
 
-.image_style2 {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/*.image_style2 {*/
+  /*width: 80px;*/
+  /*height: 80px;*/
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: center;*/
+/*}*/
 
 
 .image_layout {

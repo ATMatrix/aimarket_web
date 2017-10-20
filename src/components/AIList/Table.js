@@ -5,10 +5,13 @@ import styles from './table.css'
 import mock_data from './mock_data/data'
 import { Link } from 'dva/router';
 import { connect } from 'dva';
+const _ = require('lodash')
 
+const tableDataBack = mock_data.tableData;
+console.log("tableDataBack: \n" + tableDataBack)
 
-let tableData = mock_data.tableData
-function TableDemo ({ dispatch, aiName}) {
+function TableDemo ({ dispatch, aiName, tableData}) {
+
     const attribute = {
         bordered: true,
         loading: false,
@@ -19,86 +22,93 @@ function TableDemo ({ dispatch, aiName}) {
     };
 
     let state = {
-      tableData,
         filteredInfo: null,
         sortedInfo: null,
     };
 
 
     function setState(values) {
-      console.log("values: \n" + values);
-      if(values.tableData != null) state.tableData = values.tableData;
+      // console.log("values: \n" + values);
+      if(values.tableData != null) tableData = values.tableData;
       if(values.filteredInfo != null)state.filteredInfo = values.filteredInfo;
       if(values.sortedInfo != null)state.sortedInfo = values.sortedInfo;
-      console.log("filteredInfo: ")
-      console.log(state.filteredInfo)
+      // console.log("filteredInfo: ")
+      // console.log(state.filteredInfo)
     }
 
     function sortChange(value){
-        const val = `${value}`;
-        if(val == 'Popular') {
-            setState({
-                sortedInfo: {
-                    order: 'descend',
-                    columnKey: 'followers',
-                },
-            })
-        }
+        // const val = `${value}`;
+        // if(val == 'Popular') {
+        //     setState({
+        //         sortedInfo: {
+        //             order: 'descend',
+        //             columnKey: 'followers',
+        //         },
+        //     })
+        // }
     }
 
   // hashHistory.push(path);
 
     function filterChange(value){
         if(value === 'All') {
-            setState({
-              tableData: tableData.slice()
-            })
+            tableData = JSON.parse(JSON.stringify(tableDataBack))
             return;
         }
         const val = `^${value}$`;
         const reg = new RegExp(val, 'gi')
         // setState({
-          state.tableData.map((record) => {
-            console.log("reg: " + reg)
-            const match = record.price.match(reg)
-            console.log(match)
-            if (!match) return null;
-            return {
-              ...record,
-            };
-          }).filter(record => !!record)
+        tableData = JSON.parse(JSON.stringify(tableDataBack));
+        console.log("tableDataBack")
+        console.log(tableDataBack)
+        let tempData = tableData.map((record) => {
+          // console.log("record")
+          // console.log(record)
+          const match = record.price.match(reg)
+          // console.log("match")
+          // console.log(match)
+          if (!match) return null;
+          return {
+            ...record,
+          };
+        }).filter(record => !!record)
         // });
-      console.log(state.tableData)
+        dispatch({
+          type: 'aiList/setTableData',
+          payload: tempData
+        });
+      console.log("tableData")
+      console.log(tableData)
     }
 
     function collectIcon(opt){
         // console.log(opt)
-        if(opt.isCollected === false) {
-            const dataTemp = tableData.slice()
-            setState({
-              tableData: dataTemp.map((record) => {
-                    if(record.key === opt.key) {
-                        record.isCollected = true
-                        record.iconStyle = 'icon_style2'
-                        record.iconType = 'star'
-                    }
-                    return record
-                })
-            })
-        }
-        else {
-            const dataTemp = tableData.slice()
-            setState({
-              tableData: dataTemp.map((record) => {
-                    if(record.key === opt.key) {
-                        record.isCollected = false
-                        record.iconStyle = 'icon_style1'
-                        record.iconType = 'star_o'
-                    }
-                    return record
-                })
-            })
-        }
+        // if(opt.isCollected === false) {
+        //     const dataTemp = tableData.slice()
+        //     setState({
+        //       tableData: dataTemp.map((record) => {
+        //             if(record.key === opt.key) {
+        //                 record.isCollected = true
+        //                 record.iconStyle = 'icon_style2'
+        //                 record.iconType = 'star'
+        //             }
+        //             return record
+        //         })
+        //     })
+        // }
+        // else {
+        //     const dataTemp = tableData.slice()
+        //     setState({
+        //       tableData: dataTemp.map((record) => {
+        //             if(record.key === opt.key) {
+        //                 record.isCollected = false
+        //                 record.iconStyle = 'icon_style1'
+        //                 record.iconType = 'star_o'
+        //             }
+        //             return record
+        //         })
+        //     })
+        // }
 
     }
 
@@ -120,7 +130,9 @@ function TableDemo ({ dispatch, aiName}) {
             dataIndex: 'img',
             key: 'img',
             render: (text, record) =>
-              <span className={styles.image_layout}><a href="#" >{text}</a></span>
+              <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+                <span className={styles.image_layout}><span className={styles.image_style2}>{text}</span></span>
+              </Link>
               ,
         }, {
             title: '',
@@ -129,12 +141,11 @@ function TableDemo ({ dispatch, aiName}) {
             render: (text, record) => (
 
               <span>
-
                 <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
-                  <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}> by</span>&nbsp;
+                  <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}>  by  </span>&nbsp;
                 </Link>
-                  <a href="#" className={styles.author_style}>{record.author}</a><br />
-                  <span>{record.intro}</span>
+                  <a href={record.url} className={styles.author_style}>{record.author}</a><br />
+                  <span className={styles.intro_style}>{record.intro}</span>
               </span>
             ),
         }, {
@@ -217,7 +228,7 @@ function TableDemo ({ dispatch, aiName}) {
                 </div>
 
                 <div className={styles.table_style}>
-                    <Table  {...attribute} columns={columns} dataSource={state.tableData} />
+                    <Table  {...attribute} columns={columns} dataSource={tableData} />
                 </div>
 
             </div>
@@ -227,11 +238,14 @@ function TableDemo ({ dispatch, aiName}) {
 }
 function mapStateToProps(state) {
   const { aiName } = state.ai;
+  const { tableData } = state.aiList;
   return {
     loading: state.loading.models.ai,
-    aiName
+    aiName,
+    tableData
   };
 }
+
 
 export default connect(mapStateToProps)(TableDemo);
 

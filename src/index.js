@@ -24,6 +24,7 @@ app.use(createLoading());
 app.model(require("./models/users"));
 app.model(require("./models/signup"));
 app.model(require("./models/ai"));
+app.model(require("./models/aiList"))
 
 // 4. Router
 app.router(require('./router'));

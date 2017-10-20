@@ -31,13 +31,23 @@
   background-size: 100%, 100%;
 }
 
-
-.image_layout {
-  height: 60px;
-  width: 60px;
+.image_style2 {
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
+
+
+.image_layout {
+  height: 80px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .table_style {
     background: #FFFFFF;
@@ -50,14 +60,20 @@
 
 .by_style {
     color: #808b92;
+    font-size: 15px;
     font-style:italic;
 }
 
 .author_style {
     font-family: "Open Sans";
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bolder;
     color: #428bca;
+}
+
+.intro_style {
+  font-family: "Open Sans";
+  font-size: 12px;
 }
 
 .cell_val {

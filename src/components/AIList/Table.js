@@ -117,7 +117,7 @@ function TableDemo ({ dispatch, aiName}) {
 
               <span>
 
-                <Link to='/list' onClick={renderToDetails.bind(null,record.params)}>
+                <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
                   <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}> by</span>&nbsp;
                 </Link>
                   <a href="#" className={styles.author_style}>{record.author}</a><br />

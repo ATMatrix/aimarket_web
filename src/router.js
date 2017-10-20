@@ -4,7 +4,7 @@ import {Router, Route, Switch} from 'dva/router';
 
 import Users from "./routes/Users.js";
 
-import Tester from "./routes/Tester.js";
+import Tester from "./routes/Tester1.js";
 
 import IndexPage from './routes/HomePage'
 import List from './components/AIList/List'

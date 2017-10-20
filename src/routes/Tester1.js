@@ -7,29 +7,29 @@ import { Button } from 'antd';
 import { connect } from 'dva';
 import styles from './Tester.css';
 
-function Tester({ dispatch ,signupFlag}) {
-  function signUp(user) {
+function Tester({ dispatch ,callAIResult,aiName}) {
+  function signUp(name) {
     dispatch({
-      type: 'signup/signup',
-      payload: {user:user}
+      type: 'ai/setAIName',
+      payload: name
     });
   }
 
   return (
     <div className={styles.normal}>
-      signupFlag: {signupFlag}
+      aiName: {aiName}
       <div>
-        <Button onClick={signUp.bind(null, {username:"username1",email:"email",password:"password"})}>test</Button>
+        <Button onClick={signUp.bind(null,"fuck")}>callai</Button>
       </div>
     </div>
   );
 }
 
 function mapStateToProps(state) {
-  const { signupFlag } = state.signup;
+  const { aiName } = state.ai;
   return {
-    loading: state.loading.models.signup,
-    signupFlag
+    loading: state.loading.models.ai,
+    aiName
   };
 }
 

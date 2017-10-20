@@ -17,7 +17,7 @@
   },
   "proxy": {
     "/api": {
-      "target": "http://118.31.18.101:4000/graphql/",
+      "target": "http://10.0.10.104:4000/graphql/",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }

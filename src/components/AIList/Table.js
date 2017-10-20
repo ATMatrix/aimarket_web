@@ -7,7 +7,7 @@ import { Link } from 'dva/router';
 import { connect } from 'dva';
 
 
-let data = mock_data.tableData
+let tableData = mock_data.tableData
 function TableDemo ({ dispatch, aiName}) {
     const attribute = {
         bordered: true,
@@ -19,10 +19,20 @@ function TableDemo ({ dispatch, aiName}) {
     };
 
     let state = {
-        data,
+      tableData,
         filteredInfo: null,
         sortedInfo: null,
     };
+
+
+    function setState(values) {
+      console.log("values: \n" + values);
+      if(values.tableData != null) state.tableData = values.tableData;
+      if(values.filteredInfo != null)state.filteredInfo = values.filteredInfo;
+      if(values.sortedInfo != null)state.sortedInfo = values.sortedInfo;
+      console.log("filteredInfo: ")
+      console.log(state.filteredInfo)
+    }
 
     function sortChange(value){
         const val = `${value}`;
@@ -41,29 +51,32 @@ function TableDemo ({ dispatch, aiName}) {
     function filterChange(value){
         if(value === 'All') {
             setState({
-                data: data.slice()
+              tableData: tableData.slice()
             })
             return;
         }
         const val = `^${value}$`;
         const reg = new RegExp(val, 'gi')
-        setState({
-            data: data.map((record) => {
-                const match = record.price.match(reg)
-                if (!match) return null;
-                return {
-                    ...record,
-                };
-            }).filter(record => !!record)
-        });
+        // setState({
+          state.tableData.map((record) => {
+            console.log("reg: " + reg)
+            const match = record.price.match(reg)
+            console.log(match)
+            if (!match) return null;
+            return {
+              ...record,
+            };
+          }).filter(record => !!record)
+        // });
+      console.log(state.tableData)
     }
 
     function collectIcon(opt){
-        console.log(opt)
+        // console.log(opt)
         if(opt.isCollected === false) {
-            const dataTemp = data.slice()
+            const dataTemp = tableData.slice()
             setState({
-                data: dataTemp.map((record) => {
+              tableData: dataTemp.map((record) => {
                     if(record.key === opt.key) {
                         record.isCollected = true
                         record.iconStyle = 'icon_style2'
@@ -74,9 +87,9 @@ function TableDemo ({ dispatch, aiName}) {
             })
         }
         else {
-            const dataTemp = data.slice()
+            const dataTemp = tableData.slice()
             setState({
-                data: dataTemp.map((record) => {
+              tableData: dataTemp.map((record) => {
                     if(record.key === opt.key) {
                         record.isCollected = false
                         record.iconStyle = 'icon_style1'
@@ -177,12 +190,12 @@ function TableDemo ({ dispatch, aiName}) {
             ),
 
         }];
-        console.log(columns);
+        // console.log(columns);
 
         return (
 
             <div>
-              aiName: {aiName}
+              {/*aiName: {aiName}*/}
                 <div id="selector" className={styles.selectors}>
                     <div>
 
@@ -204,7 +217,7 @@ function TableDemo ({ dispatch, aiName}) {
                 </div>
 
                 <div className={styles.table_style}>
-                    <Table  {...attribute} columns={columns} dataSource={state.data} />
+                    <Table  {...attribute} columns={columns} dataSource={state.tableData} />
                 </div>
 
             </div>

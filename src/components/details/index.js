@@ -9,7 +9,7 @@ import HorizotalMenu from './components/horizontalMenu'
 import Header from '../Header/HeaderLight'
 import ContentRow from './components/contentRow'
 
-import data from './mock_data'
+import { connect } from 'dva';
 
 
 const {
@@ -65,10 +65,10 @@ class Profile extends React.Component {
   }
 }
 
-export default class Details extends React.Component {
+class Details extends React.Component {
   constructor(props) {
     super(props)
-    this.state = data
+    this.state = props
   }
 
   render() {
@@ -101,4 +101,8 @@ export default class Details extends React.Component {
   }
 }
 
-// ReactDOM.render(<Details data={data} />, document.getElementById('root'))
+const mapStateToProps = state => ({
+  profile: JSON.parse(state.ai.aiName)
+})
+
+export default connect(mapStateToProps)(Details)

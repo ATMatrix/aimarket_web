@@ -59,6 +59,7 @@ export default {
     },
     {
       key: '5',
+      params: 'baiduVoice',
       img: <img className={styles.image_style} src={require('../../../assets/images/baidu2.jpg')}/>,
       name: '百度语音合成',
       author: '百度',

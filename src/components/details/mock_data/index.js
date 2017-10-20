@@ -90,10 +90,12 @@ import baidu from './baidu'
 import ali from './ali'
 import xiaoi from './xiaoi'
 import xunfei from './xunfei'
+import baiduVoice from './baiduvoice'
 
 export default {
   baidu,
   ali,
   xiaoi,
   xunfei,
+  baiduVoice,
 }

@@ -80,14 +80,7 @@ class Details extends React.Component {
           <Content>
             <ContentRow
               request={this.props.request}
-              response={this.props.response}
-            />
-            <ContentRow
-              request={this.props.request}
-              response={this.props.response}
-            />
-            <ContentRow
-              request={this.props.request}
+              dispatch={this.props.dispatch}
               response={this.props.response}
             />
           </Content>
@@ -97,6 +90,6 @@ class Details extends React.Component {
   }
 }
 
-const mapStateToProps = state => state.ai
+const mapStateToProps = state => state.ai.aiName
 
 export default connect(mapStateToProps)(Details)

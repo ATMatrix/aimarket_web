@@ -24,6 +24,8 @@ class Form extends React.Component {
           </div>
           <div>
             <Input
+              className={'CallAIInputData'}
+              name={field.name}
               suffix={
                 field.required
                   ? <span style={{color: "red"}}>*</span>
@@ -54,11 +56,29 @@ class Form extends React.Component {
 class Request extends React.Component {
   constructor(props) {
     super(props)
-    this.props = props.data
+    this.handleCallAI = this.handleCallAI.bind(this)
+  }
+
+  handleCallAI() {
+    console.log(this.props)
+    const params = {
+      type: this.props.data.type,
+    }
+    const formFields = document.querySelectorAll('.CallAIInputData input')
+    for (let i = 0; i < formFields.length; i++) {
+      const field = formFields[i]
+      params[field.name] = field.value
+    }
+    console.log(params)
+    this.props.dispatch({
+      type: 'ai/callai',
+      payload: {params:JSON.stringify(params)}
+    })
   }
 
   render() {
-    const forms = this.props.forms.map((form, idx) => {
+    const data = this.props.data
+    const forms = data.forms.map((form, idx) => {
       return (
         <Form
           key={idx}
@@ -72,12 +92,12 @@ class Request extends React.Component {
       <Col span={12} className={style.request} type="flex">
         <div>
           <div>
-            <h3>{this.props.title}</h3>
-            <p>{this.props.describe}</p>
+            <h3>{data.title}</h3>
+            <p>{data.describe}</p>
           </div>
           {forms}
         </div>
-        <Button className={style.request_buttom}>Test EndPoint</Button>
+        <Button className={style.request_buttom} onClick={this.handleCallAI}>Test EndPoint</Button>
       </Col>
     )
   }
@@ -86,29 +106,29 @@ class Request extends React.Component {
 class Response extends React.Component {
   constructor(props) {
     super(props)
-    this.props = props.data
   }
 
   render() {
+    const data = this.props.data
     return (
       <Col span={12} className={style.response} type="flex">
         <div className={
-          style.container + ' ' + style[this.props.method.toUpperCase()]
+          style.container + ' ' + style[data.method.toUpperCase()]
         }>
           <h2>ENDPOINT DEFINITION</h2>
           <Input
             className={
-              style.route_container + ' ' + style[this.props.method.toUpperCase()]
+              style.route_container + ' ' + style[data.method.toUpperCase()]
             }
             addonBefore={
               <span
                 className={
-                  style.verb + ' ' + style[this.props.method.toUpperCase()]
+                  style.verb + ' ' + style[data.method.toUpperCase()]
                 }>
-                {this.props.method.toUpperCase()}
+                {data.method.toUpperCase()}
               </span>
             }
-            value={this.props.url}
+            value={data.url}
             readOnly="readonly"
           />
         </div>
@@ -116,7 +136,7 @@ class Response extends React.Component {
           <h2>REQUEST EXAMPLE</h2>
           <TextArea
             rows='12'
-            value={this.props.requestExample}
+            value={data.requestExample}
             readOnly="readonly"
           />
         </div>
@@ -126,20 +146,20 @@ class Response extends React.Component {
             <span
               className={
                 style.status_container + ' ' + (/2..$/
-                  .test(this.props.statusCode.toString())
+                  .test(data.statusCode.toString())
                   ? style.success
                   : style.fail)
               }
             >
               {
-                `${this.props.statusCode} / ${this.props.contentType}`
+                `${data.statusCode} / ${data.contentType}`
               }
             </span>
-            {this.props.endPointTitle.split(' ').join('_')}
+            {data.endPointTitle.split(' ').join('_')}
           </div>
           <TextArea
             rows='12'
-            value={this.props.responseBody}
+            value={data.responseBody}
             readOnly="readonly"
           />
         </div>
@@ -157,7 +177,7 @@ export default class extends React.Component {
     return (
       <Row className={style.row2}>
         <Row className={style.row1}>
-          <Request data={this.props.request} />
+          <Request dispatch={this.props.dispatch} data={this.props.request} />
           <Response data={this.props.response} />
         </Row>
       </Row>

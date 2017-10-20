@@ -32,6 +32,7 @@ export default {
     * callai ({
       payload
     }, { put, call, select }) {
+      console.log(payload)
       //request start
       const result = yield call(commonService.service,gqlBody_builder(CALLAI_GQl,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
@@ -69,7 +70,7 @@ export default {
         }
       });
     }
-    
+
   }
 
 }

@@ -9,6 +9,8 @@ import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {CALLAI_GQl} from '../utils/gql/gql_template/index';
 import mock_data from '../components/AIList/mock_data/data'
+const fs = require('fs')
+
 export default {
 
   namespace: 'aiList',
@@ -50,7 +52,7 @@ export default {
       });
     }
     ,
-    * setTableData ({
+    * setFilterInfo ({
                    payload
                  }, { put, call, select }) {
       const tableDataBack = mock_data.tableData;
@@ -84,7 +86,6 @@ export default {
         //     ...record,
         //   };
         // }).filter(record => !!record);
-
         yield put({
           type: 'saveTableData',
           payload: {
@@ -99,58 +100,66 @@ export default {
                       payload
                     }, { put, call, select }) {
       const tableDataBack = mock_data.tableData;
-      let isCollected = payload;
-
-      if(isCollected === false) {
-        const dataTemp = tableData.slice()
-        setState({
-          tableData: dataTemp.map((record) => {
-            if(record.key === opt.key) {
-              record.isCollected = true
-              record.iconStyle = 'icon_style2'
-              record.iconType = 'star'
-            }
-            return record
-          })
-        })
-      }
-      else {
-        const dataTemp = tableData.slice()
-        setState({
-          tableData: dataTemp.map((record) => {
-            if(record.key === opt.key) {
-              record.isCollected = false
-              record.iconStyle = 'icon_style1'
-              record.iconType = 'star_o'
-            }
-            return record
-          })
-        })
-      }
-      if(value === "ALL") {
-        yield put({
-          type: 'saveTableData',
-          payload: {
-            tableData:tableDataBack
-          }
-        });
-      }
-      else {
-        let tempData = [];
-        for (let record in tableDataBack) {
-          if(tableDataBack[record].price === value) {
-            tempData.push(tableDataBack[record])
-          }
+      let opt = payload;
+      // console.log("=======opt:\n" + opt)
+      let tempData = [];
+      for (let i in tableDataBack) {
+        tempData.push(tableDataBack[i])
+        if(tableDataBack[i].key === opt) {
+          tempData[i].isCollected = !tempData[i].isCollected;
         }
-        yield put({
-          type: 'saveTableData',
-          payload: {
-            tableData:tempData
-          }
-        });
+      }
+      //日后将修改后的tableData写入数据库
+
+      //如果直接这么修改的话state树不会自动更新
+      // for (let i in tableDataBack) {
+      //   if (tableDataBack[i].key === opt) {
+      //     tableDataBack[i].isCollected = !tableDataBack[i].isCollected;
+      //     console.log("tableDataBack[i].isCollected: " + tableDataBack[i].isCollected);
+      //     break;
+      //   }
+      // }
+
+      // fs.writeFileSync(mock_data.tableData, tableDataBack);
+      yield put({
+        type: 'saveTableData',
+        payload: {
+          tableData:tempData
+        }
+      });
+    },
+
+    * setSortOrder ({
+                      payload
+                    }, { put, call, select }) {
+      let tableDataBack = mock_data.tableData;
+      let tempData = [];
+      let field = '';
+      if(payload === 'Popular') {
+        field = 'followers';
+      }
+      function sortBy(field) {
+        return function(a, b) {
+          return b[field] - a[field];
+        }
       }
 
-    }
+      tableDataBack.sort(sortBy(field));
+
+      // 如果直接把tableDataBack作为参数传给saveTableData，那么前台不会自动刷新，所以定义一个新的数组传过去
+      for (let i in tableDataBack) {
+        tempData.push(tableDataBack[i])
+      }
+
+      console.log("setSortOrder: =======\n", tempData);
+      yield put({
+        type: 'saveTableData',
+        payload: {
+          tableData:tempData
+        }
+      });
+    } 
+
     ,
     * setcallAIResult ({
                          payload

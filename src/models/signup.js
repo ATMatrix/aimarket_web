@@ -13,7 +13,7 @@ export default {
   namespace: 'signup',
 
   state: {
-    signupFlag:'signupFlag_null'
+    signupFlag:'signupFlag_null',
   },
   reducers: {
     saveSignupFlag(state, { payload: { signupFlag } }) {
@@ -30,7 +30,8 @@ export default {
       console.log(result);
       if(result.type !== "error") {
         //request success
-        let dataContent = JSON.parse(result.data.data.addUser.content);
+        // let dataContent = JSON.parse(result.data.data.addUser.content);
+        let dataContent = {"flag" : true}
         console.log(dataContent);
         if(dataContent.flag){
           //signup success
@@ -38,10 +39,10 @@ export default {
           yield put({
             type: 'saveSignupFlag',
             payload: {
-              signupFlag:"signupFlag_true"
+              signupFlag:"signupFlag_true",
             }
           });
-          proxyGlobal.emit("signupFlag_true");
+          // proxyGlobal.emit("signupFlag_true");
           let signupFlagTemp = yield select(state => state.signup);
           console.log(signupFlagTemp);
         }else {
@@ -50,7 +51,7 @@ export default {
           yield put({
             type: 'saveSignupFlag',
             payload: {
-              signupFlag:"signupFlag_false"
+              signupFlag:"signupFlag_false",
             }
           });
           proxyGlobal.emit("signupFlag_false");
@@ -68,19 +69,17 @@ export default {
         let signupFlagTemp = yield select(state => state.signup);
         console.log(signupFlagTemp);
       }
+    },
 
-      // const { locationQuery } = yield select(_ => _.app);
-      // if (data.success) {
-      //   const { from } = locationQuery;
-      //   yield put({ type: 'app/query' });
-      //   if (from && from !== '/login') {
-      //     yield put(routerRedux.push(from))
-      //   } else {
-      //     yield put(routerRedux.push('/dashboard'))
-      //   }
-      // } else {
-      //   throw data
-      // }
+    * setSignUpFlag ({
+      payload,
+    }, { put, call, select }) {
+      yield put({
+        type: 'saveSignupFlag',
+        payload: {
+          signupFlag : payload
+        }
+      });
     }
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './list.css'
 import { connect } from 'dva';
 import { Layout } from 'antd';
-import HomeHeader from '../Header/HeaderLight'
+import { HomeHeader } from '../Header/HeaderLight'
 import MenuList from './MenuList'
 import Table from './Table'
 import data from './mock_data/data'

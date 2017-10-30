@@ -13,7 +13,7 @@ export default {
 
   state: {
     loginVisible: false,
-    registerVisible: false 
+    registerVisible: false
   },
   reducers: {
     saveLoginVisible(state, { payload: { loginVisible } }) {
@@ -28,8 +28,8 @@ export default {
   },
   effects: {
     * setLoginVisible ({
-                payload
-              }, { put, call, select }) {
+                         payload
+                       }, { put, call, select }) {
       //request start
       yield put({
         type: 'saveLoginVisible',
@@ -40,28 +40,28 @@ export default {
     }
     ,
     * setRegisterVisible ({
-                   payload
-                 }, { put, call, select }) {
-        yield put({
-          type: 'saveRegisterVisible',
-          payload: {
-            registerVisible : payload
-          }
-        });
- 
-      }
+                            payload
+                          }, { put, call, select }) {
+      yield put({
+        type: 'saveRegisterVisible',
+        payload: {
+          registerVisible : payload
+        }
+      });
 
     }
-    ,
-    * setState ({
-        payload
-      }, { put, call, select }) {
-        yield put({
-          type: 'saveState',
-          payload: {
-            registerVisible : payload.registerVisible,
-            loginVisible : payload.loginVisible
-          }
+
+  }
+  ,
+  * setState ({
+                payload
+              }, { put, call, select }) {
+    yield put({
+      type: 'saveState',
+      payload: {
+        registerVisible : payload.registerVisible,
+        loginVisible : payload.loginVisible
+      }
     })
   }
 

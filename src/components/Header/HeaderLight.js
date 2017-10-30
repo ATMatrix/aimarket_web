@@ -6,6 +6,7 @@ import { Row, Col } from 'antd';
 import { Input, Form, Modal } from 'antd';
 import LoginForm from './Login'
 import { RegisterForm } from './Register'
+
 const Search = Input.Search;
 import { connect } from 'dva';
 import { Link } from 'dva/router';
@@ -120,8 +121,8 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
         );
 }
 function mapStateToProps(state) {
-    const { loginVisible } = state.headermodal;
-    const { registerVisible } = state.headermodal;
+    const { loginVisible } = state.headerModal;
+    const { registerVisible } = state.headerModal;
     return {
       registerVisible,
       loginVisible

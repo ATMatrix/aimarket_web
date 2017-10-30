@@ -28,12 +28,12 @@ function Register({dispatch, form, signupFlag}) {
 
   console.log("Register function signupFlag: ", signupFlag);
 
-  const onClose = () => {
+  // const onClose = () => {
     
-      // window.location.href='/'
+  //     // window.location.href='/'
 
     
-    }
+  //   }
 
   if(signupFlag == "signupFlag_true") {
     dispatch({

@@ -42,7 +42,6 @@ export default {
     * setRegisterVisible ({
                    payload
                  }, { put, call, select }) {
-        console.log("=======registerVisible: ", payload);
         yield put({
           type: 'saveRegisterVisible',
           payload: {

@@ -26,14 +26,14 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
     const showLoginModal = () => {
         dispatch({
             type: 'headerModal/setLoginVisible',
-            payload: 'true'
+            payload: true
         })
     }
 
     const showRegisterModal = () => {
         dispatch({
             type: 'headerModal/setRegisterVisible',
-            payload: 'true'
+            payload: true
         })
     }
 

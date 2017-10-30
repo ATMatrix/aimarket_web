@@ -43,7 +43,7 @@ function Register({dispatch, form, signupFlag}) {
     message.success("Sign up success! ");
     dispatch({
       type: 'headerModal/setRegisterVisible',
-      payload: 'false'
+      payload: false
     })
   }
 

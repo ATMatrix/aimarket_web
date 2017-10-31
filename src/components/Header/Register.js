@@ -26,6 +26,8 @@ import { Link, routerRedux } from 'dva/router';
 
 function Register({dispatch, form, signupFlag}) {
 
+  console.log("register form: ", form);
+
   console.log("Register function signupFlag: ", signupFlag);
 
   // const onClose = () => {
@@ -52,7 +54,7 @@ function Register({dispatch, form, signupFlag}) {
       type: 'signup/setSignUpFlag',
       payload: 'signupFlag_null'
     })
-    message.success("Sign up failed! ");   
+    message.error("Sign up failed! ");   
   }
 
    function handleSubmit(e) {

@@ -95,6 +95,13 @@
     flex: 1 1 auto
 }
 
+.image_layout {
+    height: 80px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
 

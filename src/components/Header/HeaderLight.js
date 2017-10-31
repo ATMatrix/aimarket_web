@@ -4,7 +4,7 @@ import styles from './header.css'
 import logo_light from '../../assets/images/logo_light.png'
 import { Row, Col } from 'antd';
 import { Input, Form, Modal } from 'antd';
-import LoginForm from './Login'
+import { LoginForm } from './Login'
 import { RegisterForm } from './Register'
 
 const Search = Input.Search;
@@ -13,15 +13,6 @@ import { Link } from 'dva/router';
 
 
 function HeaderLight({ dispatch, registerVisible, loginVisible }){
-    // handleClick = (e) => {
-    //     console.log('click ', e);
-    //     setState({
-    //         current: e.key,
-    //     });
-    // }
-
-    // let state = { loginVisible: false, registerVisible: false }
-    console.log("registerVisible: ", registerVisible);
 
     const showLoginModal = () => {
         dispatch({
@@ -37,22 +28,30 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
         })
     }
 
-    const handleOk = (e) => {
-        const value = { loginVisible: false, registerVisible: false }
+    const handleOk = () => {
         dispatch({
-            type: 'headerModal/setState',
-            payload: value
+            type: 'headerModal/setRegisterVisible',
+            payload: false
+        })
+        dispatch({
+            type: 'headerModal/setLoginVisible',
+            payload: false
         })
     }
-    const handleCancel = (e) => {
-        const value = { loginVisible: false, registerVisible: false }
+    const handleCancel = () => {
         dispatch({
-            type: 'headerModal/setState',
-            payload: value
+            type: 'headerModal/setRegisterVisible',
+            payload: false
+        })
+        dispatch({
+            type: 'headerModal/setLoginVisible',
+            payload: false
         })
     }
 
       const AntForm = Form.create()(RegisterForm)
+      const LogForm = Form.create()(LoginForm)
+
         return(
         <Row  className={styles.head_light_back} >
             <Col className={styles.column1}>
@@ -94,7 +93,7 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
                 footer={null}
                 closable={false}
             >
-                <div className={styles.login_form}><LoginForm /></div>
+                <div className={styles.login_form}><LogForm /></div>
             </Modal>
             </div>
 

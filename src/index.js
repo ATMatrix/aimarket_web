@@ -23,6 +23,7 @@ app.use(createLoading());
 // app.model(require('./models/example'));
 app.model(require("./models/users"));
 app.model(require("./models/signup"));
+app.model(require("./models/login"))
 app.model(require("./models/ai"));
 app.model(require("./models/aiList"))
 app.model(require("./models/headerModal"))

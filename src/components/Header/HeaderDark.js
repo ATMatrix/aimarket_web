@@ -4,62 +4,55 @@ import styles from './header.css'
 import logo_dark from '../../assets/images/logo_dark.png'
 import { Row, Col } from 'antd';
 import { Input, Form, Modal } from 'antd';
-import LoginForm from './Login'
-import {RegisterForm} from './Register'
+import { LoginForm } from './Login'
+import { RegisterForm } from './Register'
+
 const Search = Input.Search;
+import { connect } from 'dva';
 import { Link } from 'dva/router';
 
 
-export default class HeaderDark extends React.Component {
-    // handleClick = (e) => {
-    //     console.log('click ', e);
-    //     this.setState({
-    //         current: e.key,
-    //     });
-    // }
+function HeaderDark({ dispatch, registerVisible, loginVisible }){
 
-
-  constructor(props) {
-    super(props)
-    this.state = { loginVisible: false, registerVisible: false }
-  }
-    showLoginModal = () => {
-        this.setState({
-          loginVisible: true,
-        });
+    const showLoginModal = () => {
+        dispatch({
+            type: 'headerModal/setLoginVisible',
+            payload: true
+        })
     }
 
-  showRegisterModal = () => {
-    this.setState({
-      registerVisible: true,
-    });
-  }
-
-    handleOk = (e) => {
-        this.setState({
-          loginVisible: false,
-          registerVisible: false
-        });
-      // let user = {}
-      // dispatch({
-      //   type: 'signup/signup',
-      //   payload: {user:user}
-      // });
-    }
-    handleCancel = (e) => {
-        this.setState({
-          loginVisible: false,
-          registerVisible: false
-        });
+    const showRegisterModal = () => {
+        dispatch({
+            type: 'headerModal/setRegisterVisible',
+            payload: true
+        })
     }
 
-    render() {
+    const handleOk = () => {
+        dispatch({
+            type: 'headerModal/setRegisterVisible',
+            payload: false
+        })
+        dispatch({
+            type: 'headerModal/setLoginVisible',
+            payload: false
+        })
+    }
+    const handleCancel = () => {
+        dispatch({
+            type: 'headerModal/setRegisterVisible',
+            payload: false
+        })
+        dispatch({
+            type: 'headerModal/setLoginVisible',
+            payload: false
+        })
+    }
+
       const AntForm = Form.create()(RegisterForm)
+      const LogForm = Form.create()(LoginForm)
+
         return(
-    //       <div>
-    //       <Test test="tester"/>
-    //       </div>
-    //
         <Row  className={styles.head_dark_back} >
             <Col className={styles.column1}>
 
@@ -89,30 +82,30 @@ export default class HeaderDark extends React.Component {
             </Col>
 
             <Col className={styles.column2}>
-                    <a onClick={this.showLoginModal} className={styles.head_dark_font} >Login</a></Col>
+                    <a onClick={showLoginModal} className={styles.head_dark_font} >Login</a></Col>
             <div >
             <Modal
                 bodyStyle={{ padding: 0 }}
                 className={styles.modal}
-                visible={this.state.loginVisible}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
+                visible={loginVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
                 footer={null}
                 closable={false}
             >
-                <div className={styles.login_form}><LoginForm /></div>
+                <div className={styles.login_form}><LogForm /></div>
             </Modal>
             </div>
 
             <Col className={styles.column2}>
-                    <a onClick={this.showRegisterModal} className={styles.head_dark_font} >Sign Up</a></Col>
+                    <a onClick={showRegisterModal} className={styles.head_dark_font} >Sign Up</a></Col>
             <div >
                 <Modal
                     bodyStyle={{ padding: 0 }}
                     className={styles.modal}
-                    visible={this.state.registerVisible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
+                    visible={registerVisible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
                     footer={null}
                     closable={false}
                 >
@@ -125,9 +118,21 @@ export default class HeaderDark extends React.Component {
         </Row>
 
         );
-    }
 }
+function mapStateToProps(state) {
+    const { loginVisible } = state.headerModal;
+    const { registerVisible } = state.headerModal;
+    return {
+      registerVisible,
+      loginVisible
+    };
+  }
+  export default {
+     // : Form.create()(Register),
+     HomeHeader: connect(mapStateToProps)(HeaderDark)
+   }
+  
 // ReactDOM.render(
-//     <HeaderDark/>
+//     <Headerdark/>
 //     , document.getElementById('root'));
 

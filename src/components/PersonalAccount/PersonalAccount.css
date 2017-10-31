@@ -1,0 +1,98 @@
+h1 {
+    font-family: 'Open Sans';
+    font-size: 400%;
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h2 {
+    font-family: 'Open Sans';
+    font-size: 200%;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h3 {
+    color: #FFFFFF;
+}
+
+.layout_size {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.padding_style {
+    padding: 30px;
+    
+}
+
+.card_style {
+    height: 20%;
+    width: 100%;
+    padding: 20px;
+}
+
+.icon {
+    font-size: 15px;
+    font-family: 'Open Sans';
+    font-weight: bolder;
+}
+
+.p_style1 {
+    display: flex; 
+    align-items: flex-start;       
+    justify-content: flex-start;
+}
+
+.p_style2 {
+    display: flex; 
+    align-items: flex-start;       
+    justify-content: space-between;
+}
+
+
+.column1 {
+    flex: 0.1 0.1 1%
+}
+
+.column2 {
+    flex: 0.05 0.1 auto
+}
+
+.input {
+    width: 50%;
+    height: 40px;
+    padding: 5px 0;
+}
+
+Card[title] {
+    font-family: 'Open Sans';
+    font-size: 10px;
+    font-weight: bolder;
+    color: #808B91;
+}
+
+.content_style {
+    /* /#EAF0F3 */
+    background: #EAF0F3;
+    display: flex;
+    justify-content: space-between; 
+    /* align-items: center;   */
+    flex-direction: column;
+}
+
+.header {
+    height: 10%;
+    width: 100%;
+    margin: 0;
+}
+
+.button_style {
+    background: #0D5D81;
+    height: 40px;
+    width:100px;
+}
+

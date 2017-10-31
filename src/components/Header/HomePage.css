@@ -1,0 +1,50 @@
+h1 {
+    font-family: 'Open Sans';
+    font-size: 400%;
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h2 {
+    font-family: 'Open Sans';
+    font-size: 200%;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h3 {
+    color: #FFFFFF;
+}
+
+.layout_size {
+    height: 100%;
+    width: 100%;
+    margin: 0
+}
+
+.content_style {
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.header {
+    height: 10%;
+    width: 100%;
+    margin: 0;
+}
+
+.button_center {
+    text-align:center;
+}
+
+.button_style {
+    background: #0D5D81;
+    height: 50px;
+    width: 150px;
+}
+

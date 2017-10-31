@@ -9,6 +9,7 @@ import Tester from "./routes/Tester2.js";
 import IndexPage from './routes/HomePage'
 import List from './components/AIList/List'
 import Details from './components/details';
+import PersonalAccount from './components/PersonalAccount/PersonalAccount'
 
 
 
@@ -21,6 +22,7 @@ function RouterConfig({history}) {
                 <Route path="/details" exact component={Details}/>
                 <Route path="/users" component={Users}/>
                 <Route path="/test" component={Tester} />
+                <Route path="/personalAccount" component={PersonalAccount}/>
             </Switch>
         </Router>
     );

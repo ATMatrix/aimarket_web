@@ -54,7 +54,7 @@ export default {
               signupFlag:"signupFlag_false",
             }
           });
-          proxyGlobal.emit("signupFlag_false");
+          // proxyGlobal.emit("signupFlag_false");
           let signupFlagTemp = yield select(state => state.signup);
           console.log(signupFlagTemp);
         }
@@ -81,6 +81,7 @@ export default {
         }
       });
     }
-  }
+  },
+
 
 }

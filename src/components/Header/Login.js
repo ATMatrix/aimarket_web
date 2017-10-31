@@ -1,30 +1,85 @@
 import React from 'react';
 import LoginHeader from './LoginHeader'
 import styles from './login.css'
-import  '../font/font.css'
-import { Form, Icon, Input, Button } from 'antd';
+import '../font/font.css'
+import { message, Form, Icon, Input, Button } from 'antd';
 import { Card } from 'antd';
+import { connect } from 'dva';
 const FormItem = Form.Item;
+import { Link, routerRedux } from 'dva/router';
 
 
-class Login extends React.Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+
+function Login({dispatch, form, loginFlag}) {
+  
+  console.log("Login function signupFlag: ", loginFlag);  
+
+  let user = {};
+
+  if(loginFlag == "loginFlag_true") {
+    dispatch({
+      type: 'login/setLoginFlag',
+      payload: 'loginFlag_null'
+    })
+    message.success("Login success! ");
+    dispatch({
+      type: 'headerModal/setLoginVisible',
+      payload: false
+    })
+
+    // dispatch({
+    //   type: 'login/setUsername',
+    //   payload: user.username
+    // })
+
+    
+
   }
-  render() {
-    const { getFieldDecorator } = this.props.form;
+
+  if(loginFlag == "loginFlag_false") {
+    dispatch({
+      type: 'login/setLoginFlag',
+      payload: 'loginFlag_null'
+    })
+    message.error("Login failed! ");   
+  }
+
+   function handleSubmit(e) {
+     form.validateFields((err, values) => {
+          if (!err) {
+            console.log('Received values of form: ', values);
+          }
+          user.username = values.username
+          user.password = values.password
+          console.log(user)
+          dispatch({
+            type: 'login/login',
+            payload: {user:user}
+          });
+
+        });
+     // dispatch(routerRedux.goBack())
+    }
+
+  const { getFieldDecorator } = form
+  let loading = false;
+  
+
+  // handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   props.form.validateFields((err, values) => {
+  //     if (!err) {
+  //       console.log('Received values of form: ', values);
+  //     }
+  //   });
+  // }
     return (
       <div className={styles.layout}>
         <Card  className={styles.card_style} bodyStyle={{ padding: 0 }}>
           <div className={styles.login_header}><LoginHeader /></div>
           <div className={styles.form_style}>
-            <Form onSubmit={this.handleSubmit} className={styles.login_form}>
-              <FormItem>
+            <Form className={styles.login_form}>
+             <FormItem>
                 {getFieldDecorator('username', {
                   rules: [{ required: true, message: 'Please input your username!' }],
                 })(
@@ -40,7 +95,7 @@ class Login extends React.Component {
               </FormItem>
               <FormItem>
 
-                <p> <Button type="primary" htmlType="submit" className={styles.login_form_button}>
+                <p> <Button type="primary" htmlType="submit" className={styles.login_form_button} onClick={handleSubmit.bind(this)}>
                   <div style={{color: "#FFFFFF"}}>LOGIN</div>
                 </Button></p>
                 <a className={styles.login_form_forgot} href="">Forgot password?</a>
@@ -59,9 +114,18 @@ class Login extends React.Component {
 
     );
   }
-}
 
-const LoginForm = Form.create()(Login);
-export default LoginForm;
 
+  function mapStateToProps(state) {
+    const { loginFlag } = state.login;
+    return {
+      loading: state.loading.models.login,
+      loginFlag
+    };
+  }
+  export default {
+     // : Form.create()(Register),
+     LoginForm: connect(mapStateToProps)(Login)
+   }
+  
 // ReactDOM.render(<LoginForm />, document.getElementById('root'));

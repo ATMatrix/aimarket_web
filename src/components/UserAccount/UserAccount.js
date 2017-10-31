@@ -4,13 +4,13 @@ import { connect } from 'dva';
 import { Layout, Button, Input, Card, Icon } from 'antd';
 import { Row, Col } from 'antd';
 import { HomeHeader } from '../Header/HeaderDark'
-import styles from './PersonalAccount.css'
+import styles from './UserAccount.css'
 const { Content } = Layout;
 import { Link } from 'dva/router';
 
 
 
-function PersonalAccount ({ location }) {
+function UserAccount ({ location }) {
   return (
     <Layout className={styles.layout_size}>
     <HomeHeader/>    
@@ -109,4 +109,4 @@ function PersonalAccount ({ location }) {
 //   </Link>
 // </div>
 // </Card> 
-export default connect()(PersonalAccount);
+export default connect()(UserAccount);

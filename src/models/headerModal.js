@@ -14,7 +14,6 @@ export default {
   state: {
     loginVisible: false,
     registerVisible: false,
-    username: ''
   },
   reducers: {
     saveLoginVisible(state, { payload: { loginVisible } }) {
@@ -26,9 +25,7 @@ export default {
     saveState(state, { payload: { registerVisible, loginVisible } }) {
       return { ...state, registerVisible, loginVisible };
     },
-    saveUsername(state, { payload: { username } }) {
-      return { ...state, username };
-    }
+
   },
   effects: {
     * setLoginVisible ({
@@ -68,16 +65,4 @@ export default {
       }
     })
   },
-
-  * setUsername ({
-    payload,
-    }, { put, call, select }) {
-      yield put({
-        type: 'saveUsername',
-        payload: {
-          username : payload
-        }
-      });
-    }
-
 }

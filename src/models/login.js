@@ -53,7 +53,7 @@ export default {
          // proxyGlobal.emit("loginFlag_true");
          let loginFlagTemp = yield select(state => state.login);
          console.log(loginFlagTemp);
-         yield put(routerRedux.push('/personalAccount'))
+         yield put(routerRedux.push('/userAccount'))
        }else {
          //login fail
          console.log("login failed");

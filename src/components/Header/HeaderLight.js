@@ -96,7 +96,7 @@ function HeaderLight({ dispatch, registerVisible, loginVisible, username }){
             { isLoggedIn  ? (
                 <div className = {styles.login_flex}>
                     <Col className={styles.column2}>
-                        <Link to = "/personalAccount">
+                        <Link to = "/userAccount">
                         <a className={styles.head_light_font}>{username}</a>
                         </Link>
                     </Col>

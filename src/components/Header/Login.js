@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import LoginHeader from './LoginHeader'
 import styles from './login.css'
@@ -21,12 +22,11 @@ function Login({dispatch, form, loginFlag}) {
       type: 'login/setLoginFlag',
       payload: 'loginFlag_null'
     })
-    message.success("Login success! ");
+    message.success("Login success! ", 1);
     dispatch({
       type: 'headerModal/setLoginVisible',
       payload: false
     })
-
     // dispatch({
     //   type: 'login/setUsername',
     //   payload: user.username
@@ -41,7 +41,7 @@ function Login({dispatch, form, loginFlag}) {
       type: 'login/setLoginFlag',
       payload: 'loginFlag_null'
     })
-    message.error("Login failed! ");   
+    message.error("Login failed! ", 1);   
   }
 
    function handleSubmit(e) {

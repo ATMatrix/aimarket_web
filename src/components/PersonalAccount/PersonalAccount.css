@@ -19,9 +19,8 @@ h3 {
 }
 
 .layout_size {
-    height: 100%;
-    width: 100%;
     margin: 0;
+    background: #EAF0F3;    
 }
 
 .padding_style {
@@ -41,9 +40,15 @@ h3 {
     font-weight: bolder;
 }
 
+.ether {
+    font-size: 16px;
+    /* font-family: 'Open Sans'; */
+    font-weight: bolder;
+}
+
 .p_style1 {
     display: flex; 
-    align-items: flex-start;       
+    align-items: flex-end;       
     justify-content: flex-start;
 }
 
@@ -63,9 +68,15 @@ h3 {
 }
 
 .input {
-    width: 50%;
+    width: 40%;
     height: 40px;
     padding: 5px 0;
+}
+
+.input_balance {
+    width: 150px;
+    height: 40px;
+    padding: 5px 0;    
 }
 
 Card[title] {
@@ -77,6 +88,8 @@ Card[title] {
 
 .content_style {
     /* /#EAF0F3 */
+    width: 100%;
+    height: 100%;
     background: #EAF0F3;
     display: flex;
     justify-content: space-between; 

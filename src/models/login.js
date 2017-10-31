@@ -1,3 +1,4 @@
+'use strict';
 import { routerRedux } from 'dva/router'
 import * as signupService from '../services/signup';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
@@ -8,7 +9,7 @@ export default {
 
   state: {
     loginFlag:'loginFlag_null',
-    username: '**'
+    username: ''
   },
   reducers: {
     saveLoginFlag(state, { payload: { loginFlag } }) {
@@ -46,13 +47,13 @@ export default {
          yield put({
             type: 'saveUsername',
             payload: {
-              username : payload.username
+              username : payload.user.username
             }
           });
          // proxyGlobal.emit("loginFlag_true");
          let loginFlagTemp = yield select(state => state.login);
          console.log(loginFlagTemp);
-         yield put(routerRedux.push('/PersonalAccount'))
+         yield put(routerRedux.push('/personalAccount'))
        }else {
          //login fail
          console.log("login failed");
@@ -99,7 +100,19 @@ export default {
           username : payload
         }
       });
-    }
+    },
+
+    * logout ({
+      payload,
+       }, { put, call, select }) {
+         yield put({
+           type: 'saveUsername',
+           payload: {
+             username : payload
+           }
+         });
+         yield put(routerRedux.push('/'))
+       },
 
  }
 }

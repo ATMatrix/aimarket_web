@@ -67,7 +67,7 @@
 }
 
 .login_form {
-    alignSelf: "center"
+    align-self: "center"
 }
 
 .modal {
@@ -101,6 +101,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.login_flex {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 

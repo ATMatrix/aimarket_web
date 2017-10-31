@@ -1,3 +1,4 @@
+'use strict';
 import { Table, Icon, Select, Button } from 'antd';
 import React from 'react';
 import '../font/font.css'

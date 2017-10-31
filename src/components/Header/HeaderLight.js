@@ -1,8 +1,9 @@
+'use strict';
 import React from 'react';
 import '../font/font.css'
 import styles from './header.css'
 import logo_light from '../../assets/images/logo_light.png'
-import { Row, Col } from 'antd';
+import { Row, Col, message } from 'antd';
 import { Input, Form, Modal } from 'antd';
 import { LoginForm } from './Login'
 import { RegisterForm } from './Register'
@@ -12,7 +13,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 
 
-function HeaderLight({ dispatch, registerVisible, loginVisible }){
+function HeaderLight({ dispatch, registerVisible, loginVisible, username }){
 
     const showLoginModal = () => {
         dispatch({
@@ -49,8 +50,19 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
         })
     }
 
+    const logout = () => {
+        dispatch({
+            type: 'login/logout',
+            payload: ''
+        })
+        message.success("Logout success!", 1);
+    }
+
       const AntForm = Form.create()(RegisterForm)
       const LogForm = Form.create()(LoginForm)
+
+      let isLoggedIn = username == '' ? false : true;  
+      console.log("HeaderDark isLoggedIn: ", isLoggedIn);
 
         return(
         <Row  className={styles.head_light_back} >
@@ -81,37 +93,53 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
             <Col className={styles.column4}>
             </Col>
 
-            <Col className={styles.column2}>
-                    <a onClick={showLoginModal} className={styles.head_light_font} >Login</a></Col>
-            <div >
-            <Modal
-                bodyStyle={{ padding: 0 }}
-                className={styles.modal}
-                visible={loginVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                footer={null}
-                closable={false}
-            >
-                <div className={styles.login_form}><LogForm /></div>
-            </Modal>
-            </div>
+            { isLoggedIn  ? (
+                <div className = {styles.login_flex}>
+                    <Col className={styles.column2}>
+                        <Link to = "/personalAccount">
+                        <a className={styles.head_light_font}>{username}</a>
+                        </Link>
+                    </Col>
+                    
+                    <Col className={styles.column2}>
+                        <a  onClick={logout} className={styles.head_light_font} >Logout</a>
+                    </Col>
+                </div>
+            ) : (
+                <div className = {styles.login_flex}>
+                    <Col className={styles.column2}>
+                            <a onClick={showLoginModal} className={styles.head_light_font} >Login</a></Col>
+                    <div >
+                    <Modal
+                        bodyStyle={{ padding: 0 }}
+                        className={styles.modal}
+                        visible={loginVisible}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                        footer={null}
+                        closable={false}
+                    >
+                        <div className={styles.login_form}><LogForm /></div>
+                    </Modal>
+                    </div>
 
-            <Col className={styles.column2}>
-                    <a onClick={showRegisterModal} className={styles.head_light_font} >Sign Up</a></Col>
-            <div >
-                <Modal
-                    bodyStyle={{ padding: 0 }}
-                    className={styles.modal}
-                    visible={registerVisible}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                    footer={null}
-                    closable={false}
-                >
-                    <div className={styles.login_form}><AntForm /></div>
-                </Modal>
-            </div>
+                    <Col className={styles.column2}>
+                            <a onClick={showRegisterModal} className={styles.head_light_font} >Sign Up</a></Col>
+                    <div >
+                        <Modal
+                            bodyStyle={{ padding: 0 }}
+                            className={styles.modal}
+                            visible={registerVisible}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                            footer={null}
+                            closable={false}
+                        >
+                            <div className={styles.login_form}><AntForm /></div>
+                        </Modal>
+                    </div>
+                </div>
+            )}
 
 
 
@@ -122,9 +150,11 @@ function HeaderLight({ dispatch, registerVisible, loginVisible }){
 function mapStateToProps(state) {
     const { loginVisible } = state.headerModal;
     const { registerVisible } = state.headerModal;
+    const { username } = state.login;
     return {
       registerVisible,
-      loginVisible
+      loginVisible,
+      username
     };
   }
   export default {

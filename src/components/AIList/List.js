@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import styles from './list.css'
 import { connect } from 'dva';

@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import LoginHeader from './LoginHeader'
 import styles from './login.css'
@@ -42,7 +43,7 @@ function Register({dispatch, form, signupFlag}) {
       type: 'signup/setSignUpFlag',
       payload: 'signupFlag_null'
     })
-    message.success("Sign up success! ");
+    message.success("Sign up success! ", 1);
     dispatch({
       type: 'headerModal/setRegisterVisible',
       payload: false
@@ -54,7 +55,7 @@ function Register({dispatch, form, signupFlag}) {
       type: 'signup/setSignUpFlag',
       payload: 'signupFlag_null'
     })
-    message.error("Sign up failed! ");   
+    message.error("Sign up failed! ", 1);   
   }
 
    function handleSubmit(e) {

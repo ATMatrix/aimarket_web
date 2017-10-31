@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import { connect } from 'dva';
 import '../font/font.css'

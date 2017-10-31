@@ -1,3 +1,4 @@
+'use strict';
 import styles from '../table.css'
 
 export default {

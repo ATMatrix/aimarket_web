@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { Layout, Button, Input, Card, Icon } from 'antd';
 import { Row, Col } from 'antd';
-import { PersonalHeader } from '../Header/PersonalHeader'
 import { HomeHeader } from '../Header/HeaderDark'
 import styles from './PersonalAccount.css'
 const { Content } = Layout;

@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Button, Input, Card, Icon } from 'antd';
+import { Layout, Button, Input, Card, Icon, message } from 'antd';
 import { Row, Col } from 'antd';
 import { HomeHeader } from '../Header/HeaderDark'
 import styles from './UserAccount.css'
@@ -15,7 +15,7 @@ window.addEventListener('load', function() {
   
     if (typeof web3 !== 'undefined') {
       window.web3 = new Web3(web3.currentProvider);
-      console.log("endpoint web3: ", web3);
+      // console.log("endpoint web3: ", web3);
     } else {
       console.log('No web3? You should consider trying MetaMask!')
       window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
@@ -24,29 +24,29 @@ window.addEventListener('load', function() {
 
 function UserAccount ({ dispatch, accountAddress, accountBalance }) {
 
+    console.log("accountBalance: ", accountBalance.toString());
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
     let att = ATT.at('0x82a98e99284e3002da3f8c466443ef187a5a5472');
-    // console.log("Att: ", att);
     //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da
     //{from: owner, gas: 700000},
     const getBalance = () => {
       const owner = '0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4';
-      web3.personal.unlockAccount(owner, '123456' , function(err, res){
-        console.log("unlock err: ", err);
-        console.log("unlock res: ", res);
-      });      
+      // web3.personal.unlockAccount(owner, '123456' , function(err, res){
+        // console.log("unlock err: ", err);
+        // console.log("unlock res: ", res);
+      // });      
       const e = document.getElementById("account").value;
-      const a = '0x63194Eb819f617929127244BeAD0FF3386e000b7';
-      console.log("accountAddress: ", e);
+      // const a = '0x63194Eb819f617929127244BeAD0FF3386e000b7';
+      // console.log("accountAddress: ", e);
       // att.generateTokens(e, 200, function(err, res){
       //   console.log("generate err: ", err);
       //   console.log("generate res: ", res);
       // });
-      console.log("e:", e);
+      // console.log("e:", e);
       att.balanceOf(e).then(function(res) {
-        console.log("-----att balance: ", res.toString());
+        // console.log("-----att balance: ", res.toString());
         dispatch({
           type: 'userAccount/setAccountAddress',
           payload: e
@@ -59,20 +59,44 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
     }
 
     const transfer = () => {
+      const sendButton = document.getElementById("sendButton");
+      sendButton.setAttribute("disabled", true);
       const toAddress = document.getElementById("transferToAddress").value;
       const transferAmount = document.getElementById("transferAmount").value;
-      console.log("toAddress:", toAddress)
+      // console.log("toAddress:", toAddress)
       att.transfer(toAddress, transferAmount, {from: accountAddress, gas: 7000000}).then(function(res) {
         console.log("transfer success:", res);
+        att.balanceOf(accountAddress).then(function(res) {
+          // console.log("-----att balance: ", res.toString());
+          dispatch({
+            type: 'userAccount/setAccountBalance',
+            payload: res
+          }).then(res => {
+            message.success("transfer success!", 1.5);
+            sendButton.removeAttribute("disabled");            
+          })
+        });
       })
-      att.balanceOf(accountAddress).then(function(res) {
-        console.log("-----att balance: ", res.toString());
-        dispatch({
-          type: 'userAccount/setAccountBalance',
-          payload: res
-        })
-      });
     }
+
+    const approve = () => {
+      const toAddress = document.getElementById("approveToAddress").value;
+      const approveAmount = document.getElementById("approveAmount").value;
+      att.approve(toAddress, approveAmount, {from: accountAddress, gas: 7000000}).then(function(res) {
+        console.log("approve success:", res);
+        att.balanceOf(accountAddress).then(function(res) {
+          // console.log("-----att balance: ", res.toString());
+          dispatch({
+            type: 'userAccount/setAccountBalance',
+            payload: res
+          }).then(res => {
+            message.success("approve success!", 1.5);
+            sendButton.removeAttribute("disabled");            
+          })
+        });
+      })
+    }
+    
 
     return (
       <Layout className={styles.layout_size}>
@@ -123,7 +147,7 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
             <p className={styles.p_style1}>
               <Input className={styles.input} placeholder="to address" id="transferToAddress" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Input className={styles.input} placeholder="amount" id="transferAmount" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type={"primary"} onClick={transfer.bind()} className={styles.button_style}><h3>SEND</h3></Button>
+              <Button type={"primary"} onClick={transfer.bind()} className={styles.button_style} id="sendButton" ><h3>SEND</h3></Button>
             </p>
             </Card>
             <br/>
@@ -137,9 +161,9 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
             </p>
               <br/>
             <p className={styles.p_style1}>
-              <Input className={styles.input} placeholder="to address"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Input className={styles.input} placeholder="amount"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type={"primary"} className={styles.button_style}><h3>APPROVE</h3></Button>
+              <Input className={styles.input} placeholder="to address" id="approveToAddress" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input className={styles.input} placeholder="amount" id="approveAmount" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type={"primary"} onClick={approve.bind()} className={styles.button_style} id="approveButtion"><h3>APPROVE</h3></Button>
             </p>
             </Card>
 

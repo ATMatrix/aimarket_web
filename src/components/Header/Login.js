@@ -41,7 +41,7 @@ function Login({dispatch, form, loginFlag}) {
       type: 'login/setLoginFlag',
       payload: 'loginFlag_null'
     })
-    message.error("Login failed! ", 1);   
+    message.error("Login failed! Invalid Credentials", 1);   
   }
 
    function handleSubmit(e) {
@@ -51,11 +51,7 @@ function Login({dispatch, form, loginFlag}) {
           }
           user.username = values.username
           user.password = values.password
-<<<<<<< HEAD
-          user.email = ""
-=======
           user.email = ''
->>>>>>> 0c553aecaa698db61c52a692ba4fb94554733391
           console.log(user)
           dispatch({
             type: 'login/login',

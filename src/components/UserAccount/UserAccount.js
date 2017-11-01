@@ -7,106 +7,162 @@ import { HomeHeader } from '../Header/HeaderDark'
 import styles from './UserAccount.css'
 const { Content } = Layout;
 import { Link } from 'dva/router';
+import { default as Web3} from 'web3';
+import { default as contract } from 'truffle-contract'
+import att_artifacts from './ATT.json'
 
+window.addEventListener('load', function() {
+  
+    if (typeof web3 !== 'undefined') {
+      window.web3 = new Web3(web3.currentProvider);
+      console.log("endpoint web3: ", web3);
+    } else {
+      console.log('No web3? You should consider trying MetaMask!')
+      window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
+  })
 
+function UserAccount ({ dispatch, accountAddress, accountBalance }) {
 
-function UserAccount ({ location }) {
-  return (
-    <Layout className={styles.layout_size}>
-    <HomeHeader/>    
-      <Layout>
+    const ATT = contract(att_artifacts);
+    ATT.setProvider(web3.currentProvider);
+    let att = ATT.at('0x82a98e99284e3002da3f8c466443ef187a5a5472');
+    // console.log("Att: ", att);
+    //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
+    //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da
+    //{from: owner, gas: 700000},
+    const getBalance = () => {
+      const owner = '0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4';
+      web3.personal.unlockAccount(owner, '123456' , function(err, res){
+        console.log("unlock err: ", err);
+        console.log("unlock res: ", res);
+      });      
+      const e = document.getElementById("account").value;
+      const a = '0x63194Eb819f617929127244BeAD0FF3386e000b7';
+      console.log("accountAddress: ", e);
+      // att.generateTokens(e, 200, function(err, res){
+      //   console.log("generate err: ", err);
+      //   console.log("generate res: ", res);
+      // });
+      console.log("e:", e);
+      att.balanceOf(e).then(function(res) {
+        console.log("-----att balance: ", res.toString());
+        dispatch({
+          type: 'userAccount/setAccountAddress',
+          payload: e
+          });
+        dispatch({
+          type: 'userAccount/setAccountBalance',
+          payload: res
+        })
+      });
+    }
 
-        <Content className={styles.content_style}>
-          <div className={styles.padding_style}>
-          <Card title="ACCOUNT SETTINGS" bordered={false} className={styles.card_style}>
-          <p>
-            <span className={styles.icon}>
-            <Icon type="user" />&nbsp;&nbsp;address
-            </span>
-          </p>
+    const transfer = () => {
+      const toAddress = document.getElementById("transferToAddress").value;
+      const transferAmount = document.getElementById("transferAmount").value;
+      console.log("toAddress:", toAddress)
+      att.transfer(toAddress, transferAmount, {from: accountAddress, gas: 7000000}).then(function(res) {
+        console.log("transfer success:", res);
+      })
+      att.balanceOf(accountAddress).then(function(res) {
+        console.log("-----att balance: ", res.toString());
+        dispatch({
+          type: 'userAccount/setAccountBalance',
+          payload: res
+        })
+      });
+    }
+
+    return (
+      <Layout className={styles.layout_size}>
+      <HomeHeader/>    
+        <Layout>
+
+          <Content className={styles.content_style}>
+            <div className={styles.padding_style}>
+            <Card title="ACCOUNT SETTINGS" bordered={false} className={styles.card_style}>
+            <p>
+              <span className={styles.icon}>
+              <Icon type="user" />&nbsp;&nbsp;address
+              </span>
+            </p>
+              <br/>
+            <p className={styles.p_style1}>
+              <Input className={styles.input} placeholder="account address" id="account"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type={"primary"} onClick={getBalance.bind()} className={styles.button_style}><h3>SET</h3></Button>
+            </p>
+            </Card>
+
             <br/>
-          <p className={styles.p_style1}>
-            <Input className={styles.input} placeholder="account address" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button type={"primary"} className={styles.button_style}><h3>SET</h3></Button>
-          </p>
-          </Card>
-
-          <br/>
-          <br/>
-
-          <Card title="ACCOUNT BALANCE" bordered={false} className={styles.card_style}>
-          <p>
-            <span className={styles.icon}>
-            <Icon type="bank" />&nbsp;&nbsp;balance
-            </span>
-          </p>
             <br/>
-          <p className={styles.p_style1}>
-            <Input className={styles.input} placeholder="account address" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Input className={styles.input_balance} placeholder="" disabled={true}/>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span className={styles.ether}>ATT</span>
-          </p>
-          </Card>
-          <br/>
-          <br/>
+
+            <Card title="ACCOUNT BALANCE" bordered={false} className={styles.card_style}>
+            <p>
+              <span className={styles.icon}>
+              <Icon type="bank" />&nbsp;&nbsp;balance
+              </span>
+            </p>
+              <br/>
+            <p className={styles.p_style1}>
+              <Input className={styles.input_disabled} placeholder="" disabled={true} value={accountAddress} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input className={styles.input_balance} placeholder="" disabled={true} value={accountBalance} />&nbsp;&nbsp;&nbsp;&nbsp;
+              <span className={styles.ether}>ATT</span>
+            </p>
+            </Card>
+            <br/>
+            <br/>
+            
+            <Card title="TRANSFER" bordered={false} className={styles.card_style}>
+            <p>
+              <span className={styles.icon}>
+              <Icon type="global" />&nbsp;&nbsp;transfer
+              </span>
+            </p>
+              <br/>
+            <p className={styles.p_style1}>
+              <Input className={styles.input} placeholder="to address" id="transferToAddress" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input className={styles.input} placeholder="amount" id="transferAmount" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type={"primary"} onClick={transfer.bind()} className={styles.button_style}><h3>SEND</h3></Button>
+            </p>
+            </Card>
+            <br/>
+            <br/>
+
+            <Card title="APPROVE" bordered={false} className={styles.card_style}>
+            <p>
+              <span className={styles.icon}>
+              <Icon type="check-circle-o" />&nbsp;&nbsp;approve
+              </span>
+            </p>
+              <br/>
+            <p className={styles.p_style1}>
+              <Input className={styles.input} placeholder="to address"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input className={styles.input} placeholder="amount"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button type={"primary"} className={styles.button_style}><h3>APPROVE</h3></Button>
+            </p>
+            </Card>
+
+            </div>
           
-          <Card title="TRANSFER" bordered={false} className={styles.card_style}>
-          <p>
-            <span className={styles.icon}>
-            <Icon type="global" />&nbsp;&nbsp;transfer
-            </span>
-          </p>
-            <br/>
-          <p className={styles.p_style1}>
-            <Input className={styles.input} placeholder="to address"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Input className={styles.input} placeholder="amount"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button type={"primary"} className={styles.button_style}><h3>SEND</h3></Button>
-          </p>
-          </Card>
-          <br/>
-          <br/>
+        </Content>
+          
 
-          <Card title="APPROVE" bordered={false} className={styles.card_style}>
-          <p>
-            <span className={styles.icon}>
-            <Icon type="check-circle-o" />&nbsp;&nbsp;approve
-            </span>
-          </p>
-            <br/>
-          <p className={styles.p_style1}>
-            <Input className={styles.input} placeholder="to address"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Input className={styles.input} placeholder="amount"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button type={"primary"} className={styles.button_style}><h3>APPROVE</h3></Button>
-          </p>
-          </Card>
-
-          </div>
-        
-      </Content>
-        
-
+        </Layout>
       </Layout>
-    </Layout>
-    );
+      );
 
 }
-// <Content className={styles.content_style}>
-// <div>
- 
-//   <div className={styles.button_center}>
-//     <Link to = '/list'>
-//     <Button type={"primary"} className={styles.button_style}><h3>EXPLORE AIS</h3></Button>
-//     </Link>
-//   </div>
 
-// </div>
-// </Content>
-// <Card className={styles.card_style}>
-// <span>address: <Input placeholder="account address"/></span>       
-// <div className={styles.button_center}>
-//   <Link to = '/list'>
-//   <Button type={"primary"} className={styles.button_style}><h3>SET</h3></Button>
-//   </Link>
-// </div>
-// </Card> 
-export default connect()(UserAccount);
+function mapStateToProps(state) {
+  const { accountAddress } = state.userAccount;
+  const { accountBalance } = state.userAccount;
+  return {
+    accountAddress,
+    accountBalance
+  };
+}
+export default {
+  // : Form.create()(Register),
+  UserAccount: connect(mapStateToProps)(UserAccount)
+}

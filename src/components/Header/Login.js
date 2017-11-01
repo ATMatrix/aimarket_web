@@ -51,6 +51,7 @@ function Login({dispatch, form, loginFlag}) {
           }
           user.username = values.username
           user.password = values.password
+          user.email = ""
           console.log(user)
           dispatch({
             type: 'login/login',

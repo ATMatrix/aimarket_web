@@ -12,30 +12,46 @@ export default {
   namespace: 'userAccount',
 
   state: {
-    account: '',
+    accountAddress: '',
+    accountBalance: '',
     username: ''
   },
   reducers: {
-    saveAccount(state, { payload: { account } }) {
-      return { ...state, account };
+    saveAccountAddress(state, { payload: { accountAddress } }) {
+      return { ...state, accountAddress };
+    },
+    saveAccountBalance(state, { payload: { accountBalance } }) {
+      return { ...state, accountBalance };
     },
     saveUsername(state, { payload: { username } }) {
       return { ...state, username };
     }
   },
   effects: {
-    * setAccount ({
+    * setAccountAddress ({
                          payload
                        }, { put, call, select }) {
       //request start
       yield put({
-        type: 'saveAccount',
+        type: 'saveAccountAddress',
         payload: {
-          account : payload
+          accountAddress : payload
         }
       });
     }
     ,
+    * setAccountBalance ({
+      payload
+    }, { put, call, select }) {
+    //request start
+      yield put({
+      type: 'saveAccountBalance',
+      payload: {
+        accountBalance : payload
+      }
+      });
+    }
+,
   * setUsername ({
     payload,
     }, { put, call, select }) {

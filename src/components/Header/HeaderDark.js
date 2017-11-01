@@ -15,7 +15,7 @@ import { Link } from 'dva/router';
 
 function HeaderDark({ dispatch, registerVisible, loginVisible, username }){
 
-        console.log("HeaderDark username: ", username);
+        // console.log("HeaderDark username: ", username);
 
         const showLoginModal = () => {
             dispatch({
@@ -64,7 +64,7 @@ function HeaderDark({ dispatch, registerVisible, loginVisible, username }){
       const LogForm = Form.create()(LoginForm)
 
       let isLoggedIn = username == '' ? false : true;  
-      console.log("HeaderDark isLoggedIn: ", isLoggedIn);
+    //   console.log("HeaderDark isLoggedIn: ", isLoggedIn);
 
         return(
             <Row  className={styles.head_dark_back} >

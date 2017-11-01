@@ -73,10 +73,18 @@ h3 {
     padding: 5px 0;
 }
 
-.input_balance {
-    width: 150px;
+.input_disabled {
+    width: 40%;
     height: 40px;
-    padding: 5px 0;    
+    padding: 5px 0;
+    color: #0a89f1;
+}
+
+.input_balance {
+    width: 100px;
+    height: 40px;
+    padding: 5px 0;  
+    color: #0a89f1;  
 }
 
 Card[title] {

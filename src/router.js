@@ -9,7 +9,7 @@ import Tester from "./routes/Tester2.js";
 import IndexPage from './routes/HomePage'
 import List from './components/AIList/List'
 import Details from './components/details';
-import UserAccount from './components/UserAccount/UserAccount'
+import { UserAccount } from './components/UserAccount/UserAccount'
 
 
 

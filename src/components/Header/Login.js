@@ -51,7 +51,11 @@ function Login({dispatch, form, loginFlag}) {
           }
           user.username = values.username
           user.password = values.password
+<<<<<<< HEAD
           user.email = ""
+=======
+          user.email = ''
+>>>>>>> 0c553aecaa698db61c52a692ba4fb94554733391
           console.log(user)
           dispatch({
             type: 'login/login',

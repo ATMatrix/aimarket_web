@@ -1,8 +1,8 @@
 'use strict';
 import { routerRedux } from 'dva/router'
-import * as signupService from '../services/signup';
+import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {SINUP_GQl} from '../utils/gql/gql_template/index';
+import {SININ_GQL} from '../utils/gql/gql_template/index';
 
 export default {
   namespace: 'login',
@@ -26,10 +26,15 @@ export default {
       payload,
     }, { put, call, select }) {
       console.log("login:login ", payload);
-      // let data = yield call(login, payload) 
+      // let data = yield call(login, payload)
+      console.log(gqlBody_builder(SININ_GQL,payload))
+      payload.email = '123';
+      const result = yield call(commonService.service,gqlBody_builder(SININ_GQL,payload));
+      console.log('+++++++++++++++++++++++++');
+      console.log(result);      
       // const { locationQuery } = yield select(_ => _.app)
       // data.success
-      if (true) {
+      if (result.type != undefined && result.type !== 'error') {
        //request success
        // let dataContent = JSON.parse(result.data.data.addUser.content);
        let dataContent = {"flag" : true};

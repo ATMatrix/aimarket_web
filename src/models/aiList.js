@@ -7,7 +7,7 @@
 import { routerRedux } from 'dva/router'
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {CALLAI_GQl} from '../utils/gql/gql_template/index';
+import {CALLAI_GQL} from '../utils/gql/gql_template/index';
 import mock_data from '../components/AIList/mock_data/data'
 const fs = require('fs')
 
@@ -39,9 +39,9 @@ export default {
                 payload
               }, { put, call, select }) {
       //request start
-      const result = yield call(commonService.service,gqlBody_builder(CALLAI_GQl,payload));
+      const result = yield call(commonService.service,gqlBody_builder(CALLAI_GQL,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
-      let dataContent = JSON.parse(result.data.data.callAI.content);
+      let dataContent = JSON.parse(result.data.callAI.content);
       console.log(dataContent);
 
       yield put({

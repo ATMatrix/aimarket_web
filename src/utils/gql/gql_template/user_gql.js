@@ -11,10 +11,19 @@
  * 
  */
 
-export const SINUP_GQl = `query  addUserFunc($user: User!) {
+export const SINUP_GQL = `query  addUserFunc($user: User!) {
                              addUser(user:$user) {
                                   code
                                   type
                                   content
                                 }
                              }`;
+
+
+export const SININ_GQL = `query  loginUserFunc($user: User!) {
+                            loginUser(user:$user) {
+                                code
+                                type
+                                content
+                              }
+                            }`;

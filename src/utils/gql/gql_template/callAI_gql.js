@@ -14,7 +14,7 @@
  *
  */
 
-export const CALLAI_GQl = `query  callAIFunc($params: String!) {
+export const CALLAI_GQL = `query  callAIFunc($params: String!) {
                              callAI(params:$params) {
                                   code
                                   type

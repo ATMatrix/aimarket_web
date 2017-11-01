@@ -29,7 +29,7 @@ export default {
       // console.log(gqlBody_builder(SINUP_GQl,payload));
       console.log('+++++++++++++++++++++++++');      
       console.log(result);    
-      if(result.type != undefined && result.type != "error") {
+      if(result.data.addUser.type != undefined && result.data.addUser.type != "error") {
         //request success
         // let dataContent = JSON.parse(result.data.data.addUser.content);
         let dataContent = {"flag" : true}

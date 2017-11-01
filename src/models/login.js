@@ -34,11 +34,6 @@ export default {
       // const { locationQuery } = yield select(_ => _.app)
       // data.success
       if (result.data.loginUser.type != undefined && result.data.loginUser.type !== 'error') {
-       //request success
-       let dataContent = JSON.parse(result.data.data.addUser.content);
-       console.log("dataContent:", dataContent);
-       if(dataContent.flag){
-         //login success
          console.log("login success");
          yield put({
            type: 'saveLoginFlag',
@@ -57,16 +52,8 @@ export default {
          let loginFlagTemp = yield select(state => state.login);
          console.log(loginFlagTemp);
          yield put(routerRedux.push('/userAccount'))
-       }else {
-          console.log("login failed");
-          yield put({
-            type: 'saveLoginFlag',
-            payload: {
-              loginFlag:"loginFlag_false",
-            }
-          });
-       }
-     } else {
+        }
+          else {
        //request fail
        console.log("login failed");
        yield put({

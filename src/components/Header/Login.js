@@ -41,7 +41,7 @@ function Login({dispatch, form, loginFlag}) {
       type: 'login/setLoginFlag',
       payload: 'loginFlag_null'
     })
-    message.error("Login failed, Username or password is wrong! ", 2);   
+    message.error("Login failed, wrong username or password! ", 2);   
   }
 
    function handleSubmit(e) {

@@ -33,7 +33,7 @@ export default {
       if(result.data.addUser.type !== undefined && result.data.addUser.type !== "error") {
         //request success
         console.log("request success!");
-        let dataContent = JSON.parse(result.data.data.addUser.content);
+        let dataContent = JSON.parse(result.data.addUser.content);
         // let dataContent = {"flag" : true}
         console.log("dataContent: ", dataContent);
         if(dataContent.flag){

@@ -55,7 +55,7 @@ function Register({dispatch, form, signupFlag}) {
       type: 'signup/setSignUpFlag',
       payload: 'signupFlag_null'
     })
-    message.error("Sign up failed! ", 1);   
+    message.error("Sign up failed, Duplicate username! ", 1);   
   }
 
    function handleSubmit(e) {

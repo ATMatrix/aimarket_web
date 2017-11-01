@@ -29,15 +29,14 @@ export default {
       // let data = yield call(login, payload)
       console.log(gqlBody_builder(SININ_GQL,payload))
       const result = yield call(commonService.service,gqlBody_builder(SININ_GQL,payload));
-      console.log('+++++++++++++++++++++++++');  
+      // console.log('--------------');  
       console.log("result: ", result);
       // const { locationQuery } = yield select(_ => _.app)
       // data.success
       if (result.data.loginUser.type != undefined && result.data.loginUser.type !== 'error') {
        //request success
-       // let dataContent = JSON.parse(result.data.data.addUser.content);
-       let dataContent = {"flag" : true};
-       console.log(dataContent);
+       let dataContent = JSON.parse(result.data.data.addUser.content);
+       console.log("dataContent:", dataContent);
        if(dataContent.flag){
          //login success
          console.log("login success");
@@ -59,24 +58,21 @@ export default {
          console.log(loginFlagTemp);
          yield put(routerRedux.push('/userAccount'))
        }else {
-         //login fail
-         console.log("login failed");
-         yield put({
-           type: 'saveLoginFlag',
-           payload: {
-             loginFlag:"loginFlag_false",
-           }
-         });
-        //  proxyGlobal.emit("loginFlag_false");
-        //  let loginFlagTemp = yield select(state => state.login);
-        //  console.log(loginFlagTemp);
+          console.log("login failed");
+          yield put({
+            type: 'saveLoginFlag',
+            payload: {
+              loginFlag:"loginFlag_false",
+            }
+          });
        }
      } else {
        //request fail
+       console.log("login failed");
        yield put({
-         type: 'saveloginFlag',
+         type: 'saveLoginFlag',
          payload: {
-           loginFlag:"loginFlag_false"
+           loginFlag:"loginFlag_false",
          }
        });
       //  let loginFlagTemp = yield select(state => state.login);

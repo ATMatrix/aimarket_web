@@ -27,13 +27,15 @@ export default {
       //request start
       const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQL,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
-      console.log('+++++++++++++++++++++++++');      
+      console.log('===========');      
       console.log(result);    
-      if(result.data.addUser.type != undefined && result.data.addUser.type != "error") {
+      console.log("result.data.addUser.type: " , result.data.addUser.type);
+      if(result.data.addUser.type !== undefined && result.data.addUser.type !== "error") {
         //request success
+        console.log("request success!");
         let dataContent = JSON.parse(result.data.data.addUser.content);
         // let dataContent = {"flag" : true}
-        console.log(dataContent);
+        console.log("dataContent: ", dataContent);
         if(dataContent.flag){
           //signup success
           console.log("signup success");
@@ -45,7 +47,7 @@ export default {
           });
           // proxyGlobal.emit("signupFlag_true");
           let signupFlagTemp = yield select(state => state.signup);
-          console.log(signupFlagTemp);
+          console.log("signupFlagTemp: ", signupFlagTemp);
         }else {
           //signup fail
           console.log("signup failed");
@@ -61,6 +63,7 @@ export default {
         }
       }else {
         //request fail
+        console.log("request failed");
         yield put({
           type: 'saveSignupFlag',
           payload: {

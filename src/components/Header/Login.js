@@ -31,7 +31,7 @@ function Login({dispatch, form, loginFlag}) {
     //   type: 'login/setUsername',
     //   payload: user.username
     // })
-
+//http://118.31.18.101:4000/graphql/
     
 
   }
@@ -41,7 +41,7 @@ function Login({dispatch, form, loginFlag}) {
       type: 'login/setLoginFlag',
       payload: 'loginFlag_null'
     })
-    message.error("Login failed! Invalid Credentials", 1);   
+    message.error("Login failed, Username or password is wrong! ", 2);   
   }
 
    function handleSubmit(e) {

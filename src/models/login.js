@@ -28,13 +28,11 @@ export default {
       console.log("login:login ", payload);
       // let data = yield call(login, payload)
       console.log(gqlBody_builder(SININ_GQL,payload))
-      payload.email = '123';
       const result = yield call(commonService.service,gqlBody_builder(SININ_GQL,payload));
-      console.log('+++++++++++++++++++++++++');
-      console.log(result);      
+      console.log('+++++++++++++++++++++++++');  
       // const { locationQuery } = yield select(_ => _.app)
       // data.success
-      if (result.type != undefined && result.type !== 'error') {
+      if (result.data.loginUser.type != undefined && result.data.loginUser.type !== 'error') {
        //request success
        // let dataContent = JSON.parse(result.data.data.addUser.content);
        let dataContent = {"flag" : true};

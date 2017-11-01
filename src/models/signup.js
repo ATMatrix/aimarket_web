@@ -28,8 +28,8 @@ export default {
       const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQL,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
       console.log('+++++++++++++++++++++++++');      
-      console.log("signup:", result);    
-      if(result.type != undefined && result.type != "error") {
+      console.log(result);    
+      if(result.data.addUser.type != undefined && result.data.addUser.type != "error") {
         //request success
         let dataContent = JSON.parse(result.data.data.addUser.content);
         // let dataContent = {"flag" : true}

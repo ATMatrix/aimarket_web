@@ -49,8 +49,8 @@ export default {
             }
           });
          // proxyGlobal.emit("loginFlag_true");
-         let loginFlagTemp = yield select(state => state.login);
-         console.log(loginFlagTemp);
+        //  let loginFlagTemp = yield select(state => state.login);
+        //  console.log(loginFlagTemp);
          yield put(routerRedux.push('/userAccount'))
         }
           else {

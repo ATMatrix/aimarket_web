@@ -27,7 +27,8 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
     console.log("accountBalance: ", accountBalance.toString());
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
-    let att = ATT.at('0x82a98e99284e3002da3f8c466443ef187a5a5472');
+    let att = ATT.at('0xe1cfa4728a454a22dd4033321b0a33a80caa3158');
+
     //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da
     //{from: owner, gas: 700000},
@@ -40,17 +41,13 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
       const e = document.getElementById("account").value;
       // const a = '0x63194Eb819f617929127244BeAD0FF3386e000b7';
       // console.log("accountAddress: ", e);
-      // att.generateTokens(e, 200, function(err, res){
-      //   console.log("generate err: ", err);
-      //   console.log("generate res: ", res);
-      // });
       // console.log("e:", e);
       att.balanceOf(e).then(function(res) {
         // console.log("-----att balance: ", res.toString());
         dispatch({
           type: 'userAccount/setAccountAddress',
           payload: e
-          });
+        });
         dispatch({
           type: 'userAccount/setAccountBalance',
           payload: res

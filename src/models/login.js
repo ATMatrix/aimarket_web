@@ -30,6 +30,7 @@ export default {
       console.log(gqlBody_builder(SININ_GQL,payload))
       const result = yield call(commonService.service,gqlBody_builder(SININ_GQL,payload));
       console.log('+++++++++++++++++++++++++');  
+      console.log("result: ", result);
       // const { locationQuery } = yield select(_ => _.app)
       // data.success
       if (result.data.loginUser.type != undefined && result.data.loginUser.type !== 'error') {

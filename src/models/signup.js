@@ -7,7 +7,7 @@
 import { routerRedux } from 'dva/router'
 import * as signupService from '../services/signup';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {SINUP_GQl} from '../utils/gql/gql_template/index';
+import {SINUP_GQL} from '../utils/gql/gql_template/index';
 
 export default {
   namespace: 'signup',
@@ -25,10 +25,11 @@ export default {
                 payload,
               }, { put, call, select }) {
       //request start
-      const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQl,payload));
+      const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQL,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
-      console.log(result);
-      if(result.type !== "error") {
+      console.log('+++++++++++++++++++++++++');      
+      console.log(result);    
+      if(result.type != undefined && result.type != "error") {
         //request success
         // let dataContent = JSON.parse(result.data.data.addUser.content);
         let dataContent = {"flag" : true}

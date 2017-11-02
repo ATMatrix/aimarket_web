@@ -31,7 +31,7 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
     
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
-    let att = ATT.at('0xe1cfa4728a454a22dd4033321b0a33a80caa3158');
+    let att = ATT.at('0xde6430355bfabd038e93f6f5aa9ccbf18925fc84');
 
     //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da

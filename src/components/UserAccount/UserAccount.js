@@ -22,9 +22,13 @@ window.addEventListener('load', function() {
     }
   })
 
-function UserAccount ({ dispatch, accountAddress, accountBalance }) {
+let isInit = false;
 
-    console.log("accountBalance: ", accountBalance.toString());
+function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
+
+
+    console.log("UserAccount account: ", account);
+    
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
     let att = ATT.at('0xe1cfa4728a454a22dd4033321b0a33a80caa3158');
@@ -33,36 +37,61 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da
     //{from: owner, gas: 700000},
     const getBalance = () => {
-      const owner = '0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4';
+      if(username == "") {
+        message.error("You must login!", 2);
+        return;
+      }
       // web3.personal.unlockAccount(owner, '123456' , function(err, res){
         // console.log("unlock err: ", err);
         // console.log("unlock res: ", res);
       // });      
       const e = document.getElementById("account").value;
+      let user = {};
+      user.username = username;
+      user.address = e;
+      dispatch({
+        type: 'userAccount/setAccountDb',
+        payload: {
+          params: JSON.stringify({user:user})
+        }
+      });
+
+      if(accountFlag == "accountFlag_true") {
+        dispatch({
+          type: 'userAccount/saveAccountFlag',
+          payload: 'accountFlag_null'
+        })
+        message.success("Account set success! ", 2);   
+      }
       att.balanceOf(e).then(function(res) {
         dispatch({
-          type: 'userAccount/setAccountAddress',
+          type: 'userAccount/setAccount',
           payload: e
-        });
+        })
+
         dispatch({
-          type: 'userAccount/setAccountBalance',
+          type: 'userAccount/setBalance',
           payload: res
         })
       });
     }
 
     const transfer = () => {
+      if(username == "") {
+        message.error("You must login!", 2);
+        return;
+      }
       const sendButton = document.getElementById("sendButton");
       sendButton.setAttribute("disabled", true);
       const toAddress = document.getElementById("transferToAddress").value;
       const transferAmount = document.getElementById("transferAmount").value;
 
-      att.transfer(toAddress, transferAmount, {from: accountAddress, gas: 7000000}).then(function(res) {
+      att.transfer(toAddress, transferAmount, {from: account, gas: 700000}).then(function(res) {
         console.log("transfer success:", res);
 
-        att.balanceOf(accountAddress).then(function(res) {
+        att.balanceOf(account).then(function(res) {
           dispatch({
-            type: 'userAccount/setAccountBalance',
+            type: 'userAccount/setBalance',
             payload: res
           }).then(res => {
             message.success("transfer success!", 1.5);
@@ -73,14 +102,18 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
     }
 
     const approve = () => {
+      if(username == "") {
+        message.error("You must login!", 2);
+        return;
+      }
       const toAddress = document.getElementById("approveToAddress").value;
       const approveAmount = document.getElementById("approveAmount").value;
-      att.approve(toAddress, approveAmount, {from: accountAddress, gas: 7000000}).then(function(res) {
+      att.approve(toAddress, approveAmount, {from: account, gas: 7000000}).then(function(res) {
         console.log("approve success:", res);
-        att.balanceOf(accountAddress).then(function(res) {
+        att.balanceOf(account).then(function(res) {
           // console.log("-----att balance: ", res.toString());
           dispatch({
-            type: 'userAccount/setAccountBalance',
+            type: 'userAccount/setBalance',
             payload: res
           }).then(res => {
             message.success("approve success!", 1.5);
@@ -122,8 +155,8 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
             </p>
               <br/>
             <p className={styles.p_style1}>
-              <Input className={styles.input_disabled} placeholder="" disabled={true} value={accountAddress} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Input className={styles.input_balance} placeholder="" disabled={true} value={accountBalance} />&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input className={styles.input_disabled} placeholder="" disabled={true} value={account} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input className={styles.input_balance} placeholder="" disabled={true} value={balance} />&nbsp;&nbsp;&nbsp;&nbsp;
               <span className={styles.ether}>ATT</span>
             </p>
             </Card>
@@ -172,11 +205,15 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
 }
 
 function mapStateToProps(state) {
-  const { accountAddress } = state.userAccount;
-  const { accountBalance } = state.userAccount;
+  const { account } = state.userAccount;
+  const { balance } = state.userAccount;
+  const { accountFlag } = state.userAccount;
+  const { username } = state.login
   return {
-    accountAddress,
-    accountBalance
+    account,
+    balance,
+    username,
+    accountFlag
   };
 }
 export default {

@@ -12,7 +12,7 @@ import { Link, routerRedux } from 'dva/router';
 
 
 function Login({dispatch, form, loginFlag}) {
-  
+  console.log(process);
   console.log("Login function signupFlag: ", loginFlag);  
 
   let user = {};
@@ -27,6 +27,8 @@ function Login({dispatch, form, loginFlag}) {
       type: 'headerModal/setLoginVisible',
       payload: false
     })
+
+
     // dispatch({
     //   type: 'login/setUsername',
     //   payload: user.username

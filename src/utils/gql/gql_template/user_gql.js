@@ -27,3 +27,20 @@ export const SININ_GQL = `query  loginUserFunc($user: User!) {
                                 content
                               }
                             }`;
+
+export const SETACCOUNT_GQL = `query  setAttAddressFunc($params: String!) {
+                                 setAttAddress(params:$params) {
+                                              code
+                                              type
+                                              content
+                                            }
+                                        }`;      
+                                        
+ export const GETACCOUNT_GQL = `query  getAttAddressFunc($params: String!) {
+                                  getAttAddress(params:$params) {
+                                                code
+                                                type
+                                                content
+                                              }
+                                          }`; 
+

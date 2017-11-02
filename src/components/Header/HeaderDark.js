@@ -99,7 +99,7 @@ function HeaderDark({ dispatch, registerVisible, loginVisible, username }){
                     <div className = {styles.login_flex}>
                         <Col className={styles.column2}>
                             <Link to = "/userAccount">
-                            <a className={styles.head_dark_font}>{username}</a>
+                            <span className={styles.head_dark_font}>{username}</span>
                             </Link>
                         </Col>
                         

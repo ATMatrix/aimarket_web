@@ -9,7 +9,7 @@ export default {
 
   state: {
     loginFlag:'loginFlag_null',
-    username: ''
+    username: '',
   },
   reducers: {
     saveLoginFlag(state, { payload: { loginFlag } }) {
@@ -17,8 +17,8 @@ export default {
     },
     saveUsername(state, { payload: { username } }) {
       return { ...state, username };
-    }
-   
+    },
+
   },
 
   effects: {
@@ -59,12 +59,20 @@ export default {
                username : payload.user.username
              }
            });
+           let user = {};
+           user.username = payload.user.username;
+           yield put({
+             type: 'userAccount/getAccountDb',
+             payload: {
+               params: JSON.stringify({user:user})
+             }
+           })
           // proxyGlobal.emit("loginFlag_true");
          //  let loginFlagTemp = yield select(state => state.login);
          //  console.log(loginFlagTemp);
-          yield put(routerRedux.push('/userAccount'))
-         }
-           else {
+         yield put(routerRedux.push('/userAccount'));
+      }
+      else {
         //request fail
         console.log("login failed");
         yield put({
@@ -101,6 +109,7 @@ export default {
         }
       });
     },
+
 
     * logout ({
       payload,

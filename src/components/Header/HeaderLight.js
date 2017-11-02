@@ -71,7 +71,7 @@ function HeaderLight({ dispatch, registerVisible, loginVisible, username }){
             </Col>
             <Col className={styles.column2}>
               <Link to="/">
-                <img src={logo_light}  style={{marginTop: "8px"}} className={styles.image_margin}/>
+                <img src={logo_light}  style={{marginTop: "20px"}} className={styles.image_margin}/>
               </Link>
             </Col>
             <Col className={styles.column3}>

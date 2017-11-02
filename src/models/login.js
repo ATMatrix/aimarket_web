@@ -33,38 +33,51 @@ export default {
       console.log("result: ", result);
       // const { locationQuery } = yield select(_ => _.app)
       // data.success
-      if (result.data.loginUser.type != undefined && result.data.loginUser.type !== 'error') {
-         console.log("login success");
-         yield put({
-           type: 'saveLoginFlag',
-           payload: {
-             loginFlag:"loginFlag_true",
-           }
-         });
-         console.log("login username: ", payload.user.username);
-         yield put({
-            type: 'saveUsername',
+      if(result.err != null) {
+        console.log("result err: ", result.err);
+        console.log("request failed");
+        yield put({
+          type: 'saveLoginFlag',
+          payload: {
+            loginFlag:"loginFlag_fail",
+          }
+        });
+      }
+      else {
+        if (result.data.loginUser.type != undefined && result.data.loginUser.type !== 'error') {
+          console.log("login success");
+          yield put({
+            type: 'saveLoginFlag',
             payload: {
-              username : payload.user.username
+              loginFlag:"loginFlag_true",
             }
           });
-         // proxyGlobal.emit("loginFlag_true");
-        //  let loginFlagTemp = yield select(state => state.login);
-        //  console.log(loginFlagTemp);
-         yield put(routerRedux.push('/userAccount'))
-        }
-          else {
-       //request fail
-       console.log("login failed");
-       yield put({
-         type: 'saveLoginFlag',
-         payload: {
-           loginFlag:"loginFlag_false",
+          console.log("login username: ", payload.user.username);
+          yield put({
+             type: 'saveUsername',
+             payload: {
+               username : payload.user.username
+             }
+           });
+          // proxyGlobal.emit("loginFlag_true");
+         //  let loginFlagTemp = yield select(state => state.login);
+         //  console.log(loginFlagTemp);
+          yield put(routerRedux.push('/userAccount'))
          }
-       });
-      //  let loginFlagTemp = yield select(state => state.login);
-      //  console.log(loginFlagTemp);
-     }
+           else {
+        //request fail
+        console.log("login failed");
+        yield put({
+          type: 'saveLoginFlag',
+          payload: {
+            loginFlag:"loginFlag_false",
+          }
+        });
+       //  let loginFlagTemp = yield select(state => state.login);
+       //  console.log(loginFlagTemp);
+      }
+      }
+
    },
 
    * setLoginFlag ({

@@ -36,6 +36,15 @@ function Login({dispatch, form, loginFlag}) {
 
   }
 
+  if(loginFlag == "loginFlag_fail") {
+    dispatch({
+      type: 'login/setLoginFlag',
+      payload: 'loginFlag_null'
+    })
+    message.error("Login failed, server is down! ", 2);   
+  }
+
+
   if(loginFlag == "loginFlag_false") {
     dispatch({
       type: 'login/setLoginFlag',

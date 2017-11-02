@@ -39,11 +39,7 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
         // console.log("unlock res: ", res);
       // });      
       const e = document.getElementById("account").value;
-      // const a = '0x63194Eb819f617929127244BeAD0FF3386e000b7';
-      // console.log("accountAddress: ", e);
-      // console.log("e:", e);
       att.balanceOf(e).then(function(res) {
-        // console.log("-----att balance: ", res.toString());
         dispatch({
           type: 'userAccount/setAccountAddress',
           payload: e
@@ -60,11 +56,11 @@ function UserAccount ({ dispatch, accountAddress, accountBalance }) {
       sendButton.setAttribute("disabled", true);
       const toAddress = document.getElementById("transferToAddress").value;
       const transferAmount = document.getElementById("transferAmount").value;
-      // console.log("toAddress:", toAddress)
+
       att.transfer(toAddress, transferAmount, {from: accountAddress, gas: 7000000}).then(function(res) {
         console.log("transfer success:", res);
+
         att.balanceOf(accountAddress).then(function(res) {
-          // console.log("-----att balance: ", res.toString());
           dispatch({
             type: 'userAccount/setAccountBalance',
             payload: res

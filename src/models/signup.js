@@ -7,13 +7,13 @@
 import { routerRedux } from 'dva/router'
 import * as signupService from '../services/signup';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {SINUP_GQl} from '../utils/gql/gql_template/index';
+import {SINUP_GQL} from '../utils/gql/gql_template/index';
 
 export default {
   namespace: 'signup',
 
   state: {
-    signupFlag:'signupFlag_null'
+    signupFlag:'signupFlag_null',
   },
   reducers: {
     saveSignupFlag(state, { payload: { signupFlag } }) {
@@ -25,40 +25,45 @@ export default {
                 payload,
               }, { put, call, select }) {
       //request start
-      const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQl,payload));
+      const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQL,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
-      console.log(result);
-      if(result.type !== "error") {
+      console.log('===========');      
+      console.log(result);    
+      console.log("result.data.addUser.type: " , result.data.addUser.type);
+      if(result.data.addUser.type !== undefined && result.data.addUser.type !== "error") {
         //request success
-        let dataContent = JSON.parse(result.data.data.addUser.content);
-        console.log(dataContent);
+        console.log("request success!");
+        let dataContent = JSON.parse(result.data.addUser.content);
+        // let dataContent = {"flag" : true}
+        console.log("dataContent: ", dataContent);
         if(dataContent.flag){
           //signup success
           console.log("signup success");
           yield put({
             type: 'saveSignupFlag',
             payload: {
-              signupFlag:"signupFlag_true"
+              signupFlag:"signupFlag_true",
             }
           });
-          proxyGlobal.emit("signupFlag_true");
+          // proxyGlobal.emit("signupFlag_true");
           let signupFlagTemp = yield select(state => state.signup);
-          console.log(signupFlagTemp);
+          console.log("signupFlagTemp: ", signupFlagTemp);
         }else {
           //signup fail
           console.log("signup failed");
           yield put({
             type: 'saveSignupFlag',
             payload: {
-              signupFlag:"signupFlag_false"
+              signupFlag:"signupFlag_false",
             }
           });
-          proxyGlobal.emit("signupFlag_false");
+          // proxyGlobal.emit("signupFlag_false");
           let signupFlagTemp = yield select(state => state.signup);
           console.log(signupFlagTemp);
         }
       }else {
         //request fail
+        console.log("request failed");
         yield put({
           type: 'saveSignupFlag',
           payload: {
@@ -68,20 +73,19 @@ export default {
         let signupFlagTemp = yield select(state => state.signup);
         console.log(signupFlagTemp);
       }
+    },
 
-      // const { locationQuery } = yield select(_ => _.app);
-      // if (data.success) {
-      //   const { from } = locationQuery;
-      //   yield put({ type: 'app/query' });
-      //   if (from && from !== '/login') {
-      //     yield put(routerRedux.push(from))
-      //   } else {
-      //     yield put(routerRedux.push('/dashboard'))
-      //   }
-      // } else {
-      //   throw data
-      // }
+    * setSignUpFlag ({
+      payload,
+    }, { put, call, select }) {
+      yield put({
+        type: 'saveSignupFlag',
+        payload: {
+          signupFlag : payload
+        }
+      });
     }
-  }
+  },
+
 
 }

@@ -4,10 +4,18 @@
 
 'use strict';
 
-import {SINUP_GQl} from './sinup_gql';
-import {CALLAI_GQl} from './callAI_gql';
+import {
+  SINUP_GQL,
+  SININ_GQL,
+  SETACCOUNT_GQL,
+  GETACCOUNT_GQL
+} from './user_gql';
+import {CALLAI_GQL} from './callAI_gql';
 
 module.exports = {
-  SINUP_GQl:SINUP_GQl,
-  CALLAI_GQl:CALLAI_GQl
+  SINUP_GQL:SINUP_GQL,
+  CALLAI_GQL:CALLAI_GQL,
+  SININ_GQL:SININ_GQL,
+  SETACCOUNT_GQL:SETACCOUNT_GQL,
+  GETACCOUNT_GQL:GETACCOUNT_GQL
 };

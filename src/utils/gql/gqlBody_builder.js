@@ -15,6 +15,7 @@
 
 
 export function gqlBody_builder(GQL,variables) {
+  if(variables == undefined)throw ("gqlBody_builder variables undefined!");
   return {
     query: GQL,
     variables: variables

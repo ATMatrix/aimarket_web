@@ -35,7 +35,12 @@
     "dva-loading": "^1.0.2",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
-    "socket.io-client": "^2.0.4"
+    "socket.io-client": "^2.0.4",
+    "truffle-contract": "^3.0.0",
+    "web3": "^0.19.1"
+  },
+  "peerDependencies": {
+    "chai": "1.x"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

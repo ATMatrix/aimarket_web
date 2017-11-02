@@ -1,7 +1,8 @@
+'use strict';
 import React from 'react';
 import { connect } from 'dva';
 import { Layout, Button } from 'antd';
-import HomeHeader from '../components/Header/HeaderDark'
+import { HomeHeader } from '../components/Header/HeaderDark'
 import styles from './HomePage.css'
 const { Content } = Layout;
 import { Link } from 'dva/router';

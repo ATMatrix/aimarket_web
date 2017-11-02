@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import LoginHeader from './LoginHeader'
 import styles from './login.css'
@@ -8,19 +9,54 @@ import { connect } from 'dva';
 const FormItem = Form.Item;
 import { Link, routerRedux } from 'dva/router';
 
-proxyGlobal.once('signupFlag_false', function () {
-  message.error("Sign up failed! ");
-});
+// proxyGlobal.once('signupFlag_false', function () {
+//   message.error("Sign up failed! ");
+// });
 
-proxyGlobal.once('signupFlag_true', function () {
-  message.success("Sign up success! ", 0.5, onClose);
-});
+// proxyGlobal.once('signupFlag_true', function () {
+//   message.success("Sign up success! ", 0.5, onClose);
+// });
 
-const onClose = () => {
-  // window.location.href='/'
-}
+// const onClose = () => {
 
-function Register({dispatch,form, signupFlag}) {
+//   // window.location.href='/'
+
+// }
+
+
+
+function Register({dispatch, form, signupFlag}) {
+
+  console.log("register form: ", form);
+
+  console.log("Register function signupFlag: ", signupFlag);
+
+  // const onClose = () => {
+    
+  //     // window.location.href='/'
+
+    
+  //   }
+
+  if(signupFlag == "signupFlag_true") {
+    dispatch({
+      type: 'signup/setSignUpFlag',
+      payload: 'signupFlag_null'
+    })
+    message.success("Sign up success! ", 1);
+    dispatch({
+      type: 'headerModal/setRegisterVisible',
+      payload: false
+    })
+  }
+
+  if(signupFlag == "signupFlag_false") {
+    dispatch({
+      type: 'signup/setSignUpFlag',
+      payload: 'signupFlag_null'
+    })
+    message.error("Sign up failed, Duplicate username! ", 1);   
+  }
 
    function handleSubmit(e) {
      form.validateFields((err, values) => {

@@ -6,9 +6,8 @@
 
 import { routerRedux } from 'dva/router';
 import * as commonService from '../services/common_service';
-import { gqlBody_builder } from '../utils/gql/gqlBody_builder';
-import { CALLAI_GQl } from '../utils/gql/gql_template/index';
-
+import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
+import {CALLAI_GQL} from '../utils/gql/gql_template/index';
 
 export default {
   namespace: 'ai',

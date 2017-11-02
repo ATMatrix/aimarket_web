@@ -4,6 +4,7 @@
 
 'use strict';
 
+// import io from 'socket.io-client';
 import request from '../utils/request_gql';
 
 export function service(obj) {
@@ -13,3 +14,5 @@ export function service(obj) {
     headers: {'Content-Type': 'application/json'}
   });
 }
+
+// export function

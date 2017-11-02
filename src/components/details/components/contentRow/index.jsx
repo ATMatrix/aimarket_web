@@ -1,10 +1,12 @@
 import React from 'react'
-import { Row, Col, Input, Button, Select, Icon } from 'antd'
+import { Row, Col, Input, Button, Select, Icon, Tabs } from 'antd'
 import { connect } from 'dva';
 
 const { Group, TextArea } = Input
 const { Option } = Select
+const { TabPane } = Tabs
 
+import AISteps from '../stepBar'
 import style from './styles.css'
 
 class Form extends React.Component {
@@ -61,24 +63,29 @@ class Request extends React.Component {
   }
 
   handleCallAI() {
-    console.log(this.props)
+    this.props.dispatch({
+      type: 'ai/callai',
+      payload: '',
+    })
+
     const params = {
-      type: this.props.data.type,
+      aiID: this.props.data.type,
+      args: {},
     }
     const formFields = document.querySelectorAll('.CallAIInputData input')
     for (let i = 0; i < formFields.length; i++) {
       const field = formFields[i]
-      params[field.name] = field.value
+      params.args[field.name] = field.value
     }
-    console.log(params)
-    console.log({
-      type: 'ai/callai',
-      payload: {params:JSON.stringify(params)}
+
+    const socket = newSocket()
+    socket.on('message', (msg) => {
+      this.props.dispatch({
+        type: 'ai/nextStep',
+        payload: msg,
+      })
     })
-    this.props.dispatch({
-      type: 'ai/callai',
-      payload: {params:JSON.stringify(params)}
-    })
+    socket.emit('callAI', params)
   }
 
   render() {
@@ -102,7 +109,11 @@ class Request extends React.Component {
           </div>
           {forms}
         </div>
-        <Button className={style.request_buttom} onClick={this.handleCallAI}>Test EndPoint</Button>
+        <Button
+          className={style.request_buttom}
+          onClick={this.handleCallAI}
+          loading={data.requesting}
+        >Test EndPoint</Button>
       </Col>
     )
   }
@@ -114,18 +125,8 @@ class Response extends React.Component {
   }
 
   render() {
-    const data = this.props.data
-
-
-    function isEmpty(obj)
-    {
-      for (let name in obj)
-      {
-        return false
-      }
-      return true
-    }
-
+    const result = this.props.data.result
+    const log = this.props.data.log
     return (
       <Col span={12} className={style.response} type="flex">
         {/* <div className={ */}
@@ -157,7 +158,7 @@ class Response extends React.Component {
         {/*   /> */}
         {/* </div> */}
         {/* <div className={style.container}> */}
-          <h2>返回结果</h2>
+          {/* <h2>返回结果</h2> */}
           {/* <div classname={style.status_area}> */}
           {/*   <span */}
           {/*     classname={ */}
@@ -175,28 +176,45 @@ class Response extends React.Component {
           {/*   </span> */}
           {/*   {data.endpointtitle.split(' ').join('_')} */}
           {/* </div> */}
-          <TextArea
-            rows='24'
-            value={data}
-            readOnly="readonly"
-          />
+          {/* <TextArea */}
+          {/*   rows='24' */}
+          {/*   value={data} */}
+          {/*   readOnly="readonly" */}
+          {/* /> */}
+          <div className="card-container">
+						<Tabs type="card">
+              <TabPane
+                tab="Result"
+                key="1"
+                style={{ whiteSpace: 'pre-wrap' }}
+              >{result}</TabPane>
+							<TabPane
+                tab="Log"
+                key="2"
+                style={{ whiteSpace: 'pre-wrap' }}
+              >{log}</TabPane>
+						</Tabs>
+					</div>
         {/* </div> */}
       </Col>
     )
   }
 }
 
-class ContentRow extends React.Component {
+export default class ContentRow extends React.Component {
   constructor(props) {
     super(props)
   }
 
   render() {
     return (
-      <Row className={style.row2}>
-        <Row className={style.row1}>
-          <Request dispatch={this.props.dispatch} data={this.props.request} />
-          <Response data={this.props.response} />
+      <Row>
+        <AISteps data={this.props.step} />
+        <Row className={style.row2}>
+          <Row className={style.row1}>
+            <Request dispatch={this.props.dispatch} data={this.props.request} />
+            <Response data={this.props.response} />
+          </Row>
         </Row>
       </Row>
     )
@@ -206,13 +224,13 @@ class ContentRow extends React.Component {
 // const mapStateToProps = state => state.ai.aiName
 
 // export default connect(mapStateToProps)(Details)
-function mapStateToProps(state) {
+// function mapStateToProps(state) {
   // const { callAIResult,signupFlag } = state.ai;
-  return {
+  // return {
     // loading: state.loading.models.ai,
-    response: JSON.stringify(state.ai.callAIResult),
+    // response: JSON.stringify(state.ai.callAIResult),
     // signupFlag
-  }
-}
+  // }
+// }
 
-export default connect(mapStateToProps)(ContentRow);
+// export default connect(mapStateToProps)(ContentRow);

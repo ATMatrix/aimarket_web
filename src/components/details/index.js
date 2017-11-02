@@ -66,10 +66,13 @@ class Profile extends React.Component {
 class Details extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props)
   }
 
   render() {
     const data = mock[this.props.name]
+    data.request.requesting = this.props.requesting
+    console.log(data)
     return (
       <Layout>
         <Header />
@@ -83,7 +86,11 @@ class Details extends React.Component {
             <ContentRow
               request={data.request}
               dispatch={this.props.dispatch}
-              response={data.response}
+              response={{
+                result: this.props.result,
+                log: this.props.log,
+              }}
+              step={this.props.step}
             />
           </Content>
         </Layout>
@@ -93,7 +100,13 @@ class Details extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  name: state.ai.aiName
+  // response: {
+    result: state.ai.callAIResult,
+    log: state.ai.callAILog,
+  // },
+  name: state.ai.aiName,
+  requesting: state.ai.requesting,
+  step: state.ai.callStep,
 })
 
 export default connect(mapStateToProps)(Details)

@@ -44,8 +44,11 @@ const request = {
   forms,
 }
 
+const response = ''
+
 export default {
   apis,
   request,
+  response,
   profile,
 }

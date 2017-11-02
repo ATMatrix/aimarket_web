@@ -43,8 +43,63 @@ const request = {
   forms,
 }
 
+const response = ''
+
+const log =  `基于业界领先的深度学习技术，依托全网海量优质数据为您提供多场景、多语种、高精度的整图文字检测和识别服务.支持多场景下的文字检测识别，多项ICDAR指标世界第一, 支持中、英、葡、法、德、意、西、俄、日、中英混合识别，整体识别准确率高达90%以上
+  onChange = (activeKey) => {
+    this.setState({ activeKey });
+  }
+  onEdit = (targetKey, action) => {
+    this[action](targetKey);
+  }
+  add = () => {
+    const panes = this.state.panes;
+    panes.push({ title: 'New Tab', content: 'Content of new Tab', key: activeKey });
+    this.setState({ panes, activeKey });
+  }
+  remove = (targetKey) => {
+    let activeKey = this.state.activeKey;
+    let lastIndex;
+    this.state.panes.forEach((pane, i) => {
+      if (pane.key === targetKey) {
+        lastIndex = i - 1;
+      }
+    });
+    const panes = this.state.panes.filter(pane => pane.key !== targetKey);
+    if (lastIndex >= 0 && activeKey === targetKey) {
+      activeKey = panes[lastIndex].key;
+    }
+    this.setState({ panes, activeKey });
+  }
+
+#components-tabs-demo-card-top .code-box-demo {
+  background: #ececec;
+  overflow: hidden;
+  padding: 24px;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-content {
+  height: 120px;
+  margin-top: -16px;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
+  background: #fff;
+  padding: 16px;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+  border-color: transparent;
+}
+
+.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+  border-color: #fff;
+}`
+
 export default {
   apis,
   request,
+  response,
+    log,
   profile,
 }

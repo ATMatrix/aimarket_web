@@ -111,11 +111,11 @@ let arr1 = [{
     }
     arr2.push(object);
   }
-  console.log(arr2);
+  // console.log(arr2);
   // console.log(arr);
 const size = arr1.length + arr2.length;
 let tableData = [];
-console.log(size)
+// console.log(size)
 let j = 0;
 for(let i = 0; i < size; i++) {
   if(i < arr1.length) {

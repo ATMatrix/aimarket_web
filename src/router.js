@@ -12,8 +12,6 @@ import Details from './components/details';
 import { UserAccount } from './components/UserAccount/UserAccount'
 import { HomeHeader } from './components/Header/HeaderLight' 
 
-
-
 function RouterConfig({history}) {
     return (
         <Router history={history} >

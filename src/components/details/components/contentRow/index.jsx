@@ -128,61 +128,9 @@ class Response extends React.Component {
     const result = this.props.data.result
     const log = this.props.data.log
     return (
-      <Col span={12} className={style.response} type="flex">
-        {/* <div className={ */}
-        {/*   style.container + ' ' + style[data.method.toUpperCase()] */}
-        {/* }> */}
-        {/*   <h2>ENDPOINT DEFINITION</h2> */}
-        {/*   <Input */}
-        {/*     className={ */}
-        {/*       style.route_container + ' ' + style[data.method.toUpperCase()] */}
-        {/*     } */}
-        {/*     addonBefore={ */}
-        {/*       <span */}
-        {/*         className={ */}
-        {/*           style.verb + ' ' + style[data.method.toUpperCase()] */}
-        {/*         }> */}
-        {/*         {data.method.toUpperCase()} */}
-        {/*       </span> */}
-        {/*     } */}
-        {/*     value={data.url} */}
-        {/*     readOnly="readonly" */}
-        {/*   /> */}
-        {/* </div> */}
-        {/* <div className={style.container}> */}
-        {/*   <h2>REQUEST EXAMPLE</h2> */}
-        {/*   <TextArea */}
-        {/*     rows='12' */}
-        {/*     value={data.requestExample} */}
-        {/*     readOnly="readonly" */}
-        {/*   /> */}
-        {/* </div> */}
-        {/* <div className={style.container}> */}
-          {/* <h2>返回结果</h2> */}
-          {/* <div classname={style.status_area}> */}
-          {/*   <span */}
-          {/*     classname={ */}
-          {/*       style.status_container + ' ' + style.success */}
-          {/*       style.status_container + ' ' + (/2..$/ */}
-          {/*         .test(data.statuscode.tostring()) */}
-          {/*         ? style.success */}
-          {/*         : style.fail) */}
-          {/*     } */}
-          {/*   > */}
-          {/*     { */}
-          {/*       `${data.statuscode} / ${data.contenttype}` */}
-          {/*       '200 / json/application' */}
-          {/*     } */}
-          {/*   </span> */}
-          {/*   {data.endpointtitle.split(' ').join('_')} */}
-          {/* </div> */}
-          {/* <TextArea */}
-          {/*   rows='24' */}
-          {/*   value={data} */}
-          {/*   readOnly="readonly" */}
-          {/* /> */}
+      <Col span={12} className={style.response} style={{height: '100%'}} type="flex">
           <div className="card-container">
-						<Tabs type="card">
+						<Tabs type="card" style={{ whiteSpace: 'pre-wrap' }}>
               <TabPane
                 tab="Result"
                 key="1"
@@ -195,7 +143,6 @@ class Response extends React.Component {
               >{log}</TabPane>
 						</Tabs>
 					</div>
-        {/* </div> */}
       </Col>
     )
   }
@@ -204,15 +151,14 @@ class Response extends React.Component {
 export default class ContentRow extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
   }
 
   render() {
     return (
-      <Row>
+      <Row style={{height: '100%'}}>
         <AISteps data={this.props.step} />
-        <Row className={style.row2}>
-          <Row className={style.row1}>
+        <Row className={style.row2} style={{height: '100%'}}>
+          <Row className={style.row1} style={{height: '100%'}}>
             <Request dispatch={this.props.dispatch} data={this.props.request} />
             <Response data={this.props.response} />
           </Row>
@@ -221,17 +167,3 @@ export default class ContentRow extends React.Component {
     )
   }
 }
-
-// const mapStateToProps = state => state.ai.aiName
-
-// export default connect(mapStateToProps)(Details)
-// function mapStateToProps(state) {
-  // const { callAIResult,signupFlag } = state.ai;
-  // return {
-    // loading: state.loading.models.ai,
-    // response: JSON.stringify(state.ai.callAIResult),
-    // signupFlag
-  // }
-// }
-
-// export default connect(mapStateToProps)(ContentRow);

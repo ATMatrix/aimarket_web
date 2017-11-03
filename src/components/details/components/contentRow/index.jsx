@@ -204,6 +204,7 @@ class Response extends React.Component {
 export default class ContentRow extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props)
   }
 
   render() {

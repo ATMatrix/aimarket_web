@@ -28,9 +28,6 @@ class Profile extends React.Component {
       <div className={style.profile_container} >
         <div className={style.profile}>
           <div>
-        {/*     <div className={style.ai_logo}> */}
-        {/* {data.logoSrc} */}
-        {/*     </div> */}
             <div className={style.head_data}>
               <div className={style.title_container}>
                 <h1>{data.title}</h1>
@@ -72,7 +69,7 @@ class Details extends React.Component {
     const data = mock[this.props.name]
     data.request.requesting = this.props.requesting
     return (
-      <Layout>
+      <Layout style={{minHeight: '100%'}}>
         <HomeHeader />
         <Profile data={data.profile} />
         <HorizotalMenu />

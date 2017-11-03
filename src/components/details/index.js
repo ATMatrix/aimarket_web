@@ -6,7 +6,7 @@ import { Layout, Icon } from 'antd'
 
 import Menu from './components/menu'
 import HorizotalMenu from './components/horizontalMenu'
-import Header from '../Header/HeaderLight'
+import { HomeHeader } from '../Header/HeaderLight'
 import ContentRow from './components/contentRow'
 
 import mock from './mock_data'
@@ -66,16 +66,14 @@ class Profile extends React.Component {
 class Details extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
   }
 
   render() {
     const data = mock[this.props.name]
     data.request.requesting = this.props.requesting
-    console.log(data)
     return (
       <Layout>
-        <Header />
+        <HomeHeader />
         <Profile data={data.profile} />
         <HorizotalMenu />
         <Layout>
@@ -100,10 +98,8 @@ class Details extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  // response: {
-    result: state.ai.callAIResult,
-    log: state.ai.callAILog,
-  // },
+  result: state.ai.callAIResult,
+  log: state.ai.callAILog,
   name: state.ai.aiName,
   requesting: state.ai.requesting,
   step: state.ai.callStep,

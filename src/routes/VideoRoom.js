@@ -122,7 +122,6 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
 
         <Content style={styles.content_style}>
           <div style={styles.top}>
-            <div style={{height:windowHeight*0.1,fontSize: 50}} >直播场景</div>
           </div>
           <div style={styles.center}>
             <div style={[styles.center_left,{flex: 8,height:windowHeight*0.6}]}>
@@ -132,12 +131,12 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
             </div>
             <div style={[styles.center_right,{width:windowWidth*0.3}]}></div>
           </div>
-          <div style={styles.top}>
-            <div style={{height:windowHeight*0.1,fontSize: 30}}>
-              直播场景
-              <VoiceInput/>
+          <div >
+            <div style={{marginLeft: 200}}>
+              <VoiceInput windowWidth={windowWidth} windowHeight={windowHeight}/>
+              <span id="startbutton" style={{fontSize:20}}><div style={{marginLeft: 400}}>同声字幕</div></span>
             </div>
-            <button id="startbutton">Take photo</button>
+            
             <canvas id="canvas" style={{display: 'none'}}/>
           </div>
           
@@ -180,10 +179,10 @@ const styles = {
   }
   ,
   top: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    display: 'flex',
+    // flex: 0.5,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // display: 'flex',
     fontStyle: 'Open Sans',
     borderWidth: 2,
     borderColor: 'black'
@@ -199,7 +198,7 @@ const styles = {
     flexDirection: 'row',
     display: 'flex',
     margin: 200,
-    marginTop: 0,
+    marginTop: 50,
     marginBottom: 0
   }
   ,

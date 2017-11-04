@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {connect} from 'dva';
-import {Layout, Button} from 'antd';
+import {message, Layout, Button} from 'antd';
 import {HomeHeader} from '../components/Header/HeaderDark';
 import {CensorModal} from '../components/CensorModal';
 const {Content} = Layout;
@@ -17,7 +17,9 @@ import { Chat } from './Chat'
 
 function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDisplay}) {
 
-  var width = 320;    // We will scale the photo width to this
+    message.warning(censorResult);
+
+  var width = 120;    // We will scale the photo width to this
   var height = 0;     // This will be computed based on the input stream
 
   var streaming = false;
@@ -62,7 +64,7 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
     }, false);
     //
     startbutton.addEventListener('click', function(ev){
-      takepicture();
+      setInterval(takepicture, 5000);
       ev.preventDefault();
     }, false);
     //
@@ -105,7 +107,19 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
       context.drawImage(video, 0, 0, width, height);
 
       var data = canvas.toDataURL('image/png');
-      return data;
+
+      if (data) {
+        const image = data.replace('data:image/png;base64,', '')
+        dispatch({
+          type: 'censor/censorImage',
+          payload: {params:JSON.stringify({
+            type: 'censor',
+            image,
+          })}
+        })
+      } else {
+        console.log('takepicture error')
+      }
     } else {
       // clearphoto();
     }
@@ -125,13 +139,16 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
     }
   }
 
+  const warning = (msg) => {
+    message.warning(msg);
+  }
+
   return (
     <Layout style={[styles.layout_size,{width:windowWidth,height:windowHeight}]}>
       <HomeHeader/>
 
       <Layout>
 
-        <CensorModal result={censorResult} display={censorDisplay} dispatch={dispatch}/>
 
         <Content style={styles.content_style}>
           <div style={styles.top}>

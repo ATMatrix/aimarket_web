@@ -35,6 +35,7 @@ export default {
       payload,
     }, { put, call }) {
       const result = yield call(commonService.service, gqlBody_builder(CALLAI_GQL, payload));
+      console.log(result)
       if (result && result.data.callAI.content && (result.data.callAI.type !== "error")) {
         const dataContent = result.data.callAI.content;
 

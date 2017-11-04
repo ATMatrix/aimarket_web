@@ -8,11 +8,12 @@ import React from 'react';
 import {connect} from 'dva';
 import {Layout, Button} from 'antd';
 import {HomeHeader} from '../components/Header/HeaderDark';
+import {CensorModal} from '../components/CensorModal';
 const {Content} = Layout;
 import {Link} from 'dva/router';
 
 
-function VideoRoom({dispatch, windowWidth, windowHeight}) {
+function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDisplay}) {
 
   var width = 320;    // We will scale the photo width to this
   var height = 0;     // This will be computed based on the input stream
@@ -20,8 +21,8 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
   var streaming = false;
 
   var video = null;
-  var canvas = null;
-  var photo = null;
+  // var canvas = null;
+  // var photo = null;
   var startbutton = null;
   var clearbutton = null;
 
@@ -43,8 +44,6 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
 
   window.onload = function () {
     video = document.getElementById('video');
-    canvas = document.getElementById('canvas');
-    photo = document.getElementById('photo');
     clearbutton = document.getElementById('clearbutton');
     startbutton = document.getElementById('startbutton');
 
@@ -73,6 +72,8 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
     getMedia();
   };
 
+    setInterval(censor, 3)
+
   function getMedia() {
 
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
@@ -95,6 +96,8 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
   }
 
   function takepicture() {
+    const canvas = document.getElementById('canvas');
+    const photo = document.getElementById('photo');
     var context = canvas.getContext('2d');
     if (width && height) {
       canvas.width = width;
@@ -104,8 +107,23 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
       var data = canvas.toDataURL('image/png');
       photo.setAttribute('src', data);
       console.log(data);
+      return data;
     } else {
       clearphoto();
+    }
+  }
+
+  function censor() {
+    const image = takepicture()
+    if (image) {
+      dispatch({
+        type: 'censor/censorImage',
+        payload: {params:JSON.stringify({
+          image,
+        })}
+      })
+    } else {
+      console.log('takepicture error')
     }
   }
 
@@ -114,6 +132,9 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
       <HomeHeader/>
 
       <Layout>
+
+        <canvas  id="canvas" style={{display: 'none'}} />
+        <CensorModal result={censorResult} display={censorDisplay} dispatch={dispatch}/>
 
         <Content style={styles.content_style}>
           <div style={styles.top}>
@@ -142,11 +163,15 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
 
 function mapStateToProps(state) {
   const {windowWidth, windowHeight} = state.windowSize;
+  const censorResult = state.censor.result;
+  const censorDisplay = state.censor.display;
 
   return {
     loading: state.loading.models.windowSize,
     windowWidth,
-    windowHeight
+    windowHeight,
+    censorResult,
+    censorDisplay,
   };
 }
 
@@ -199,7 +224,7 @@ const styles = {
     backgroundColor: 'red',
     borderWidth: 2,
     borderColor: 'black',
-    // objectFit:'fill',
+    objectFit:'fill',
     alignItems: 'center',
     justifyContent: 'center'
   }

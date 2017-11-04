@@ -6,10 +6,11 @@ import { gqlBody_builder } from '../utils/gql/gqlBody_builder';
 import { CALLAI_GQL } from '../utils/gql/gql_template/index';
 
 export default {
-  namespace: 'live',
+  namespace: 'censor',
 
   state: {
     result: '',
+    display: false,
   },
 
   reducers: {
@@ -17,6 +18,14 @@ export default {
       return {
         ...state,
         result: payload,
+        display: true,
+      };
+    },
+    hideModal(state) {
+      return {
+        ...state,
+        result: '',
+        display: false,
       };
     },
   },
@@ -37,5 +46,10 @@ export default {
         console.log("request fail!");
       }
     }
+  },
+  * hide(payload = null, { put }) {
+    yield put({
+      type: 'hideModal',
+    });
   },
 }

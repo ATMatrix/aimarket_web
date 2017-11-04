@@ -21,6 +21,10 @@ export default {
    * setFinalSpan ({
    payload,
     }, { put, call, select }) {
+      console.log('++',payload);
+      if(payload.length > 30){
+        payload = payload.slice(payload.length-30);
+      }
       yield put({
         type: 'saveFinalSpan',
         payload: {

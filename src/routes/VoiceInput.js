@@ -186,20 +186,20 @@ function startButton() {
   return (
 
     <div key="results" style={{
-                      flex:0.7,
+                      flex:0.5,
                    display:'flex' ,
                 alignItems: 'flex-start',
     }}>
       <Input key="final_span" style={{ 
                               color: 'black',
                        paddingRight: 5,
-                       width: windowWidth*0.3,
+                       width: windowWidth*0.32,
                            }}
                            value={final_span}></Input>
       <Input key="interim_span" style={{ 
                               color: 'gray',
                            flexWrap:'nowrap',
-                           width: windowWidth*0.3,
+                           width: windowWidth*0.32,
                               }}
                               value={interim_span}></Input>
     </div>

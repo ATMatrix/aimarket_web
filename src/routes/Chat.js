@@ -29,9 +29,10 @@ const {
 
 
 
-function Chat({ dispatch, messages, username, isInit }) {
+function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight }) {
 
-    
+    console.log("===windowWidth", windowWidth);
+    console.log("===windowHeight", windowHeight);
     // socket.on('xiaoi message', (msg,user) => {
     //     $('.messages').append('<p>'+user+'说：'+msg+'</p>');
     //     // 滚动条滚动到底部
@@ -78,7 +79,8 @@ function Chat({ dispatch, messages, username, isInit }) {
 
 
   const send = () => {
-    const inputValue = document.getElementById("input").value;
+    const input = document.getElementById("input");
+    const inputValue = input.value;
     console.log("inputValue: ", inputValue);
     socket.emit('message', inputValue)
     socket.on('new message', msg => {
@@ -99,16 +101,17 @@ function Chat({ dispatch, messages, username, isInit }) {
         type: 'chat/setMessages',
         payload: response
       });
-  });
+    });
+    input.value = "";
   }
   let jj = 1;
   // let temp = ["2","3"]
   return (
-    <Layout className={styles.layout_size}>
+    <Layout styles={{width:windowWidth*0.6,height:windowHeight*0.6}}>
       <Content className={styles.content_style}>
         <div>
         <span id="init" onClick={init} disabled={true}><div className={styles.lucency}>test</div></span>
-        <Card style={{ width: 300, height: 400 }} >
+        <Card style={{ width: 300, height: windowHeight*0.6 }} >
 
           {messages.map((ii) => (
             <div key={jj++} >
@@ -142,5 +145,5 @@ function mapStateToProps(state) {
 }
 
 export default {
-  Tester: connect(mapStateToProps)(Chat)
+  Chat: connect(mapStateToProps)(Chat)
 }

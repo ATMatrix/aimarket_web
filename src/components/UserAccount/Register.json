@@ -1,0 +1,263 @@
+{
+  "contract_name": "Register",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "aiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "isRegistered",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "aiName",
+          "type": "bytes32"
+        },
+        {
+          "name": "billingAddr",
+          "type": "address"
+        }
+      ],
+      "name": "setBillingAddr",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "aiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "deleteAI",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "aiName",
+          "type": "bytes32"
+        },
+        {
+          "name": "billingAddr",
+          "type": "address"
+        }
+      ],
+      "name": "register",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "aiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getBillingAddr",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "aiName",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "billingAddr",
+          "type": "address"
+        }
+      ],
+      "name": "EventRegister",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "aiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "EventDelete",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "aiName",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "billingAddr",
+          "type": "address"
+        }
+      ],
+      "name": "EventSet",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b6103a18061003c6000396000f300606060405236156100755763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166327258b22811461007a5780636193cc6e146100a45780638da5cb5b146100c8578063c344e758146100f7578063d22057a91461010f578063eae4135014610133575b600080fd5b341561008557600080fd5b610090600435610165565b604051901515815260200160405180910390f35b34156100af57600080fd5b6100c6600435600160a060020a0360243516610194565b005b34156100d357600080fd5b6100db61022f565b604051600160a060020a03909116815260200160405180910390f35b341561010257600080fd5b6100c660043561023e565b005b341561011a57600080fd5b6100c6600435600160a060020a03602435166102bc565b005b341561013e57600080fd5b6100db600435610357565b604051600160a060020a03909116815260200160405180910390f35b600081815260016020526040812054600160a060020a0316151561018b5750600061018f565b5060015b919050565b60005433600160a060020a039081169116146101af57600080fd5b60008281526001602052604090819020805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0384161790557f3a608d4256790d37d59939ce0473319781550e1a156d62e1452cd12ad113a396908390839051918252600160a060020a031660208201526040908101905180910390a15b5b5050565b600054600160a060020a031681565b60005433600160a060020a0390811691161461025957600080fd5b60008181526001602052604090819020805473ffffffffffffffffffffffffffffffffffffffff191690557f9f3cf477bfd25ff7edf2b352f48d2dffc05cfcb743157abbffa78ade0e2401e59082905190815260200160405180910390a15b5b50565b60005433600160a060020a039081169116146102d757600080fd5b60008281526001602052604090819020805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0384161790557f19c7cc4cc6233415a2746bbc20a66c240d492f10dd8478390b35a9bc7e4b07cb908390839051918252600160a060020a031660208201526040908101905180910390a15b5b5050565b600081815260016020526040902054600160a060020a03165b9190505600a165627a7a723058206dd5b995f131ab123e2e5a3f4a707a7f13265fdb1247ebdfb5b162993b47ef140029",
+  "networks": {
+    "31415926": {
+      "events": {
+        "0x19c7cc4cc6233415a2746bbc20a66c240d492f10dd8478390b35a9bc7e4b07cb": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "aiName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "billingAddr",
+              "type": "address"
+            }
+          ],
+          "name": "EventRegister",
+          "type": "event"
+        },
+        "0x9f3cf477bfd25ff7edf2b352f48d2dffc05cfcb743157abbffa78ade0e2401e5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "aiName",
+              "type": "bytes32"
+            }
+          ],
+          "name": "EventDelete",
+          "type": "event"
+        },
+        "0x3a608d4256790d37d59939ce0473319781550e1a156d62e1452cd12ad113a396": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "aiName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "billingAddr",
+              "type": "address"
+            }
+          ],
+          "name": "EventSet",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xe1390465b57f5086e50b70757a3429dc011da7e7",
+      "updated_at": 1509093649643
+    },
+    "61008596": {
+      "events": {
+        "0x19c7cc4cc6233415a2746bbc20a66c240d492f10dd8478390b35a9bc7e4b07cb": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "aiName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "billingAddr",
+              "type": "address"
+            }
+          ],
+          "name": "EventRegister",
+          "type": "event"
+        },
+        "0x9f3cf477bfd25ff7edf2b352f48d2dffc05cfcb743157abbffa78ade0e2401e5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "aiName",
+              "type": "bytes32"
+            }
+          ],
+          "name": "EventDelete",
+          "type": "event"
+        },
+        "0x3a608d4256790d37d59939ce0473319781550e1a156d62e1452cd12ad113a396": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "aiName",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "billingAddr",
+              "type": "address"
+            }
+          ],
+          "name": "EventSet",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x1c17f099a62a4b9c604ebbdb751faff34b892ace",
+      "updated_at": 1509523709802
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1509523709802
+}

@@ -30,6 +30,7 @@ app.model(require("./models/headerModal"));
 app.model(require("./models/userAccount"));
 app.model(require("./models/windowSize"));
 app.model(require("./models/voiceInput"));
+app.model(require("./models/chat"))
 
 // 4. Router
 app.router(require('./router'));

@@ -11,6 +11,7 @@ import {HomeHeader} from '../components/Header/HeaderDark';
 const {Content} = Layout;
 import {Link} from 'dva/router';
 import VoiceInput from './VoiceInput';
+import { Chat } from './Chat'
 
 
 function VideoRoom({dispatch, windowWidth, windowHeight}) {
@@ -126,7 +127,7 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
                 Video stream not available.
               </video>
             </div>
-            <div style={[styles.center_right,{width:windowWidth*0.3}]}>中文字幕</div>
+            <div style={[styles.center_right,{width:windowWidth*0.3}]}><Chat windowWidth={windowWidth} windowHeight={windowHeight}/></div>
           </div>
           <div style={styles.top}>
             <div style={{height:windowHeight*0.1,fontSize: 30}}>
@@ -185,7 +186,7 @@ const styles = {
   ,
   center: {
     flex: 19,
-    backgroundColor: 'silver',
+    // backgroundColor: 'silver',
     borderWidth: 2,
     borderColor: 'black',
     alignItems: 'center',

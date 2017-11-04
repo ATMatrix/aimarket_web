@@ -10,6 +10,7 @@ import {Layout, Button} from 'antd';
 import {HomeHeader} from '../components/Header/HeaderDark';
 const {Content} = Layout;
 import {Link} from 'dva/router';
+import VoiceInput from './VoiceInput';
 
 
 function VideoRoom({dispatch, windowWidth, windowHeight}) {
@@ -130,8 +131,10 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
           <div style={styles.top}>
             <div style={{height:windowHeight*0.1,fontSize: 30}}>
               直播场景
+              <VoiceInput/>
             </div>
           </div>
+          
         </Content>
 
       </Layout>

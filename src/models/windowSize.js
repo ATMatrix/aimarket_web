@@ -9,7 +9,8 @@ export default {
 
   state: {
     windowWidth: (typeof window !== 'undefined') ? window.innerWidth : undefined,
-    windowHeight: (typeof window !== 'undefined') ? window.innerHeight : undefined
+    windowHeight: (typeof window !== 'undefined') ? window.innerHeight : undefined,
+    stream:{}
   },
 
   reducers: {
@@ -20,6 +21,15 @@ export default {
         ...state,
         windowWidth,
         windowHeight
+      };
+    }
+    ,
+    saveStream(state, {
+      payload: { stream},
+    }) {
+      return {
+        ...state,
+        stream
       };
     }
   }

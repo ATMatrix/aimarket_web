@@ -43,10 +43,9 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
     return {__html: str};
   }
 
-  function transfer(str) {  
-    return <div dangerouslySetInnerHTML={createMarkup(str)} />;  
+  function transfer(str) {
+    return <div dangerouslySetInnerHTML={createMarkup(str)} />;
 }
-  // let socket = io('http://localhost:4000',  {transports: ['websocket']});
 
   // window.addEventListener('load', function() {
   //   init();
@@ -87,7 +86,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
           payload: response
         });
       });
-      
+
       socket.on('sys', (msg) => {
         console.log("sys msg: ", msg);
         // msg = transfer('a');
@@ -109,13 +108,14 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
 
   const send = () => {
+    let socket = io('http://localhost:4000',  {transports: ['websocket']});
     const input = document.getElementById("input");
     let data = {};
     data.input = input.value;
     data.username = username;
     console.log("inputValue: ", data);
     socket.emit('message', data)
-    
+
     input.value = "";
   }
   let jj = 1;
@@ -133,7 +133,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
           </Card>
           <p className={styles.p_style1}>
         <Input id="input" >
-          
+
         </Input>
           <Button type={"primary"} id="sendButton" onClick={send} >Send</Button>
         </p>

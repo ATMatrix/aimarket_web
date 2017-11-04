@@ -32,7 +32,7 @@ export default {
     saveIsLoggedIn(state, { payload: { isLoggedIn } }) {
       return { ...state, isLoggedIn };
     }
-    
+
   },
   effects: {
 
@@ -40,6 +40,7 @@ export default {
                          payload
                        }, { put, call, select }) {
       let msg = _.cloneDeep(yield select(state => state.chat.messages));
+
       console.log("original msg: ", msg);
       msg.push(payload);
       console.log("msg: ", msg);

@@ -13,7 +13,7 @@ const {Content} = Layout;
 import {Link} from 'dva/router';
 
 
-function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDisplay}) {
+function VideoRoom({dispatch, windowWidth, windowHeight, stream, censorResult, censorDisplay}) {
 
   var width = 320;    // We will scale the photo width to this
   var height = 0;     // This will be computed based on the input stream
@@ -31,6 +31,15 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
   function handleResize(e) {
     window.removeEventListener('resize', handleResize);
 
+    function isEmpty(obj)
+    {
+      for (var name in obj)
+      {
+        return false;
+      }
+      return true;
+    };
+
     dispatch({
       type: 'windowSize/saveWindowSize',
       payload: {
@@ -41,29 +50,28 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
     console.log("windowWidth: ", windowWidth);
     console.log("windowHeight: ", windowHeight);
   }
-
   window.onload = function () {
     video = document.getElementById('video');
     clearbutton = document.getElementById('clearbutton');
     startbutton = document.getElementById('startbutton');
 
-    // video.addEventListener('canplay', function(ev){
-    //   if (!streaming) {
-    //     height = video.videoHeight / (video.videoWidth/width);
-    //
-    //     video.setAttribute('width', width);
-    //     video.setAttribute('height', height);
-    //     canvas.setAttribute('width', width);
-    //     canvas.setAttribute('height', height);
-    //     streaming = true;
-    //   }
-    // }, false);
-    //
-    // startbutton.addEventListener('click', function(ev){
-    //   takepicture();
-    //   ev.preventDefault();
-    // }, false);
-    //
+    video.addEventListener('canplay', function(ev){
+      if (!streaming) {
+        height = video.videoHeight / (video.videoWidth/width);
+
+        video.setAttribute('width', width);
+        video.setAttribute('height', height);
+        canvas.setAttribute('width', width);
+        canvas.setAttribute('height', height);
+        streaming = true;
+      }
+    }, false);
+
+    startbutton.addEventListener('click', function(ev){
+      takepicture();
+      ev.preventDefault();
+    }, false);
+
     // clearbutton.addEventListener('click', function(ev){
     //   clearphoto();
     //   ev.preventDefault();
@@ -74,7 +82,7 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
 
     setInterval(censor, 3)
 
-  function getMedia() {
+  async function getMedia() {
 
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
       .then(function (stream) {
@@ -105,8 +113,6 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
       context.drawImage(video, 0, 0, width, height);
 
       var data = canvas.toDataURL('image/png');
-      photo.setAttribute('src', data);
-      console.log(data);
       return data;
     } else {
       clearphoto();
@@ -142,7 +148,7 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
           </div>
           <div style={styles.center}>
             <div style={[styles.center_left,{flex: 8,height:windowHeight*0.6}]}>
-              <video  id="video" style={{objectFit:'fill',height:windowHeight*0.6}}>
+              <video  id="video" style={{objectFit:'fill',width:windowHeight*0.6*4/3,height:windowHeight*0.6}}>
                 Video stream not available.
               </video>
             </div>
@@ -152,6 +158,9 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
             <div style={{height:windowHeight*0.1,fontSize: 30}}>
               直播场景
             </div>
+
+            <canvas id="canvas" style={{display:'none'}} />
+
           </div>
         </Content>
 
@@ -162,9 +171,9 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
 }
 
 function mapStateToProps(state) {
-  const {windowWidth, windowHeight} = state.windowSize;
   const censorResult = state.censor.result;
   const censorDisplay = state.censor.display;
+  const {windowWidth, windowHeight, stream} = state.windowSize;
 
   return {
     loading: state.loading.models.windowSize,
@@ -172,6 +181,7 @@ function mapStateToProps(state) {
     windowHeight,
     censorResult,
     censorDisplay,
+    stream
   };
 }
 

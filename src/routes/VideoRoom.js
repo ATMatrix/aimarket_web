@@ -50,22 +50,22 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
     clearbutton = document.getElementById('clearbutton');
     startbutton = document.getElementById('startbutton');
 
-    // video.addEventListener('canplay', function(ev){
-    //   if (!streaming) {
-    //     height = video.videoHeight / (video.videoWidth/width);
+    video.addEventListener('canplay', function(ev){
+      if (!streaming) {
+        height = video.videoHeight / (video.videoWidth/width);
+
+        // video.setAttribute('width', width);
+        // video.setAttribute('height', height);
+        canvas.setAttribute('width', width);
+        canvas.setAttribute('height', height);
+        streaming = true;
+      }
+    }, false);
     //
-    //     video.setAttribute('width', width);
-    //     video.setAttribute('height', height);
-    //     canvas.setAttribute('width', width);
-    //     canvas.setAttribute('height', height);
-    //     streaming = true;
-    //   }
-    // }, false);
-    //
-    // startbutton.addEventListener('click', function(ev){
-    //   takepicture();
-    //   ev.preventDefault();
-    // }, false);
+    startbutton.addEventListener('click', function(ev){
+      takepicture();
+      ev.preventDefault();
+    }, false);
     //
     // clearbutton.addEventListener('click', function(ev){
     //   clearphoto();
@@ -104,10 +104,13 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
       context.drawImage(video, 0, 0, width, height);
 
       var data = canvas.toDataURL('image/png');
-      photo.setAttribute('src', data);
+      // photo.setAttribute('src', data);
       console.log(data);
+
+      
+
     } else {
-      clearphoto();
+      // clearphoto();
     }
   }
 
@@ -127,13 +130,15 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
                 Video stream not available.
               </video>
             </div>
-            <div style={[styles.center_right,{width:windowWidth*0.3}]}><Chat windowWidth={windowWidth} windowHeight={windowHeight}/></div>
+            <div style={[styles.center_right,{width:windowWidth*0.3}]}></div>
           </div>
           <div style={styles.top}>
             <div style={{height:windowHeight*0.1,fontSize: 30}}>
               直播场景
               <VoiceInput/>
             </div>
+            <button id="startbutton">Take photo</button>
+            <canvas id="canvas" style={{display: 'none'}}/>
           </div>
           
         </Content>
@@ -217,3 +222,5 @@ const styles = {
     display: 'flex'
   }
 };
+
+// <Chat windowWidth={windowWidth} windowHeight={windowHeight}/>

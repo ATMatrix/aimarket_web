@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Layout, Button, Input, Card, Icon, message } from 'antd';
-import { Row, Col } from 'antd';
+import { Row, Col, Spin, Alert, Select } from 'antd';
 import { HomeHeader } from '../Header/HeaderDark'
 import styles from './UserAccount.css'
 const { Content } = Layout;
@@ -10,6 +10,7 @@ import { Link } from 'dva/router';
 import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract'
 import att_artifacts from './ATT.json'
+import register_artifacts from './Register.json'
 
 window.addEventListener('load', function() {
   
@@ -23,15 +24,18 @@ window.addEventListener('load', function() {
   })
 
 let isInit = false;
+const InputGroup = Input.Group;
 
-function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
+function UserAccount ({ dispatch, username, account, balance, accountFlag, sendLoading, sendValue }) {
 
 
     console.log("UserAccount account: ", account);
-    
+    console.log("sendLoading: ", sendLoading);
+    console.log("sendValue: ", sendValue);
+
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
-    let att = ATT.at('0xde6430355bfabd038e93f6f5aa9ccbf18925fc84');
+    const att = ATT.at('0xde6430355bfabd038e93f6f5aa9ccbf18925fc84');
 
     //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da
@@ -45,6 +49,7 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
         // console.log("unlock err: ", err);
         // console.log("unlock res: ", res);
       // });      
+
       const e = document.getElementById("account").value;
       let user = {};
       user.username = username;
@@ -75,20 +80,32 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
         })
       });
     }
-
     const transfer = () => {
       if(username == "") {
         message.error("You must login!", 2);
         return;
       }
-      const sendButton = document.getElementById("sendButton");
-      sendButton.setAttribute("disabled", true);
+
+      dispatch({
+        type: 'userAccount/setSendLoading',
+        payload: true
+      });
+      dispatch({
+        type: 'userAccount/setSendValue',
+        payload: "SENDING"
+      });
       const toAddress = document.getElementById("transferToAddress").value;
       const transferAmount = document.getElementById("transferAmount").value;
-
       att.transfer(toAddress, transferAmount, {from: account, gas: 700000}).then(function(res) {
         console.log("transfer success:", res);
-
+        dispatch({
+          type: 'userAccount/setSendLoading',
+          payload: false
+        });
+        dispatch({
+          type: 'userAccount/setSendValue',
+          payload: "SEND"
+        });
         att.balanceOf(account).then(function(res) {
           dispatch({
             type: 'userAccount/setBalance',
@@ -101,31 +118,57 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
       })
     }
 
+    let approveAIName = "xiaoi";
+    const handleChange = (e) => {
+      // console.log("approveToName", e);
+      approveAIName = e;
+    }
+
     const approve = () => {
       if(username == "") {
         message.error("You must login!", 2);
         return;
       }
-      const toAddress = document.getElementById("approveToAddress").value;
+      // const toAddress = document.getElementById("approveToName");
       const approveAmount = document.getElementById("approveAmount").value;
-      att.approve(toAddress, approveAmount, {from: account, gas: 7000000}).then(function(res) {
-        console.log("approve success:", res);
-        att.balanceOf(account).then(function(res) {
-          // console.log("-----att balance: ", res.toString());
-          dispatch({
-            type: 'userAccount/setBalance',
-            payload: res
-          }).then(res => {
-            message.success("approve success!", 1.5);
-            sendButton.removeAttribute("disabled");            
-          })
-        });
+
+      const registerContract = contract(register_artifacts);
+      registerContract.setProvider(web3.currentProvider);
+      const register = registerContract.at('0xac78e13cfdbaea22f34eb10ec167ee3d0038fa58');
+
+      let toAddress = "";
+      register.getBillingAddr(approveAIName).then(function(res) {
+        toAddress = res.toString();
+        if(toAddress === "" || toAddress === "0x0000000000000000000000000000000000000000") {
+          message.error("AI has not been registered!", 2);
+          return;
+        }
+        console.log("toAddress: ", toAddress);
+
+        att.approve(toAddress, approveAmount, {from: account, gas: 4476767}).then(function(res) {
+          console.log("approve success:", res);
+          att.balanceOf(account).then(function(res) {
+            // console.log("-----att balance: ", res.toString());
+            dispatch({
+              type: 'userAccount/setBalance',
+              payload: res
+            }).then(res => {
+              message.success("approve success!", 1.5);
+              sendButton.removeAttribute("disabled");            
+            })
+          });
+        })
       })
+
     }
     
 
     return (
+
+
       <Layout className={styles.layout_size}>
+
+      
       <HomeHeader/>    
         <Layout>
 
@@ -140,13 +183,13 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
               <br/>
             <p className={styles.p_style1}>
               <Input className={styles.input} placeholder="account address" id="account"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type={"primary"} onClick={getBalance.bind()} className={styles.button_style}><h3>SET</h3></Button>
+              <Button type={"primary"} onClick={getBalance.bind()} className={styles.button_style}>SET</Button>
             </p>
             </Card>
 
             <br/>
             <br/>
-
+            
             <Card title="ACCOUNT BALANCE" bordered={false} className={styles.card_style}>
             <p>
               <span className={styles.icon}>
@@ -170,10 +213,11 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
               </span>
             </p>
               <br/>
+
             <p className={styles.p_style1}>
               <Input className={styles.input} placeholder="to address" id="transferToAddress" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Input className={styles.input} placeholder="amount" id="transferAmount" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type={"primary"} onClick={transfer.bind()} className={styles.button_style} id="sendButton" ><h3>SEND</h3></Button>
+              <Button type={"primary"} onClick={transfer.bind()} className={styles.button_style} id="sendButton" loading={sendLoading}>{sendValue}</Button>
             </p>
             </Card>
             <br/>
@@ -186,13 +230,17 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag }) {
               </span>
             </p>
               <br/>
-            <p className={styles.p_style1}>
-              <Input className={styles.input} placeholder="to address" id="approveToAddress" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Input className={styles.input} placeholder="amount" id="approveAmount" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type={"primary"} onClick={approve.bind()} className={styles.button_style} id="approveButtion"><h3>APPROVE</h3></Button>
-            </p>
-            </Card>
 
+            <p className={styles.p_style1}>
+              <Select defaultValue="xiaoi" size="large" className={styles.select} id="approveToName" onChange={handleChange}>
+                <Option value="xiaoi">xiaoi</Option>
+              </Select>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Input className={styles.input} placeholder="amount" id="approveAmount" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button type={"primary"} onClick={approve.bind()} className={styles.button_style} id="approveButtion">APPROVE</Button>
+            </p>
+
+            </Card>
             </div>
           
         </Content>
@@ -208,12 +256,16 @@ function mapStateToProps(state) {
   const { account } = state.userAccount;
   const { balance } = state.userAccount;
   const { accountFlag } = state.userAccount;
-  const { username } = state.login
+  const { username } = state.login;
+  const { sendLoading } = state.userAccount;
+  const { sendValue } = state.userAccount;
   return {
     account,
     balance,
     username,
-    accountFlag
+    accountFlag,
+    sendLoading,
+    sendValue
   };
 }
 export default {

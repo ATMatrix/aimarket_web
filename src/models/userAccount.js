@@ -18,6 +18,8 @@ export default {
     balance: '',
     username: '',
     accountFlag: 'accountFlag_null',
+    sendLoading: false,
+    sendValue: 'SEND'
   },
   reducers: {
     saveAccount(state, { payload: { account } }) {
@@ -31,6 +33,12 @@ export default {
     },
     saveAccountFlag(state, { payload: { accountFlag } }) {
       return { ...state, accountFlag };
+    },
+    saveSendLoading(state, { payload: { sendLoading } }) {
+      return { ...state, sendLoading };
+    },
+    saveSendValue(state, { payload: { sendValue } }) {
+      return { ...state, sendValue };
     },
   },
   effects: {
@@ -179,7 +187,29 @@ export default {
           username : payload
         }
       });
-    }
+    },
+
+    * setSendValue ({
+      payload,
+      }, { put, call, select }) {
+        yield put({
+          type: 'saveSendValue',
+          payload: {
+            sendValue : payload
+          }
+        });
+      },
+
+      * setSendLoading ({
+        payload,
+        }, { put, call, select }) {
+          yield put({
+            type: 'saveSendLoading',
+            payload: {
+              sendLoading : payload
+            }
+          });
+        }
 
   }
 } 

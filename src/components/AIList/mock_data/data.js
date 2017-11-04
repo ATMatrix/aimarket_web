@@ -1,7 +1,9 @@
 'use strict';
 import styles from '../table.css'
+
+// console.log("data.js baidu: ", baidu);
 let imgArray = [<img className={styles.image_style} src={require("../../../assets/images/baidu2.jpg")}/>, <img className={styles.image_style} src={require("../../../assets/images/aliyun2.jpg")}/>,
-<img className={styles.image_style} src={require('../../../assets/images/xunfei2.png')}/>, <img className={styles.image_style} src={require('../../../assets/images/temp6.jpeg')}/>,
+<img className={styles.image_style} src={require('../../../assets/images/xunfei2.png')}/>,<img className={styles.image_style} src={require('../../../assets/images/hanwuji.png')}/>,
 <img className={styles.image_style} src={require('../../../assets/images/tencent.png')}/>, <img className={styles.image_style} src={require('../../../assets/images/huawei.jpg')}/>]
 let arr1 = [{
   key: '1',
@@ -48,7 +50,7 @@ let arr1 = [{
   {
     key: '4',
     params: 'xiaoi',
-    img: imgArray[3],
+    img: <img className={styles.image_style} src={require('../../../assets/images/temp6.jpeg')}/>,
     name: '小i机器人',
     author: '小 i',
     url: 'http://www.xiaoi.com/solution/service/vca.shtml',
@@ -61,7 +63,7 @@ let arr1 = [{
   },
   {
     key: '5',
-    params: 'baiduVoice',
+    params: 'baiduvoice',
     img: imgArray[0],
     name: '百度语音合成',
     author: '百度',

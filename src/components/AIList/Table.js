@@ -11,6 +11,7 @@ const tableDataBack = mock_data.tableData;
 
 function TableDemo ({ dispatch, aiName, tableData }) {
 
+  console.log("aiName:", aiName);
   // tableData = JSON.stringify(tableData)
   // console.log("tableDataBack: \n" + tableDataBack)
   // console.log("((((((tableData: \n" + tableData)
@@ -28,38 +29,14 @@ function TableDemo ({ dispatch, aiName, tableData }) {
     sortedInfo: null,
   };
 
-
-//    function setState(values) {
-//      // console.log("values: \n" + values);
-//      // if(values.tableData != null) tableData = values.tableData;
-//      if(values !== null){
-//       if(values.filteredInfo != null)state.filteredInfo = values.filteredInfo;
-//       if(values.sortedInfo != null)state.sortedInfo = values.sortedInfo;
-//       console.log("state.sortedInfo: ", state.sortedInfo);
-//      }
-
-     // console.log("filteredInfo: ")
-     // console.log(state.filteredInfo)
-//    }
-
   function sortChange(value) {
     console.log("value: " + value);
     dispatch({
       type: 'aiList/setSortOrder',
       payload: value
       });
-    // const val = `${value}`;
-    // if(val == 'Popular') {
-    //   setState({
-    //     sortedInfo: {
-    //       order: 'descend',
-    //       columnKey: 'followers',
-    //     },
-    //   })
-    // }
   }
 
-  // hashHistory.push(path);
 
   function filterChange(value) {
     dispatch({

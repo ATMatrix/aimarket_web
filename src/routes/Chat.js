@@ -46,7 +46,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
   function transfer(str) {  
     return <div dangerouslySetInnerHTML={createMarkup(str)} />;  
 }
-  // let socket = io('http://localhost:4000',  {transports: ['websocket']});
+  let socket = io('http://localhost:4000',  {transports: ['websocket']});
 
   // window.addEventListener('load', function() {
   //   init();
@@ -63,7 +63,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
   function init() {
     if(!isInit) {
-      let socket = io('http://localhost:4000',  {transports: ['websocket']})
+      socket = io('http://localhost:4000',  {transports: ['websocket']})
       console.log("socket: ", socket);
       socket.on('connect', () => {
         console.log("socket connect !");
@@ -124,7 +124,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
     <Layout styles={{width:windowWidth*0.6,height:windowHeight*0.57}}>
       <Content className={styles.content_style}>
         <div>
-          <Card style={{ width: 300, height: windowHeight*0.57 }} >
+          <Card style={{ width: 300, height: windowHeight*0.56 }} >
           {messages.map((ii) => (
             <div key={jj++} >
               <div>{ii}</div>

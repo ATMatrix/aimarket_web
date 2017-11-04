@@ -4,7 +4,7 @@ import {Router, Route, Switch} from 'dva/router';
 
 import Users from "./routes/Users.js";
 
-import Tester from "./routes/Tester2.js";
+import { Tester } from "./routes/Chat";
 
 import IndexPage from './routes/HomePage'
 import List from './components/AIList/List'
@@ -20,7 +20,7 @@ function RouterConfig({history}) {
                 <Route path="/list" exact component={List}/>
                 <Route path="/details" exact component={Details}/>
                 <Route path="/users" component={Users}/>
-                <Route path="/test" component={HomeHeader} />
+                <Route path="/test" component={Tester} />
                 <Route path="/userAccount" component={UserAccount}/>
             </Switch>
         </Router>

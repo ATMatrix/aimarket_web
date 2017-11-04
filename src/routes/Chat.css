@@ -1,0 +1,55 @@
+.subMenu {
+    color: #FFFFFF;
+}
+
+.layout_size {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.content_style {
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.tag_font {
+    color: #FFFFFF;
+    font-family: 'Open Sans';
+}
+
+.icon_style {
+    color: #FFFFFF;
+}
+
+.font_style{
+    padding-left: 25px;
+    padding-right: 31px;
+    padding-bottom: 15px;
+    color: #517284;
+    letter-spacing: .2px;
+    text-transform: uppercase;
+    font-weight: 600;
+
+}
+
+.header_style {
+    background: #FFFFFF;
+    height: 70px;
+    width: 100%;
+    margin: 0;
+}
+
+.p_style1 {
+    display: flex; 
+    align-items: flex-end;       
+    justify-content: flex-start;
+}
+
+.lucency {
+    background: #FFFFFF;
+    color: #FFFFFF;
+}

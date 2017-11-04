@@ -28,6 +28,7 @@ app.model(require("./models/ai"));
 app.model(require("./models/aiList"))
 app.model(require("./models/headerModal"))
 app.model(require("./models/userAccount"))
+app.model(require("./models/chat"))
 
 // 4. Router
 app.router(require('./router'));

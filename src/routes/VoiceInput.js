@@ -4,7 +4,7 @@ import React from 'react';
 import { Input } from 'antd';
 import { connect } from 'dva';
 
-function VoiceInput({dispatch, final_span, interim_span}) {
+function VoiceInput({dispatch, final_span, interim_span, windowWidth, windowHeight}) {
   
   window.addEventListener('load', function() {
     startButton();
@@ -193,11 +193,13 @@ function startButton() {
       <Input key="final_span" style={{ 
                               color: 'black',
                        paddingRight: 5,
+                       width: windowWidth*0.3,
                            }}
                            value={final_span}></Input>
       <Input key="interim_span" style={{ 
                               color: 'gray',
-                           flexWrap:'nowrap'
+                           flexWrap:'nowrap',
+                           width: windowWidth*0.3,
                               }}
                               value={interim_span}></Input>
     </div>

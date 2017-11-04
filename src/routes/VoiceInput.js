@@ -186,7 +186,7 @@ function startButton() {
   return (
 
     <div key="results" style={{
-                      flex:0.7,
+                      flex:0.5,
                    display:'flex' ,
                 alignItems: 'flex-start',
     }}>

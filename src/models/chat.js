@@ -16,7 +16,8 @@ export default {
   state: {
     messages: [],
     name: "",
-    isInit: false
+    isInit: false,
+    isLoggedIn: false
   },
   reducers: {
     saveMessages(state, { payload: { messages } }) {
@@ -28,6 +29,9 @@ export default {
     saveIsInit(state, { payload: { isInit } }) {
       return { ...state, isInit };
     },
+    saveIsLoggedIn(state, { payload: { isLoggedIn } }) {
+      return { ...state, isLoggedIn };
+    }
     
   },
   effects: {
@@ -65,6 +69,16 @@ export default {
         type: 'saveIsInit',
         payload: {
           isInit: payload
+      }
+    });
+    },
+    * setIsLoggedIn ({
+      payload
+    }, { put, call, select }) {
+      yield put({
+        type: 'saveIsLoggedIn',
+        payload: {
+          isLoggedIn: payload
       }
     });
     }

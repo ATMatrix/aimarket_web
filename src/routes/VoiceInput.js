@@ -193,13 +193,13 @@ function startButton() {
       <Input key="final_span" style={{ 
                               color: 'black',
                        paddingRight: 5,
-                       width: windowWidth*0.3,
+                       width: windowWidth*0.32,
                            }}
                            value={final_span}></Input>
       <Input key="interim_span" style={{ 
                               color: 'gray',
                            flexWrap:'nowrap',
-                           width: windowWidth*0.3,
+                           width: windowWidth*0.32,
                               }}
                               value={interim_span}></Input>
     </div>

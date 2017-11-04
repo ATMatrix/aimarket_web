@@ -129,7 +129,9 @@ function VideoRoom({dispatch, windowWidth, windowHeight}) {
                 Video stream not available.
               </video>
             </div>
-            <div style={[styles.center_right,{width:windowWidth*0.3}]}></div>
+            <div style={[styles.center_right,{width:windowWidth*0.3}]}>
+            <Chat windowWidth={windowWidth} windowHeight={windowHeight}/>
+            </div>
           </div>
           <div >
             <div style={{marginLeft: 200}}>

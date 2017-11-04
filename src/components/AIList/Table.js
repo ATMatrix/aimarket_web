@@ -200,6 +200,7 @@ function TableDemo ({ dispatch, aiName, tableData }) {
 
 
 }
+
 function mapStateToProps(state) {
   const { aiName } = state.ai;
   const { tableData } = state.aiList;

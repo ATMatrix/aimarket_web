@@ -10,7 +10,8 @@ import IndexPage from './routes/HomePage'
 import List from './components/AIList/List'
 import Details from './components/details';
 import { UserAccount } from './components/UserAccount/UserAccount'
-import { HomeHeader } from './components/Header/HeaderLight' 
+import { HomeHeader } from './components/Header/HeaderLight'
+import VideoRoom  from './routes/VideoRoom'
 
 
 
@@ -24,6 +25,7 @@ function RouterConfig({history}) {
                 <Route path="/users" component={Users}/>
                 <Route path="/test" component={HomeHeader} />
                 <Route path="/userAccount" component={UserAccount}/>
+                <Route path="/room" component={VideoRoom}/>
             </Switch>
         </Router>
     );

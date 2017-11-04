@@ -46,7 +46,7 @@ class Form extends React.Component {
     return (
       <div>
         <div className={style.form_title}>
-          <h2>{this.props.title.toUpperCase()}</h2>
+          <p style={{fontSize:'15px', fontWeight: '600'}}>{this.props.title.toUpperCase()}</p>
         </div>
         <div>
           {thisFields}
@@ -104,7 +104,7 @@ class Request extends React.Component {
       <Col span={12} className={style.request} type="flex">
         <div>
           <div>
-            <h3>{data.title}</h3>
+            <p style={{fontSize:'20px', fontWeight: '600'}}>{data.title}</p>
             <p>{data.describe}</p>
           </div>
           {forms}
@@ -128,7 +128,7 @@ class Response extends React.Component {
     const result = this.props.data.result
     const log = this.props.data.log
     return (
-      <Col span={12} className={style.response} style={{height: '100%'}} type="flex">
+      <Col span={12} className={style.response} type="flex">
           <div className="card-container">
 						<Tabs type="card" style={{ whiteSpace: 'pre-wrap' }}>
               <TabPane
@@ -157,11 +157,12 @@ export default class ContentRow extends React.Component {
     return (
       <Row style={{height: '100%'}}>
         <AISteps data={this.props.step} />
-        <Row className={style.row2} style={{height: '100%'}}>
-          <Row className={style.row1} style={{height: '100%'}}>
-            <Request dispatch={this.props.dispatch} data={this.props.request} />
-            <Response data={this.props.response} />
-          </Row>
+        <Row style={{height: '100%'}}>
+          <Request
+            dispatch={this.props.dispatch}
+            data={this.props.request}
+          />
+          <Response data={this.props.response} />
         </Row>
       </Row>
     )

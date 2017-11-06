@@ -48,3 +48,34 @@
     background: #FFFFFF;
     color: #FFFFFF;
 }
+
+.table {
+    border:1px solid #D9D9D9;
+    display: flex;
+    align-items: flex-start;       
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow-x: auto; overflow-y: auto;
+}
+
+.td {
+    border-style:none;
+}
+
+.image_style {
+    height: 20px;
+    width: 20px;
+  }
+
+.input_style {
+    color: #0011FF;
+}
+
+.xiaoi_style {
+    color: #FF8100;
+}
+
+.name_style {
+    color: #8D9921;
+    font-weight: bold;
+}

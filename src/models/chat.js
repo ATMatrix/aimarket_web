@@ -43,6 +43,7 @@ export default {
 
       console.log("original msg: ", msg);
       msg.push(payload);
+      // msg += (payload + '\n');
       console.log("msg: ", msg);
       yield put({
         type: 'saveMessages',

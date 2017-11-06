@@ -34,7 +34,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
     // console.log("===windowWidth", windowWidth);
     // console.log("===windowHeight", windowHeight);
     // socket.on('xiaoi message', (msg,user) => {
-    //     $('.messages').append('<p>'+user+'说：'+msg+'</p>');
+    //     $('.messages').append('<tr><td>'+user+'说：'+msg+'</td></tr>');
     //     // 滚动条滚动到底部
     //     scrollToBottom();
     // });
@@ -73,31 +73,45 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
       })
 
       socket.on('new message', msg => {
-        msg = transfer(msg);
-        console.log(msg);
+        // msg = transfer(msg);
+        // console.log("new message:", msg);
+        msg = JSON.parse(msg);
+        const user = msg.user;
+        const input = msg.input;
+        const result = msg.result;
+        let emotion = <img className={styles.image_style} src={require('../assets/images/happy.jpg')}/>;
+        if(result === 0) emotion = <img className={styles.image_style} src={require('../assets/images/angry.jpg')}/>
+        else if(result === 1)emotion = <img className={styles.image_style} src={require('../assets/images/mid.jpg')}/>;
+        else emotion = <img className={styles.image_style} src={require('../assets/images/happy.jpg')}/>;
+        // + '说: ' + input + " (AI情感分析结果：" + img + ")";
+        let value = <tr><td><span className={styles.input_style}><span className={styles.name_style}>{user}</span>: {input}</span> [AI情感分析结果：{emotion}]</td></tr>
+        console.log("value: ", value);
         dispatch({
           type: 'chat/setMessages',
-          payload: msg
+          payload: value
         });
       });
       socket.on('xiaoi message', function (msg,user) {
         let response = user + "说： " + msg;
+        let value = <tr><td className={styles.xiaoi_style}><span className={styles.name_style}>{user}</span>: {msg}</td></tr>
         console.log("response: ", response);
         dispatch({
           type: 'chat/setMessages',
-          payload: response
+          payload: value
         });
       });
 
       socket.on('sys', (msg) => {
-        console.log("sys msg: ", msg);
+        // console.log("sys msg: ", msg);
+        let value = <tr><td>{msg}</td></tr>
+
         // msg = transfer('a');
         // console.log("transfer msg: ", msg);
         dispatch({
           type: 'chat/setMessages',
-          payload: msg
+          payload: value
         });
-          // $('.messages').append('<p>'+msg+'</p>');
+          // $('.messages').append('<tr><td>'+msg+'</td></tr>');
           // // 滚动条滚动到底部
           // scrollToBottom();
       });
@@ -122,25 +136,39 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
     input.value = "";
   }
-  let jj = 1;
-  // let temp = ["2","3"]
+
+  const columns = [{
+    title: '',
+    dataIndex: 'img',
+    key: 'img',
+    render: (text, record) =>
+      <span className={styles.image_layout}><span className={styles.image_style2}>{text}</span></span>
+  }]
+
+  const attribute = {
+    bordered: false,
+    loading: false,
+    pagination: false,
+    size: 'small',
+    showHeader: false,
+    scroll: undefined,
+  };
+
   return (
     <Layout styles={{width:windowWidth*0.6,height:windowHeight*0.57}}>
       <Content className={styles.content_style}>
         <div>
-          <Card style={{ width: 300, height: windowHeight*0.56 }} >
-          {messages.map((ii) => (
-            <div key={jj++} >
-              <div>{ii}</div>
-            </div>
-            ))}
-          </Card>
-          <p className={styles.p_style1}>
+        <Content >
+          <table style={{ width: 300, height: windowHeight*0.56, background: '#FFFFFF' }} className={styles.table} >
+            {messages}
+          </table>
+        </Content>
+        <p className={styles.p_style1}>
         <Input id="input" >
-
+        
         </Input>
           <Button type={"primary"} id="sendButton" onClick={send} >Send</Button>
-        </p>
+       </p>
 
       </div>
       </Content>
@@ -148,6 +176,9 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
   )
 }
 
+// <TextArea style={{ width: 300, height: windowHeight*0.56 }} value={messages}>
+// </TextArea>
+// 
 function mapStateToProps(state) {
   const { messages } = state.chat;
   const { username } = state.login;

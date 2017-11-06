@@ -9,7 +9,7 @@ export default {
   namespace: 'censor',
 
   state: {
-    result: '',
+    result: '{}',
     display: false,
   },
 

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {connect} from 'dva';
-import {message, Layout, Button} from 'antd';
+import {Progress, message, Layout, Button} from 'antd';
 import {HomeHeader} from '../components/Header/HeaderDark';
 import {CensorModal} from '../components/CensorModal';
 const {Content} = Layout;
@@ -17,7 +17,14 @@ import { Chat } from './Chat'
 
 function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDisplay}) {
 
-    message.warning(censorResult);
+  const censorData = JSON.parse(censorResult)
+  let porn = null
+  if (censorData.result) {
+    porn = censorData.result.filter(r => r.class_name === '色情')[0]
+  }
+  const pornProb = porn ? porn.probability * 100 : 0
+  const pornStatus = pornProb > 50 ? 'exception' : ''
+  if (pornProb > 50) message.error('此直播涉嫌色情！')
 
   var width = 120;    // We will scale the photo width to this
   var height = 0;     // This will be computed based on the input stream
@@ -155,6 +162,10 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
           </div>
           <div style={styles.center}>
             <div style={[styles.center_left,{flex: 8,height:windowHeight*0.6}]}>
+              <Progress
+                status={pornStatus}
+                percent={pornProb}
+              />
               <video  id="video" style={{objectFit:'fill',height:windowHeight*0.6}}>
                 Video stream not available.
               </video>

@@ -10,7 +10,7 @@ export default {
 
   state: {
     result: '{}',
-    display: false,
+    id: null,
   },
 
   reducers: {
@@ -18,16 +18,21 @@ export default {
       return {
         ...state,
         result: payload,
-        display: true,
       };
     },
-    hideModal(state) {
+    clearID(state) {
       return {
         ...state,
         result: '',
-        display: false,
+        id: null,
       };
     },
+    setID(state, {payload}) {
+      return {
+        ...state,
+        id: payload,
+      }
+    }
   },
 
   effects: {
@@ -35,7 +40,6 @@ export default {
       payload,
     }, { put, call }) {
       const result = yield call(commonService.service, gqlBody_builder(CALLAI_GQL, payload));
-      console.log(result)
       if (result && result.data.callAI.content && (result.data.callAI.type !== "error")) {
         const dataContent = result.data.callAI.content;
 
@@ -48,9 +52,15 @@ export default {
       }
     }
   },
-  * hide(payload = null, { put }) {
+  * clear(payload = null, { put }) {
     yield put({
-      type: 'hideModal',
+      type: 'clearID',
     });
   },
+  * setFuck({ payload }, { put }) {
+    yield put({
+      type: 'setID',
+      payload,
+    })
+  }
 }

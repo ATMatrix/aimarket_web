@@ -27,7 +27,7 @@ const { TextArea } = Input;
 //     $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
 // };
 
-
+let socket;
 
 function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight, isLoggedIn }) {
 
@@ -46,11 +46,13 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
   function transfer(str) {
     return <div dangerouslySetInnerHTML={createMarkup(str)} />;
 }
-  let socket = io('http://localhost:4000',  {transports: ['websocket']});
+  // const room = '/room1';
+  // let socket = roomSocket(room);
 
   // window.addEventListener('load', function() {
   //   init();
   // })
+  let socke
 
   if(username !== "" && !isLoggedIn) {
     dispatch({
@@ -63,8 +65,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
   function init() {
     if(!isInit) {
-      socket = io('http://localhost:4000',  {transports: ['websocket']})
-      console.log("socket: ", socket);
+      socket = newSocket();
       socket.on('connect', () => {
         console.log("socket connect !");
         const name = username ||'匿名';
@@ -109,13 +110,15 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
 
   const send = () => {
-    let socket = io('http://localhost:4000',  {transports: ['websocket']});
+
+    console.log(socket.id)
+
     const input = document.getElementById("input");
     let data = {};
     data.input = input.value;
     data.username = username;
     console.log("inputValue: ", data);
-    socket.emit('message', data)
+    socket.emit('clientMsg', data)
 
     input.value = "";
   }

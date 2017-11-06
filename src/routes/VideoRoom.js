@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {connect} from 'dva';
-import {Progress, message, Layout, Button} from 'antd';
+import {Switch, Progress, message, Layout, Button} from 'antd';
 import {HomeHeader} from '../components/Header/HeaderDark';
 import {CensorModal} from '../components/CensorModal';
 const {Content} = Layout;
@@ -15,7 +15,7 @@ import VoiceInput from './VoiceInput';
 import { Chat } from './Chat'
 
 
-function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDisplay}) {
+function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorID}) {
 
   const censorData = JSON.parse(censorResult)
   let porn = null
@@ -53,6 +53,23 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
     console.log("windowHeight: ", windowHeight);
   }
 
+  // function switchCensor(checked) {
+  //   if (checked && censorID === null) {
+  //     const newCensorID = setInterval(takepicture, 3000)
+  //     dispatch({
+  //       type: 'censor/setFuck',
+  //       payload: newCensorID,
+  //     })
+  //     console.log('open')
+  //   }
+  //   if (!checked && censorID !== null)
+  //     clearInterval(censorID)
+  //     dispatch({
+  //       type: 'censor/clear',
+  //     })
+  //     console.log('close')
+  // }
+
   window.onload = function () {
     video = document.getElementById('video');
     clearbutton = document.getElementById('clearbutton');
@@ -69,9 +86,11 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
         streaming = true;
       }
     }, false);
+
     //
     startbutton.addEventListener('click', function(ev){
-      setInterval(takepicture, 5000);
+      setInterval(takepicture, 3000);
+      startbutton.disabled = true;
       ev.preventDefault();
     }, false);
     //
@@ -116,6 +135,7 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
       var data = canvas.toDataURL('image/png');
 
       if (data) {
+        console.log('take picture')
         const image = data.replace('data:image/png;base64,', '')
         dispatch({
           type: 'censor/censorImage',
@@ -177,7 +197,8 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
           <div >
             <div style={{marginLeft: 200}}>
               <VoiceInput windowWidth={windowWidth} windowHeight={windowHeight}/>
-              <span id="startbutton" style={{fontSize:20}}><div style={{marginLeft: 400}}>同声字幕</div></span>
+              <Button id="startbutton">开启鉴黄</Button>
+              <span style={{fontSize:20}}><div style={{marginLeft: 400}}>同声字幕</div></span>
             </div>
 
             <canvas id="canvas" style={{display: 'none'}}/>
@@ -193,7 +214,7 @@ function VideoRoom({dispatch, windowWidth, windowHeight, censorResult, censorDis
 
 function mapStateToProps(state) {
   const censorResult = state.censor.result;
-  const censorDisplay = state.censor.display;
+  const censorID = state.censor.id;
   const {windowWidth, windowHeight} = state.windowSize;
 
   return {
@@ -201,7 +222,7 @@ function mapStateToProps(state) {
     windowWidth,
     windowHeight,
     censorResult,
-    censorDisplay,
+    censorID,
   };
 }
 

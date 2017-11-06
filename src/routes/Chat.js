@@ -27,7 +27,7 @@ const { TextArea } = Input;
 //     $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
 // };
 
-
+let socket;
 
 function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight, isLoggedIn }) {
 
@@ -52,6 +52,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
   // window.addEventListener('load', function() {
   //   init();
   // })
+  let socke
 
   if(username !== "" && !isLoggedIn) {
     dispatch({
@@ -64,8 +65,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
   function init() {
     if(!isInit) {
-      let socket = roomSocket();
-
+      socket = newSocket();
       socket.on('connect', () => {
         console.log("socket connect !");
         const name = username ||'匿名';
@@ -110,7 +110,7 @@ function Chat({ dispatch, messages, username, isInit, windowWidth, windowHeight,
 
 
   const send = () => {
-    let socket = global.socket;
+
     console.log(socket.id)
 
     const input = document.getElementById("input");

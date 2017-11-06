@@ -21,21 +21,35 @@ window.addEventListener('load', function() {
       console.log('No web3? You should consider trying MetaMask!')
       window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
+    
   })
+
 
 let isInit = false;
 const InputGroup = Input.Group;
+let isBalanceGet = false;
 
 function UserAccount ({ dispatch, username, account, balance, accountFlag, sendLoading, sendValue }) {
 
 
-    console.log("UserAccount account: ", account);
-    console.log("sendLoading: ", sendLoading);
-    console.log("sendValue: ", sendValue);
+    console.log("UserAccount balance: ", balance);
+    // console.log("sendLoading: ", sendLoading);
+    // console.log("sendValue: ", sendValue);
 
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
     const att = ATT.at('0xde6430355bfabd038e93f6f5aa9ccbf18925fc84');
+
+    if(account != '' && !isBalanceGet) {
+        att.balanceOf(account).then(function(res) {
+          dispatch({
+            type: 'userAccount/setBalance',
+            payload: res
+          })
+          isBalanceGet = true;
+      });
+      
+    }
 
     //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da

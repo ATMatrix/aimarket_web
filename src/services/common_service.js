@@ -8,7 +8,7 @@
 import request from '../utils/request_gql';
 
 export function service(obj) {
-  return request('/api', {
+  return request('http://118.31.18.101:4000/graphql/', {
     method: 'POST',
     body: JSON.stringify(obj),
     headers: {'Content-Type': 'application/json'}

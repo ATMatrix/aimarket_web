@@ -5,6 +5,7 @@
 'use strict';
 
 import { routerRedux } from 'dva/router'
+import * as commonService from '../services/common_service';
 import * as signupService from '../services/signup';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {SINUP_GQL} from '../utils/gql/gql_template/index';
@@ -25,7 +26,7 @@ export default {
                 payload,
               }, { put, call, select }) {
       //request start
-      const result = yield call(signupService.signup,gqlBody_builder(SINUP_GQL,payload));
+      const result = yield call(commonService.service,gqlBody_builder(SINUP_GQL,payload));
       // console.log(gqlBody_builder(SINUP_GQl,payload));
       console.log('===========');      
       console.log(result);    

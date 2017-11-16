@@ -78,7 +78,8 @@ export default {
         console.log("getAccountDb result: ", result);
         // const params = JSON.parse(payload)
         // console.log("setAccount: ", JSON.parse(payload.params).user.address);
-        if(result.err != null) {
+      console.log("result: ",result);
+        if(result.err != null || result.data === null) {
           console.log("result err: ", result.err);
           console.log("getAccountDb request failed");
           

@@ -20,8 +20,6 @@ const app = dva({
 app.use(createLoading());
 
 // 3. Model
-// app.model(require('./models/example'));
-app.model(require("./models/users"));
 app.model(require("./models/signup"));
 app.model(require("./models/login"));
 app.model(require("./models/ai"));

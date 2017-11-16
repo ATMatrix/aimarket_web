@@ -8,7 +8,7 @@
 import request from '../utils/request_gql';
 
 export function service(obj) {
-  return request('/api', {
+  return request(ServerURL, {
     method: 'POST',
     body: JSON.stringify(obj),
     headers: {'Content-Type': 'application/json'}

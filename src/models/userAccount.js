@@ -46,25 +46,27 @@ export default {
     * getAccountBalance ({
         payload
       }, { put, call, select }) {
+        if(payload != '') {
+          window.addEventListener('load', function() {
+              if (typeof web3 !== 'undefined') {
+                window.web3 = new Web3(web3.currentProvider);
+              } else {
+                console.log('No web3? You should consider trying MetaMask!')
+                window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+              }
+            })
 
-        window.addEventListener('load', function() {
-            if (typeof web3 !== 'undefined') {
-              window.web3 = new Web3(web3.currentProvider);
-            } else {
-              console.log('No web3? You should consider trying MetaMask!')
-              window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-            }
-          })
-
-          const ATT = contract(att_artifacts);
-          ATT.setProvider(web3.currentProvider);
-          let att = ATT.at('0xe1cfa4728a454a22dd4033321b0a33a80caa3158');
+            const ATT = contract(att_artifacts);
+            ATT.setProvider(web3.currentProvider);
+            let att = ATT.at('0xe1cfa4728a454a22dd4033321b0a33a80caa3158');
           
-          const balance = yield att.balanceOf(payload);
-          yield put({
-            type: 'setBalance',
-            payload: balance
-          })
+            const balance = yield att.balanceOf(payload);
+            yield put({
+              type: 'setBalance',
+              payload: balance
+            })
+          }
+          
     },
 
     * getAccountDb ({
@@ -73,7 +75,6 @@ export default {
         console.log("getAccount payload: ", payload);
         console.log("getAccount gqlBody_builder:", gqlBody_builder(GETACCOUNT_GQL,payload))
         const result = yield call(commonService.service,gqlBody_builder(GETACCOUNT_GQL, payload));
-        console.log('--------------');  
         console.log("getAccountDb result: ", result);
         // const params = JSON.parse(payload)
         // console.log("setAccount: ", JSON.parse(payload.params).user.address);
@@ -81,6 +82,9 @@ export default {
           console.log("result err: ", result.err);
           console.log("getAccountDb request failed");
           
+        }
+        else if(result.data === null || result.error != null) {
+          console.log("Att address has not been set")
         }
         else {
           if (result.data.getAttAddress.type != undefined && result.data.getAttAddress.type !== 'error') {

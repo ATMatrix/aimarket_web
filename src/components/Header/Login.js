@@ -13,7 +13,7 @@ import { Link, routerRedux } from 'dva/router';
 
 function Login({dispatch, form, loginFlag}) {
   // console.log(process);
-  console.log("Login function signupFlag: ", loginFlag);  
+  // console.log("Login function signupFlag: ", loginFlag);  
 
   let user = {};
 
@@ -63,7 +63,7 @@ function Login({dispatch, form, loginFlag}) {
           user.username = values.username
           user.password = values.password
           user.email = ''
-          console.log(user)
+          // console.log(user)
           dispatch({
             type: 'login/login',
             payload: {user:user}
@@ -108,7 +108,7 @@ function Login({dispatch, form, loginFlag}) {
               <FormItem>
 
                 <p> <Button type="primary" htmlType="submit" className={styles.login_form_button} onClick={handleSubmit.bind(this)}>
-                  <div style={{color: "#FFFFFF"}}>LOGIN</div>
+                  <span style={{color: "#FFFFFF"}}>LOGIN</span>
                 </Button></p>
                 <a className={styles.login_form_forgot} href="">Forgot password?</a>
                 <br/>

@@ -6,8 +6,7 @@ export const proxy = new events.EventEmitter();
 // const SOCKET_URL = "http://118.31.18.101:4000/";
 const SOCKET_URL = "http://127.0.0.1:4000/";
 
-// global.ServerURL =  "http://118.31.18.101:4000/graphql/";
-global.ServerURL = "http://127.0.0.1:4000/graphql/";
+global.ServerURL = SOCKET_URL + 'graphql/';
 
 global.proxyGlobal = proxy;
 

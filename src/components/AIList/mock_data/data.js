@@ -116,18 +116,18 @@ let arr1 = [{
   // console.log(arr2);
   // console.log(arr);
 const size = arr1.length + arr2.length;
-let tableData = [];
+let tableData = arr1;
 // console.log(size)
-let j = 0;
-for(let i = 0; i < size; i++) {
-  if(i < arr1.length) {
-    tableData[i] = arr1[i];
-  }
-  else {
-    tableData[i] = arr2[j];
-    j++;
-  }
-}
+// let j = 0;
+// for(let i = 0; i < size; i++) {
+//   if(i < arr1.length) {
+//     tableData[i] = arr1[i];
+//   }
+//   else {
+//     tableData[i] = arr2[j];
+//     j++;
+//   }
+// }
 // tableData = arr1;
 export default {
 

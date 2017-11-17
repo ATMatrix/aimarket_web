@@ -63,13 +63,12 @@ let arr1 = [{
   },
   {
     key: '5',
-    params: 'baiduvoice',
+    params: 'baidunlp',
     img: imgArray[0],
-    name: '百度语音合成',
+    name: '百度情感倾向分析',
     author: '百度',
-    url: 'https://ai.baidu.com/tech/speech/tts',
-    intro: '基于业界领先的深度神经网络技术，提供流畅自然的语音合成服务\n' +
-    '让您的应用开口说话',
+    url: 'https://ai.baidu.com/tech/nlp/sentiment_classify',
+    intro: '自动对包含主观信息的文本进行情感倾向性判断，为口碑分析、话题监控、舆情分析等应用提供基础技术支持',
     price: 'FREE',
     developers: '1007',
     followers: '980',

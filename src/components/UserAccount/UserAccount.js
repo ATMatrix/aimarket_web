@@ -32,7 +32,7 @@ let isBalanceGet = false;
 function UserAccount ({ dispatch, username, account, balance, accountFlag, sendLoading, sendValue }) {
 
 
-    console.log("UserAccount balance: ", balance);
+    // console.log("UserAccount balance: ", balance);
     // console.log("sendLoading: ", sendLoading);
     // console.log("sendValue: ", sendValue);
 

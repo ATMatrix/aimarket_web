@@ -16,7 +16,7 @@ const fields = [
     type: 'STRING',
     describe: '对话内容',
     required: true,
-    place_holder: '上海人口总数是多少？',
+    place_holder: '你好！',
   },
 ]
 

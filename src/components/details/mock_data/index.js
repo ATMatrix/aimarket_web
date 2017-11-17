@@ -86,16 +86,18 @@
 //   response,
 //   profile,
 // }
-import baidu from './baidu'
-import ali from './ali'
-import xiaoi from './xiaoi'
-import xunfei from './xunfei'
-import baiduVoice from './baiduvoice'
+import baiduOcr from './baiduOcr'
+import aliFace from './aliFace'
+import xiaoI from './xiaoI'
+import xunFei from './xunFei'
+import baiduVoice from './baiduVoice'
+import baiduNlp from './baiduNlp'
 
 export default {
-  baidu,
-  ali,
-  xiaoi,
-  xunfei,
+  baiduOcr,
+  aliFace,
+  xiaoI,
+  xunFei,
   baiduVoice,
+  baiduNlp,
 }

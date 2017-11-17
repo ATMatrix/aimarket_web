@@ -7,7 +7,7 @@ let imgArray = [<img className={styles.image_style} src={require("../../../asset
 <img className={styles.image_style} src={require('../../../assets/images/tencent.png')}/>, <img className={styles.image_style} src={require('../../../assets/images/huawei.jpg')}/>]
 let arr1 = [{
   key: '1',
-  params: 'baidu',
+  params: 'baiduOcr',
   img: imgArray[0],
   name: '通用文字识别',
   author: '百度',
@@ -21,7 +21,7 @@ let arr1 = [{
 },
 {
   key: '2',
-  params: 'baidunlp',
+  params: 'baiduNlp',
   img: imgArray[0],
   name: '百度情感倾向分析',
   author: '百度',
@@ -33,10 +33,10 @@ let arr1 = [{
   uptime: '100%',
   isCollected: false,
 },
-  
+
   {
     key: '3',
-    params: 'xunfei',
+    params: 'xunFei',
     img: imgArray[2],
     name: 'AIUI',
     author: '讯飞科大',
@@ -50,7 +50,7 @@ let arr1 = [{
 },
   {
     key: '4',
-    params: 'xiaoi',
+    params: 'xiaoI',
     img: <img className={styles.image_style} src={require('../../../assets/images/temp6.jpeg')}/>,
     name: '小i机器人',
     author: '小 i',
@@ -64,7 +64,7 @@ let arr1 = [{
   },
   {
     key: '5',
-    params: 'ali',
+    params: 'aliFace',
     img: imgArray[1],
     name: '人脸分析AI',
     author: '阿里AI云',
@@ -95,7 +95,7 @@ let arr1 = [{
   const priceArray = ['FREE', 'FREEMIUM', 'PAID'];
   const developersArray = ['318', '259', '672', '189', '209', '780']
   const followersArray = ['201', '109', '100', '230', '300', '310']
-  
+
   for(let i = 0; i < 20; i++) {
     let object = {
           key: i+6,

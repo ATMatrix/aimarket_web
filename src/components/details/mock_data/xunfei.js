@@ -16,7 +16,7 @@ const fields = [
     type: 'STRING',
     describe: '对话内容',
     required: true,
-    place_holder: '上海人口总数是多少？',
+    place_holder: '你好！',
   },
 ]
 
@@ -39,7 +39,7 @@ const forms = [
 const request = {
   title: '语义理解',
   describe: '人工智能语义理解能力，例如天气、音乐、闲聊、智能家居等',
-  type: 'xunfeiai',
+  type: 'xunfei',
   forms,
 }
 

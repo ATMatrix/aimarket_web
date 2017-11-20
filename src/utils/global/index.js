@@ -3,10 +3,18 @@ import io from 'socket.io-client'
 
 export const proxy = new events.EventEmitter();
 
-const SOCKET_URL = "http://118.31.18.101:4000/";
-// const SOCKET_URL = "http://127.0.0.1:4000/";
 
-global.ServerURL = SOCKET_URL + 'graphql/';
+
+//production
+// const SOCKET_URL = "wss://demo.atn.io/";
+// global.ServerURL = 'https://demo.atn.io/graphql/';
+//development
+const SOCKET_URL = "ws://118.31.18.101:4000/";
+global.ServerURL = 'http://118.31.18.101:4000/graphql/';
+//locate
+// const SOCKET_URL = "ws://127.0.0.1:4000/";
+//global.ServerURL = 'http://127.0.0.1:4000/';
+
 
 global.proxyGlobal = proxy;
 

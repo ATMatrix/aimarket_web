@@ -6,7 +6,6 @@ import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {SETACCOUNT_GQL} from '../utils/gql/gql_template/index';
 import {GETACCOUNT_GQL} from '../utils/gql/gql_template/index';
 import att_artifacts from '../components/UserAccount/ATT.json'
-import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract'
 
 export default {
@@ -19,7 +18,7 @@ export default {
     username: '',
     accountFlag: 'accountFlag_null',
     sendLoading: false,
-    sendValue: 'SEND'
+    sendValue: 'SEND',
   },
   reducers: {
     saveAccount(state, { payload: { account } }) {
@@ -47,18 +46,12 @@ export default {
         payload
       }, { put, call, select }) {
         if(payload != '') {
-          window.addEventListener('load', function() {
-              if (typeof web3 !== 'undefined') {
-                window.web3 = new Web3(web3.currentProvider);
-              } else {
-                console.log('No web3? You should consider trying MetaMask!')
-                window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-              }
-            })
+            const web3 = getWeb3();
 
+            let loginFlagTemp = yield select(state => state.login);
             const ATT = contract(att_artifacts);
             ATT.setProvider(web3.currentProvider);
-            let att = ATT.at('0xe1cfa4728a454a22dd4033321b0a33a80caa3158');
+            let att = ATT.at('0x067d0f4d04b7be88f47e5c9e70c3785b95ab5e02');
           
             const balance = yield att.balanceOf(payload);
             yield put({
@@ -72,13 +65,14 @@ export default {
     * getAccountDb ({
                          payload
                        }, { put, call, select }) {
+
         console.log("getAccount payload: ", payload);
         console.log("getAccount gqlBody_builder:", gqlBody_builder(GETACCOUNT_GQL,payload))
         const result = yield call(commonService.service,gqlBody_builder(GETACCOUNT_GQL, payload));
         console.log("getAccountDb result: ", result);
         // const params = JSON.parse(payload)
         // console.log("setAccount: ", JSON.parse(payload.params).user.address);
-      console.log("result: ",result);
+        console.log("result: ",result);
         if(result.err != null || result.data === null) {
           console.log("result err: ", result.err);
           console.log("getAccountDb request failed");

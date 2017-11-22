@@ -9,7 +9,16 @@ import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {CALLAI_GQL, GETAILIST_GQL} from '../utils/gql/gql_template/index';
 import mock_data from '../components/AIList/mock_data/data'
+import styles from '../components/AIList/table.css'
+
 const fs = require('fs')
+
+
+let imgArray = [<img className={styles.image_style} src={require("../assets/images/baidu2.jpg")}/>, <img className={styles.image_style} src={require("../assets/images/baidu2.jpg")}/>,
+<img className={styles.image_style} src={require('../assets/images/xunfei2.png')}/>, <img className={styles.image_style} src={require('../assets/images/temp6.jpeg')}/>,
+<img className={styles.image_style} src={require("../assets/images/aliyun2.jpg")}/>, <img className={styles.image_style} src={require('../assets/images/hanwuji.png')}/>,
+<img className={styles.image_style} src={require('../assets/images/tencent.png')}/>, <img className={styles.image_style} src={require('../assets/images/huawei.jpg')}/>]
+
 
 export default {
 
@@ -18,7 +27,7 @@ export default {
   state: {
     sortedInfo:"",
     filteredInfo:"",
-    tableData: mock_data.tableData,
+    tableData: [],
     callAIResult:{},
     value: "ALL",
     isCollected: "false"
@@ -178,43 +187,35 @@ export default {
 
         console.log("getAiListFromDb payload: ", payload);
         console.log("getAiListFromDb gqlBody_builder:", gqlBody_builder(GETAILIST_GQL,payload))
-        const result = yield call(commonService.service,gqlBody_builder(GETAILIST_GQL, payload));
+        const result = yield call(commonService.service, gqlBody_builder(GETAILIST_GQL, payload));
         console.log("getAiListFromDb result: ", result);
-        // const params = JSON.parse(payload)
-        // console.log("setAccount: ", JSON.parse(payload.params).user.address);
-        console.log("result: ",result);
-      //   if(result.err != null || result.data === null) {
-      //     console.log("result err: ", result.err);
-      //     console.log("getAccountDb request failed");
-          
-      //   }
-      //   else if(result.data === null || result.error != null) {
-      //     console.log("Att address has not been set")
-      //   }
-      //   else {
-      //     if (result.data.getAttAddress.type != undefined && result.data.getAttAddress.type !== 'error') {
-      //       console.log("get account success");
-            
-      //       yield put({
-      //           type: 'saveAccount',
-      //           payload: {
-      //             account: result.data.getAttAddress.content,
-      //           }
-      //       });
-      //       yield put({
-      //           type: 'getAccountBalance',
-      //           payload:  result.data.getAttAddress.content
-      //       });
-      //      }
-           
-      //     else {
-      //       //request fail
-      //       console.log("get address failed");
-            
-      //     //  let loginFlagTemp = yield select(state => state.login);
-      //     //  console.log(loginFlagTemp);
-      //   }
-      // }          
+        // console.log("result: ", );
+        const aiList = JSON.parse(result.data.getAiList.content);
+        let tableData = [];
+        for(let i in aiList) {
+          let dataTemp = {  
+            key: i + 1,
+            params: aiList[i].AI_NAME_EN,
+            img: imgArray[i],
+            name: aiList[i].AI_NAME_CN,
+            author: aiList[i].AI_BELONG_COMPANY,
+            url: aiList[i].AI_INTRO_URL,
+            intro: aiList[i].AI_INTRO,
+            price: aiList[i].AI_BILLING_FORMULA,
+            developers: aiList[i].AI_DEVELOPERS,
+            followers: aiList[i].AI_FOLLOWERS,
+            uptime: aiList[i].AI_UPTIME,
+            isCollected: false
+          };
+          tableData.push(dataTemp);
+        }
+        yield put({
+          type: 'saveTableData',
+          payload: {
+            tableData: tableData
+          }
+        });
+        
     },    
 
   }

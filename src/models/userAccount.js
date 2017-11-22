@@ -138,17 +138,17 @@ export default {
               }
             });
            }
-             else {
-          //request fail
-          console.log("set address failed");
-          yield put({
-            type: 'saveAccountFlag',
-            payload: {
-              accountFlag:"accountFlag_false",
-            }
-          });
-         //  let loginFlagTemp = yield select(state => state.login);
-         //  console.log(loginFlagTemp);
+          else {
+            //request fail
+            console.log("set address failed");
+            yield put({
+              type: 'saveAccountFlag',
+              payload: {
+                accountFlag:"accountFlag_false",
+              }
+            });
+          //  let loginFlagTemp = yield select(state => state.login);
+          //  console.log(loginFlagTemp);
         }
       }          
     }

@@ -33,8 +33,10 @@ function TableDemo ({ dispatch, aiName, tableData }) {
 
     dispatch({
       type: 'aiList/getAiListFromDb',
-      payload: ""
-      });
+      payload: {
+        params: ""
+      }
+    });
 
     // console.log("value: " + value);
     // dispatch({

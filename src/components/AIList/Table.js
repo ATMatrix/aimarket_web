@@ -30,11 +30,17 @@ function TableDemo ({ dispatch, aiName, tableData }) {
   };
 
   function sortChange(value) {
-    console.log("value: " + value);
+
     dispatch({
-      type: 'aiList/setSortOrder',
-      payload: value
+      type: 'aiList/getAiListFromDb',
+      payload: ""
       });
+
+    // console.log("value: " + value);
+    // dispatch({
+    //   type: 'aiList/setSortOrder',
+    //   payload: value
+    //   });
   }
 
 

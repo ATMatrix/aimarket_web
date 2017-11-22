@@ -7,7 +7,7 @@
 import { routerRedux } from 'dva/router'
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {CALLAI_GQL} from '../utils/gql/gql_template/index';
+import {CALLAI_GQL, GETAILIST_GQL} from '../utils/gql/gql_template/index';
 import mock_data from '../components/AIList/mock_data/data'
 const fs = require('fs')
 
@@ -171,6 +171,51 @@ export default {
         }
       });
     }
+    ,
+    * getAiListFromDb ({
+                         payload
+                       }, { put, call, select }) {
+
+        console.log("getAiListFromDb payload: ", payload);
+        console.log("getAiListFromDb gqlBody_builder:", gqlBody_builder(GETAILIST_GQL,payload))
+        const result = yield call(commonService.service,gqlBody_builder(GETAILIST_GQL, payload));
+        console.log("getAiListFromDb result: ", result);
+        // const params = JSON.parse(payload)
+        // console.log("setAccount: ", JSON.parse(payload.params).user.address);
+        console.log("result: ",result);
+      //   if(result.err != null || result.data === null) {
+      //     console.log("result err: ", result.err);
+      //     console.log("getAccountDb request failed");
+          
+      //   }
+      //   else if(result.data === null || result.error != null) {
+      //     console.log("Att address has not been set")
+      //   }
+      //   else {
+      //     if (result.data.getAttAddress.type != undefined && result.data.getAttAddress.type !== 'error') {
+      //       console.log("get account success");
+            
+      //       yield put({
+      //           type: 'saveAccount',
+      //           payload: {
+      //             account: result.data.getAttAddress.content,
+      //           }
+      //       });
+      //       yield put({
+      //           type: 'getAccountBalance',
+      //           payload:  result.data.getAttAddress.content
+      //       });
+      //      }
+           
+      //     else {
+      //       //request fail
+      //       console.log("get address failed");
+            
+      //     //  let loginFlagTemp = yield select(state => state.login);
+      //     //  console.log(loginFlagTemp);
+      //   }
+      // }          
+    },    
 
   }
 

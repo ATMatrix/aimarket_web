@@ -12,17 +12,6 @@ import { default as contract } from 'truffle-contract'
 import att_artifacts from './ATT.json'
 import register_artifacts from './Register.json'
 
-window.addEventListener('load', function() {
-  
-    if (typeof web3 !== 'undefined') {
-      window.web3 = new Web3(web3.currentProvider);
-      // console.log("endpoint web3: ", web3);
-    } else {
-      console.log('No web3? You should consider trying MetaMask!')
-      window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    }
-    
-  })
 
 
 let isInit = false;
@@ -35,10 +24,10 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag, sendL
     // console.log("UserAccount balance: ", balance);
     // console.log("sendLoading: ", sendLoading);
     // console.log("sendValue: ", sendValue);
-
+    const web3 = getWeb3();
     const ATT = contract(att_artifacts);
     ATT.setProvider(web3.currentProvider);
-    const att = ATT.at('0xde6430355bfabd038e93f6f5aa9ccbf18925fc84');
+    const att = ATT.at('0x067d0f4d04b7be88f47e5c9e70c3785b95ab5e02');
 
     if(account != '' && !isBalanceGet) {
         att.balanceOf(account).then(function(res) {
@@ -50,7 +39,7 @@ function UserAccount ({ dispatch, username, account, balance, accountFlag, sendL
       });
       
     }
-
+    
     //0xcA9f427df31A1F5862968fad1fE98c0a9eE068c4
     //0xbd2d69e3e68e1ab3944a865b3e566ca5c48740da
     //{from: owner, gas: 700000},

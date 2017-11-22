@@ -15,6 +15,7 @@ import mock from './mock_data'
 const {
   Sider,
   Content,
+  Header,
 } = Layout
 
 class Profile extends React.Component {
@@ -70,7 +71,9 @@ class Details extends React.Component {
     data.request.requesting = this.props.requesting
     return (
       <Layout style={{minHeight: '100%'}}>
-        <HomeHeader />
+        <Header className={style.header_style} >
+            <HomeHeader />
+        </Header>
         <Profile data={data.profile} />
         <HorizotalMenu />
         <Layout>

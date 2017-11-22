@@ -10,6 +10,13 @@ import { connect } from 'dva';
 const tableDataBack = mock_data.tableData;
 
 function TableDemo ({ dispatch, aiName, tableData }) {
+  
+  // dispatch({
+  //   type: 'aiList/getAiListFromDb',
+  //   payload: {
+  //     params: ""
+  //   }
+  // });
 
   console.log("aiName:", aiName);
   // tableData = JSON.stringify(tableData)
@@ -30,13 +37,6 @@ function TableDemo ({ dispatch, aiName, tableData }) {
   };
 
   function sortChange(value) {
-
-    dispatch({
-      type: 'aiList/getAiListFromDb',
-      payload: {
-        params: ""
-      }
-    });
 
     // console.log("value: " + value);
     // dispatch({

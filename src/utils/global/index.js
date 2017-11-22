@@ -14,7 +14,7 @@ global.ServerURL = 'https://demo.atn.io/graphql/';
 // global.ServerURL = 'https://bogong.atmatrix.org/graphql/';
 //locate
 // const SOCKET_URL = "ws://127.0.0.1:4000/";
-// global.ServerURL = 'http://127.0.0.1:4000/';
+// global.ServerURL = 'http://127.0.0.1:4000/graphql/';
 
 
 global.proxyGlobal = proxy;

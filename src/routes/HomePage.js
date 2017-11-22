@@ -19,11 +19,12 @@ function HomePage ({ location }) {
         <Content className={styles.content_style}>
           <div>
             <h1>
-              Rocket fuel for AIs
+            AIs Market
+            
             </h1>
 
             <h2>
-              Largest API Marketplace And Powerful Tools For Private And Public APIs.
+            First AI Marketplace Powered by Blockchain.
             </h2>
             <br/>
             <div className={styles.button_center}>

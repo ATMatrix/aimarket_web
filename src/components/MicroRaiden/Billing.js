@@ -112,36 +112,36 @@ function Billing({dispatch, accounts, balance, channels}) {
 
   const Close = (channel) => {
     showConfirm(CLOSE, (flag) => {
-      if(flag){
-        uraiden.signBalance(null, (err, sign) => {
-          if (err) {
-            console.log("An error occurred trying to get balance signature", err);
-            message.error("An error occurred trying to get balance signature", err);
-            return ;
-          }
-          // call cooperative-close URL, and closeChannel with close_signature data
-          $.ajax({
-            url: `/api/1/channels/${uraiden.channel.account}/${uraiden.channel.block}`,
-            method: 'DELETE',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({ 'balance': uraiden.channel.balance }),
-            success: (result) => {
-              let closeSign = null;
-              if (result && typeof result === 'object' && result['close_signature']) {
-                closeSign = result['close_signature'];
-              } else {
-                console.warn('Invalid cooperative-close response', result);
-              }
-              closeChannel(closeSign);
-            },
-            error: (request, msg, error) => {
-              console.warn('Error calling cooperative-close', request, msg, error);
-              closeChannel(null);
-            }
-          });
-        });
-      }
+      // if(flag){
+      //   uraiden.signBalance(null, (err, sign) => {
+      //     if (err) {
+      //       console.log("An error occurred trying to get balance signature", err);
+      //       message.error("An error occurred trying to get balance signature", err);
+      //       return ;
+      //     }
+      //     // call cooperative-close URL, and closeChannel with close_signature data
+      //     $.ajax({
+      //       url: `/api/1/channels/${uraiden.channel.account}/${uraiden.channel.block}`,
+      //       method: 'DELETE',
+      //       contentType: 'application/json',
+      //       dataType: 'json',
+      //       data: JSON.stringify({ 'balance': uraiden.channel.balance }),
+      //       success: (result) => {
+      //         let closeSign = null;
+      //         if (result && typeof result === 'object' && result['close_signature']) {
+      //           closeSign = result['close_signature'];
+      //         } else {
+      //           console.warn('Invalid cooperative-close response', result);
+      //         }
+      //         closeChannel(closeSign);
+      //       },
+      //       error: (request, msg, error) => {
+      //         console.warn('Error calling cooperative-close', request, msg, error);
+      //         closeChannel(null);
+      //       }
+      //     });
+      //   });
+      // }
     });
   }
 

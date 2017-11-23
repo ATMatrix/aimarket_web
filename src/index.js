@@ -31,7 +31,6 @@ app.model(require("./models/windowSize"));
 app.model(require("./models/voiceInput"));
 app.model(require("./models/chat"))
 app.model(require("./models/bill"))
-app.model(require("./models/global"))
 
 // 4. Router
 app.router(require('./router'));

@@ -1,6 +1,5 @@
 
 'use strict';
-import { cps } from 'redux-saga/effects'
 import { access, copyFileSync } from 'fs';
 import { resolve } from 'url';
 export default {

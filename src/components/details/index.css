@@ -99,3 +99,11 @@
   margin-left: 20px;
   display: inline-block
 }
+
+
+.header_style {
+    background: #FFFFFF;
+    height: 70px;
+    width: 100%;
+    margin: 0;
+}

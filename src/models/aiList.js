@@ -7,9 +7,18 @@
 import { routerRedux } from 'dva/router'
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {CALLAI_GQL} from '../utils/gql/gql_template/index';
+import {CALLAI_GQL, GETAILIST_GQL} from '../utils/gql/gql_template/index';
 import mock_data from '../components/AIList/mock_data/data'
+import styles from '../components/AIList/table.css'
+
 const fs = require('fs')
+
+
+let imgArray = [<img className={styles.image_style} src={require("../assets/images/baidu2.jpg")}/>, <img className={styles.image_style} src={require("../assets/images/baidu2.jpg")}/>,
+<img className={styles.image_style} src={require('../assets/images/xunfei2.png')}/>, <img className={styles.image_style} src={require('../assets/images/temp6.jpeg')}/>,
+<img className={styles.image_style} src={require("../assets/images/aliyun2.jpg")}/>, <img className={styles.image_style} src={require('../assets/images/hanwuji.png')}/>,
+<img className={styles.image_style} src={require('../assets/images/tencent.png')}/>, <img className={styles.image_style} src={require('../assets/images/huawei.jpg')}/>]
+
 
 export default {
 
@@ -18,7 +27,7 @@ export default {
   state: {
     sortedInfo:"",
     filteredInfo:"",
-    tableData: mock_data.tableData,
+    tableData: [],
     callAIResult:{},
     value: "ALL",
     isCollected: "false"
@@ -171,7 +180,47 @@ export default {
         }
       });
     }
+    ,
+    * getAiListFromDb ({
+                         payload
+                       }, { put, call, select }) {
+
+        console.log("getAiListFromDb payload: ", payload);
+        console.log("getAiListFromDb gqlBody_builder:", gqlBody_builder(GETAILIST_GQL,payload))
+        const result = yield call(commonService.service, gqlBody_builder(GETAILIST_GQL, payload));
+        console.log("getAiListFromDb result: ", result);
+        // console.log("result: ", );
+        const aiList = JSON.parse(result.data.getAiList.content);
+        let tableData = [];
+        for(let i in aiList) {
+          let dataTemp = {  
+            key: i + 1,
+            params: aiList[i].AI_NAME_EN,
+            img: imgArray[i],
+            name: aiList[i].AI_NAME_CN,
+            author: aiList[i].AI_BELONG_COMPANY,
+            url: aiList[i].AI_INTRO_URL,
+            intro: aiList[i].AI_INTRO,
+            price: aiList[i].AI_BILLING_FORMULA,
+            developers: aiList[i].AI_DEVELOPERS,
+            followers: aiList[i].AI_FOLLOWERS,
+            uptime: aiList[i].AI_UPTIME,
+            isCollected: false
+          };
+          tableData.push(dataTemp);
+        }
+        yield put({
+          type: 'saveTableData',
+          payload: {
+            tableData: tableData
+          }
+        });
+        
+    },    
 
   }
+,
+
+
 
 }

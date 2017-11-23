@@ -21,3 +21,14 @@ export const CALLAI_GQL = `query  callAIFunc($params: String!) {
                                   content
                                 }
                              }`;
+
+
+export const GETAILIST_GQL = `query  getAiListFunc($params: String) {
+                                getAiList(params:$params) {
+                                              code
+                                              type
+                                              content
+                                            }
+                                        }`;
+
+                             

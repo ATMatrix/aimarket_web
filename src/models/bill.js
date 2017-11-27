@@ -1,7 +1,6 @@
 
 'use strict';
-import { access, copyFileSync } from 'fs';
-import { resolve } from 'url';
+
 export default {
   namespace: 'bill',
 
@@ -14,6 +13,9 @@ export default {
   reducers: {
     saveAcounts(state, { payload: { accounts },
     }) {
+      if(accounts.length == 0){
+        channels = null;
+      }
       return { ...state, accounts };
     },
 
@@ -23,7 +25,10 @@ export default {
 
     saveChannels(state, { payload: { channels },
     }) {
-      return { ...state, channels, };
+      if(channels.length == 0){
+        channels = null;
+      }
+      return { ...state, channels };
     },
   },
 

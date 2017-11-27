@@ -25,6 +25,7 @@ import {HomeHeader} from '../Header/HeaderDark'
 const {Content} = Layout;
 import {Link} from 'dva/router';
 import styles from './Billing.css';
+import { remove } from '../../services/users';
 
 function Billing({dispatch, accounts, balance, channels}) {
 
@@ -75,25 +76,41 @@ function Billing({dispatch, accounts, balance, channels}) {
       .value;
     if (deposit <= 0)
       return;
-    uraiden.topUpChannel(deposit, (err, block) => {
+    uraiden.topUpChannel(deposit, (err, deposit) => {
       if (err) {
         console.error(err);
         message.error("An error ocurred trying to deposit to channel", err);
       }
-      console.log(block);
-      message.info(block);
+      console.log("deposit",deposit);
+      message.info(deposit);
+      uraiden.channel.deposit = deposit;
+      uraiden.channel.remaining = deposit - uraiden.channel.balance;
+      let channels = [uraiden.channel];
+      console.log(channels)
+      dispatch({
+        type: 'bill/saveChannels',
+        payload: {channels}
+      })
     });
   }
 
   const Forget = (channel) => {
     showConfirm(FORGET, (flag) => {
       if(flag){
-        // Cookies.delete("RDN-Sender-Address");
-        // Cookies.delete("RDN-Open-Block");
-        // Cookies.delete("RDN-Sender-Balance");
-        // Cookies.delete("RDN-Balance-Signature");
-        // Cookies.delete("RDN-Nonexisting-Channel");
-        // uraiden.forgetStoredChannel();
+        Cookies.delete("RDN-Sender-Address");
+        Cookies.delete("RDN-Open-Block");
+        Cookies.delete("RDN-Sender-Balance");
+        Cookies.delete("RDN-Balance-Signature");
+        Cookies.delete("RDN-Nonexisting-Channel");
+        uraiden.forgetStoredChannel();
+        let pos = channels.indexOf(channel);
+        console.log("pos",pos)
+        let removed =  channels.splice(pos,1);
+        console.log("removed",removed);
+        dispatch({
+          type: 'bill/saveChannels',
+          payload: {channels}
+        })
       }
     });
   }
@@ -157,10 +174,15 @@ function Billing({dispatch, accounts, balance, channels}) {
         console.error(err);
         message.error("An error ocurred trying to open a channel", err);
       }
-      console.log(Cookies)
       Cookies.delete("RDN-Nonexisting-Channel");
-      console.log(channel);
-      message.info(channel);
+      console.log(Cookies)      
+      Object.assign(channel, {state: "opened", deposit: deposit, remaining: 0, key:'0'});                              
+      let channels = [channel];
+      console.log(channels)
+      dispatch({
+        type: 'bill/saveChannels',
+        payload: {channels}
+      })
     });
   }
 
@@ -172,10 +194,45 @@ function Billing({dispatch, accounts, balance, channels}) {
         message.error("An error ocurred trying to buy tokens", err);
       }
       console.info(res);
-      message.info(res);
+      uraiden.token.balanceOf.call(account, (err, balance) => {
+        if(err) {
+          console.error(err);
+        }
+        balance = uraiden.bal2num(balance);
+        console.log(balance)
+        dispatch({
+          type: 'bill/saveBalance',
+          payload: {balance}
+        })
+      });
     });
   }
 
+  const CallAI = () => {
+    uraiden.incrementBalanceAndSign(uRaidenParams.amount, (err, sign) => {//消费token并签名
+      if (err && err.message && err.message.includes('Insuficient funds')) {
+        console.error(err);
+        const current = +(err.message.match(/current ?= ?([\d.,]+)/i)[1]);
+        const required = +(err.message.match(/required ?= ?([\d.,]+)/i)[1]) - current;
+        console.log("current",current);
+        console.log("required",required);
+        console.log("remaining",current - uraiden.channel.balance);
+        return;
+      } else if (err && err.message && err.message.includes('User denied message signature')) {
+        console.error(err);
+        return;
+      } else if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("SIGNED!", sign);
+      Cookies.set("RDN-Sender-Address", uraiden.channel.account);
+      Cookies.set("RDN-Open-Block", uraiden.channel.block);
+      Cookies.set("RDN-Sender-Balance", uraiden.channel.balance);
+      Cookies.set("RDN-Balance-Signature", sign);
+      Cookies.delete("RDN-Nonexisting-Channel");
+    });
+  }
 
   const attribute = {
     bordered: true,
@@ -326,6 +383,13 @@ function Billing({dispatch, accounts, balance, channels}) {
                 onClick={Deposit.bind()}
                 className={styles.button_style}
                 id="depositButton">Deposit</Button>
+
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button
+                type={"primary"}
+                onClick={CallAI.bind()}
+                className={styles.button_style}
+                id="depositButton">CallXiaoi</Button>
             </Card>
             <br/>
             <br/>

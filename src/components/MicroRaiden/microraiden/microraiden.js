@@ -1,7 +1,12 @@
 "use strict";
-import { default as truffleContract } from 'truffle-contract'
+import {
+  default as truffleContract
+} from 'truffle-contract'
 import att_artifacts from './ERC223Token.json'
 import uraiden_artifacts from './RaidenMicroTransferChannels.json'
+import {
+  error
+} from 'util';
 if (typeof Web3 === 'undefined' && typeof require === 'function') {
   var Web3 = require("web3");
 }
@@ -25,8 +30,7 @@ class MicroRaiden {
     }
     if (web3url.currentProvider) {
       this.web3 = new Web3(web3.currentProvider);
-    }
-    else if (typeof web3url === 'string') {
+    } else if (typeof web3url === 'string') {
       this.web3 = new Web3(new Web3.providers.HttpProvider(web3url));
     }
     contractAddr = contractAddr || window["RDNcontractAddr"];
@@ -41,9 +45,9 @@ class MicroRaiden {
     tokenAddr = tokenAddr || window["RDNtokenAddr"];
 
     const ATT = truffleContract(att_artifacts);
-    const URAIDEN = truffleContract(uraiden_artifacts);    
+    const URAIDEN = truffleContract(uraiden_artifacts);
     ATT.setProvider(this.web3.currentProvider);
-    URAIDEN.setProvider(this.web3.currentProvider);    
+    URAIDEN.setProvider(this.web3.currentProvider);
     this.tokenT = ATT.at(tokenAddr);
     this.contractT = URAIDEN.at(contractAddr);
 
@@ -125,8 +129,8 @@ class MicroRaiden {
   }
 
   isChannelValid() {
-    if (!this.channel || !this.channel.receiver || !this.channel.block
-      || isNaN(this.channel.balance) || !this.channel.account) {
+    if (!this.channel || !this.channel.receiver || !this.channel.block ||
+      isNaN(this.channel.balance) || !this.channel.account) {
       return false;
     }
     return true;
@@ -135,32 +139,39 @@ class MicroRaiden {
   getTokenInfo(account) {
     const nameDefer = new Promise((resolve, reject) => {
       this.token.name.call((err, name) =>
-      err ? reject(err) : resolve(name));
+        err ? reject(err) : resolve(name));
     });
     const symbolDefer = new Promise((resolve, reject) => {
       this.token.symbol.call((err, symbol) =>
-      err ? reject(err) : resolve(symbol));
+        err ? reject(err) : resolve(symbol));
     });
     const decimalsDefer = new Promise((resolve, reject) => {
       this.token.decimals.call((err, decimals) =>
-      err ? reject(err) : resolve(this.web3.toDecimal(decimals)));
+        err ? reject(err) : resolve(this.web3.toDecimal(decimals)));
     });
     const balanceDefer = new Promise((resolve, reject) => {
       this.token.balanceOf.call(account, (err, balance) =>
-      err ? reject(err) : resolve(balance));
+        err ? reject(err) : resolve(balance));
     });
 
     return Promise.all([nameDefer, symbolDefer, decimalsDefer, balanceDefer])
-           .then((values) => {
-              let [name, symbol, decimals, balance] = values;            
-              this.decimals = decimals;
-              balance = this.bal2num(balance);
-              return {name,symbol, decimals, balance};            
-            })
-           .catch(err => {err})
+      .then((values) => {
+        let [name, symbol, decimals, balance] = values;
+        this.decimals = decimals;
+        balance = this.bal2num(balance);
+        return {
+          name,
+          symbol,
+          decimals,
+          balance
+        };
+      })
+      .catch(err => {
+        err
+      })
   }
 
-  getChannelInfo(callback) {
+  getChannelInfo() {
     return new Promise((resolve, reject) => {
       if (!this.isChannelValid()) {
         reject(new Error("No valid channelInfo"));
@@ -182,6 +193,7 @@ class MicroRaiden {
         } else {
           closed = closeEvents[0].blockNumber;
         }
+        console.log('getChannelInfo closeEvents', closeEvents, '***closed', closed);        
         this.contract.ChannelSettled({
           _sender: this.channel.account,
           _receiver: this.channel.receiver,
@@ -198,21 +210,28 @@ class MicroRaiden {
           } else {
             settled = settleEvents[0].blockNumber;
           }
+          console.log('getChannelInfo ChannelSettled', closeEvents, '***settled', settled);          
           // for settled channel, getChannelInfo call will fail, so we return before
           if (settled) {
-            reject(null, {"state": "settled", "block": settled, "deposit": 0});
+            reject(null, {
+              "state": "settled",
+              "block": settled,
+              "deposit": 0
+            });
           }
           this.contract.getChannelInfo.call(
             this.channel.account,
             this.channel.receiver,
-            this.channel.block,
-            { from: this.channel.account },
+            this.channel.block, {
+              from: this.channel.account
+            },
             (err, info) => {
               if (err) {
                 reject(err);
               } else if (!(info[1] > 0)) {
-                reject(new Error("Invalid channel deposit: "+JSON.stringify(info)));
+                reject(new Error("Invalid channel deposit: " + JSON.stringify(info)));
               }
+              console.log('getChannelInfo', info);              
               resolve({
                 "state": closed ? "closed" : "opened",
                 "block": closed || this.channel.block,
@@ -241,7 +260,9 @@ class MicroRaiden {
           this.contract.address,
           _deposit,
           _receiver, // bytes _data (3rd param) is the receiver
-          { from: account },
+          {
+            from: account
+          },
           cb
         );
     } else {
@@ -250,8 +271,9 @@ class MicroRaiden {
         // send 'approve' transaction to token contract
         this.token.approve.sendTransaction(
           this.contract.address,
-          _deposit,
-          { from: account },
+          _deposit, {
+            from: account
+          },
           (err, approveTxHash) => {
             if (err) {
               return cb(err);
@@ -259,8 +281,9 @@ class MicroRaiden {
             // send 'createChannel' transaction to channel manager contract
             return this.contract.createChannelERC20.sendTransaction(
               _receiver,
-              _deposit,
-              { from: account },
+              _deposit, {
+                from: account
+              },
               cb
             );
           }
@@ -269,8 +292,9 @@ class MicroRaiden {
 
     // first, check if there's enough balance
     return this.token.balanceOf.call(
-      account,
-      { from: account },
+      account, {
+        from: account
+      },
       (err, balance) => {
         if (err) {
           return callback(err);
@@ -298,20 +322,26 @@ class MicroRaiden {
               return this.contract.getChannelInfo.call(
                 account,
                 receiver,
-                receipt.blockNumber,
-                { from: account },
+                receipt.blockNumber, {
+                  from: account
+                },
                 (err, info) => {
                   if (err) {
                     return callback(err);
                   } else if (!(info[1] > 0)) {
                     return callback(new Error("No deposit found!"));
                   }
-                  console.log("channelInfo",info)
-                  this.setChannel({account, receiver, block: receipt.blockNumber, balance: 0});
+                  console.log("channelInfo", info)
+                  this.setChannel({
+                    account,
+                    receiver,
+                    block: receipt.blockNumber,
+                    balance: 0
+                  });
                   // return channel
                   return callback(null, this.channel);
                 });
-              });
+            });
           });
       });
   }
@@ -334,8 +364,9 @@ class MicroRaiden {
           this.contract.address,
           _deposit,
           // receiver goes as 3rd param, 20 bytes, plus blocknumber, 4bytes
-          _receiver + this.encodeHex(_blockNumber, 8),
-          { from: account },
+          _receiver + this.encodeHex(_blockNumber, 8), {
+            from: account
+          },
           cb
         );
     } else {
@@ -344,8 +375,9 @@ class MicroRaiden {
         // send 'approve' transaction to token contract
         this.token.approve.sendTransaction(
           this.contract.address,
-          _deposit,
-          { from: account },
+          _deposit, {
+            from: account
+          },
           (err, approveTxHash) => {
             if (err) {
               return cb(err);
@@ -354,8 +386,9 @@ class MicroRaiden {
             return this.contract.topUpERC20.sendTransaction(
               _receiver,
               _blockNumber,
-              _deposit,
-              { from: account },
+              _deposit, {
+                from: account
+              },
               cb
             );
           }
@@ -364,8 +397,9 @@ class MicroRaiden {
 
     // first, check if there's enough balance
     return this.token.balanceOf.call(
-      account,
-      { from: account },
+      account, {
+        from: account
+      },
       (err, balance) => {
         if (err) {
           return callback(err);
@@ -390,12 +424,13 @@ class MicroRaiden {
                 return callback(err);
               }
               // return current deposit
-              return this.getChannelInfo((err, info) => {
-                if (err) {
-                  return callback(err);
-                }
-                return callback(null, info.deposit);
-              });
+              return this.getChannelInfo()
+                .then((info => {
+                  callback(null, info.deposit)
+                }))
+                .catch((err) => {
+                  callback(err);
+                })
             });
           });
       });
@@ -405,81 +440,88 @@ class MicroRaiden {
     if (!this.isChannelValid()) {
       return callback(new Error("No valid channelInfo"));
     }
-    return this.getChannelInfo((err, info) => {
-      if (err) {
-        return callback(err);
-      } else if (info.state !== "opened") {
-        return callback(new Error("Tried closing already closed channel"));
-      }
-      console.log(`Closing channel. Cooperative = ${receiverSig}`);
-      let func;
-      if (!this.channel.sign) {
-        func = (cb) => this.signBalance(this.channel.balance, cb);
-      } else {
-        func = (cb) => cb(null, this.channel.sign);
-      }
-      return func((err, sign) => {
-        if (err) {
-          return callback(err);
+    return this.getChannelInfo()
+      .then((info) => {
+        if (info.state !== "opened") {
+          return callback(new Error("Tried closing already closed channel"));
         }
-        let params = [
-          this.channel.receiver,
-          this.channel.block,
-          this.num2bal(this.channel.balance),
-          sign
-        ];
-        let paramsTypes = "address,uint32,uint192,bytes";
-        if (receiverSig) {
-          params.push(receiverSig);
-          paramsTypes += ",bytes";
+        console.log(`Closing channel. Cooperative = ${receiverSig}`);
+        let func;
+        if (!this.channel.sign) {
+          func = (cb) => this.signBalance(this.channel.balance, cb);
+        } else {
+          func = (cb) => cb(null, this.channel.sign);
         }
-        return this.contract.close[paramsTypes].sendTransaction(
-          ...params,
-          { from: this.channel.account },
-          (err, txHash) => {
-            if (err) {
-              return callback(err);
-            }
-            console.log('closeTxHash', txHash);
-            return this.waitTx(txHash, 0, (err, receipt) => {
+        return func((err, sign) => {
+          if (err) {
+            return callback(err);
+          }
+          let params = [
+            this.channel.receiver,
+            this.channel.block,
+            this.num2bal(this.channel.balance),
+            sign
+          ];
+          let paramsTypes = "address,uint32,uint192,bytes";
+          if (receiverSig) {
+            params.push(receiverSig);
+            paramsTypes += ",bytes";
+          }
+          return this.contract.close[paramsTypes].sendTransaction(
+            ...params, {
+              from: this.channel.account
+            },
+            (err, txHash) => {
               if (err) {
                 return callback(err);
               }
-              return callback(null, receipt.blockNumber);
+              console.log('closeTxHash', txHash);
+              return this.waitTx(txHash, 0, (err, receipt) => {
+                if (err) {
+                  return callback(err);
+                }
+                return callback(null, receipt.blockNumber);
+              });
             });
-          });
+        });
+      })
+      .catch((err) => {
+        callback(err);
       });
-    });
   }
 
   settleChannel(callback) {
     if (!this.isChannelValid()) {
       return callback(new Error("No valid channelInfo"));
     }
-    return this.getChannelInfo((err, info) => {
-      if (err) {
-        return callback(err);
-      } else if (info.state !== "closed") {
-        return callback(new Error("Tried settling opened or settled channel"));
-      }
-      return this.contract.settle.sendTransaction(
-        this.channel.receiver,
-        this.channel.block,
-        { from: this.channel.account },
-        (err, txHash) => {
-          if (err) {
-            return callback(err);
-          }
-          console.log('settleTxHash', txHash);
-          return this.waitTx(txHash, 0, (err, receipt) => {
+
+    return this.getChannelInfo()
+      .then((info) => {
+        if (info.state !== "closed") {
+          return callback(new Error("Tried settling opened or settled channel"));
+        }
+        return this.contract.settle.sendTransaction(
+          this.channel.receiver,
+          this.channel.block, {
+            from: this.channel.account
+          },
+          (err, txHash) => {
             if (err) {
               return callback(err);
             }
-            return callback(null, receipt.blockNumber);
-          });
-        }
-      );
-    });
+            console.log('settleTxHash', txHash);
+            return this.waitTx(txHash, 0, (err, receipt) => {
+              if (err) {
+                return callback(err);
+              }
+              return callback(null, receipt.blockNumber);
+            });
+          }
+        );
+      })
+      .catch((err) => {
+        callback(err)
+      })
   }
 
   signMessage(msg, callback) {
@@ -489,19 +531,19 @@ class MicroRaiden {
     const hex = '0x' + this.encodeHex(msg);
     console.log(`Signing "${msg}" => ${hex}, account: ${this.channel.account}`);
     return this.catchCallback(this.web3.personal.sign,
-                              hex,
-                              this.channel.account,
-                              (err, sign) => {
-      if (err && err.message &&
+      hex,
+      this.channel.account,
+      (err, sign) => {
+        if (err && err.message &&
           (err.message.includes('Method not found') ||
-           err.message.includes('is not a function'))) {
-        return this.catchCallback(this.web3.eth.sign,
-                                  this.channel.account,
-                                  hex,
-                                  callback);
-      }
-      return callback(err, sign);
-    });
+            err.message.includes('is not a function'))) {
+          return this.catchCallback(this.web3.eth.sign,
+            this.channel.account,
+            hex,
+            callback);
+        }
+        return callback(err, sign);
+      });
   }
 
   signBalance(newBalance, callback) {
@@ -518,8 +560,9 @@ class MicroRaiden {
     return this.contract.getBalanceMessage.call(
       this.channel.receiver,
       this.channel.block,
-      this.num2bal(newBalance),
-      { from: this.channel.account },
+      this.num2bal(newBalance), {
+        from: this.channel.account
+      },
       (err, msg) => {
         if (err) {
           return callback(err);
@@ -531,7 +574,9 @@ class MicroRaiden {
           }
           // return signed message
           if (newBalance === this.channel.balance && !this.channel.sign) {
-            this.setChannel(Object.assign({}, this.channel, { sign }));
+            this.setChannel(Object.assign({}, this.channel, {
+              sign
+            }));
           }
           return callback(null, sign);
         });
@@ -544,27 +589,31 @@ class MicroRaiden {
     }
     const newBalance = this.channel.balance + +amount;
     // get current deposit
-    return this.getChannelInfo((err, info) => {
-      if (err) {
-        return callback(err);
-      } else if (info.state !== "opened") {
-        return callback(new Error("Tried signing on closed channel"));
-      } else if (newBalance > info.deposit) {
-        return callback(new Error(`Insuficient funds: current = ${info.deposit} , required = ${newBalance}`));
-      }
-      // get hash for new balance proof
-      return this.signBalance(newBalance, (err, sign) => {
-        if (err) {
-          return callback(err);
+    console.log("newBalance", newBalance)
+    return this.getChannelInfo()
+      .then((info => {
+        if (info.state !== "opened") {
+          callback(new Error("Tried signing on closed channel"));
+        } else if (newBalance > info.deposit) {
+          callback(new Error(`Insuficient funds: current = ${info.deposit} , required = ${newBalance}`));
         }
-        this.setChannel(Object.assign(
-          {},
-          this.channel,
-          { balance: newBalance, sign }
-        ));
-        return callback(null, sign);
-      });
-    });
+        // get hash for new balance proof
+        return this.signBalance(newBalance, (err, sign) => {
+          if (err) {
+            return callback(err);
+          }
+          this.setChannel(Object.assign({},
+            this.channel, {
+              balance: newBalance,
+              sign
+            }
+          ));
+          return callback(null, sign);
+        });
+      }))
+      .catch((err) => {
+        callback(err);
+      })
   }
 
   waitTx(txHash, confirmations, callback) {
@@ -577,7 +626,7 @@ class MicroRaiden {
     // Wait for tx to be finished
     let filter = this.web3.eth.filter('latest');
     filter.watch((err, blockHash) => {
-      if (blockCounter<=0) {
+      if (blockCounter <= 0) {
         if (filter) {
           filter.stopWatching();
           filter = null;
@@ -587,7 +636,7 @@ class MicroRaiden {
       }
       // Get info about latest Ethereum block
       return this.web3.eth.getTransactionReceipt(txHash, (err, receipt) => {
-        console.log("receipt",receipt)
+        console.log(receipt)
         if (err) {
           if (filter) {
             filter.stopWatching();
@@ -616,8 +665,10 @@ class MicroRaiden {
    */
   buyToken(account, callback) {
     return this.catchCallback(
-      this.token.mint && this.token.mint.sendTransaction,
-      { from: account, value: this.web3.toWei(0.1, "ether") },
+      this.token.mint && this.token.mint.sendTransaction, {
+        from: account,
+        value: this.web3.toWei(0.1, "ether")
+      },
       (err, txHash) => {
         if (err) {
           return callback(err);
@@ -633,9 +684,10 @@ class MicroRaiden {
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
   module.exports.MicroRaiden = MicroRaiden;
 } else if (typeof define === 'function' && define.amd) {
-  define([], function() {
+  define([], function () {
     return MicroRaiden;
   });
 } else {
   window.MicroRaiden = MicroRaiden;
 }
+

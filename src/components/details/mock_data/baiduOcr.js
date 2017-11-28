@@ -39,7 +39,7 @@ const forms = [
 const request = {
   title: '文字识别',
   describe: '提供多种场景下精准的图像文字识别技术服务, 让您的应用看图识字，提升输入效率，优化用户体验',
-  type: 'baiduOcr',
+  type: 'BAIDU_OCR',
   forms,
 }
 

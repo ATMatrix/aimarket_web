@@ -40,7 +40,7 @@ const forms = [
 const request = {
   title: '人脸分析',
   describe: '本 api 支持对检测到的人脸直接进行分析，获得人脸的关键点和各类属性信息',
-  type: 'aliface',
+  type: 'ALI_FACE',
   forms,
 }
 

@@ -39,7 +39,7 @@ const forms = [
 const request = {
   title: '语义理解',
   describe: '人工智能语义理解能力，例如天气、音乐、闲聊、智能家居等',
-  type: 'xunfei',
+  type: 'XUN_FEI',
   forms,
 }
 

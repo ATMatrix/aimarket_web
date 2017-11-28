@@ -39,7 +39,7 @@ const forms = [
 const request = {
   title: '情感倾向分析',
   describe: '自动对包含主观信息的文本进行情感倾向性判断，为口碑分析、话题监控、舆情分析等应用提供基础技术支持',
-  type: 'baiduNlp',
+  type: 'BAIDU_NLP',
   forms,
 }
 

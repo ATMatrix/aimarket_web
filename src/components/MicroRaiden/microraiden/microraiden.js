@@ -213,7 +213,7 @@ class MicroRaiden {
           console.log('getChannelInfo ChannelSettled', closeEvents, '***settled', settled);          
           // for settled channel, getChannelInfo call will fail, so we return before
           if (settled) {
-            reject(null, {
+            resolve({
               "state": "settled",
               "block": settled,
               "deposit": 0

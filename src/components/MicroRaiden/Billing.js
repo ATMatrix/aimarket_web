@@ -27,7 +27,7 @@ import {Link} from 'dva/router';
 import styles from './Billing.css';
 import { remove } from '../../services/users';
 
-function Billing({dispatch, accounts, balance, channels, price}) {
+function Billing({dispatch, accounts, balance, channels, price, useMM}) {
 
   const TOPUP = 'TopUP';
   const CLOSE = 'Close';
@@ -397,8 +397,8 @@ function Billing({dispatch, accounts, balance, channels, price}) {
 }
 
 function mapStateToProps(state) {
-  const {accounts, balance, channels, price} = state.bill;
-  return {accounts, balance, channels, price}
+  const {accounts, balance, channels, price, useMM} = state.bill;
+  return {accounts, balance, channels, price, useMM}
 }
 
 export default connect(mapStateToProps)(Billing);

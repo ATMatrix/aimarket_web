@@ -12,6 +12,7 @@ export default {
     accounts: [],
     balance: null,
     channels: [],
+    useMM: false,
     price: '...',
   },
 

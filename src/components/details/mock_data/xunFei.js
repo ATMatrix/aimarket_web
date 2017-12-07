@@ -2,7 +2,7 @@ import styles from '../../AIList/table.css'
 
 const profile = {
   creator: '科大讯飞',
-  logoSrc: <img className={styles.image_style} src={require('../../../assets/images/xunfei2.png')}/>,
+  logoSrc: <img className={styles.image_style} src={require('../../../assets/images/xunfei.png')}/>,
   title: 'AIUI',
   host: 'http://aiui.xfyun.cn/default/index',
   tag: 'Medical',

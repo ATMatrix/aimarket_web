@@ -2,7 +2,7 @@ import styles from '../../AIList/table.css'
 
 const profile = {
   creator: '百度',
-  logoSrc: <img classname={styles.image_style} src={require('../../../assets/images/baidu2.jpg')}/>,
+  logoSrc: <img classname={styles.image_style} src={require('../../../assets/images/baidu.jpg')}/>,
   title: '通用文字识别',
   host: 'https://ai.baidu.com/tech/ocr/general',
   tag: 'Medical',

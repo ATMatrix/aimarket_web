@@ -87,7 +87,7 @@ function TableDemo ({ dispatch, aiName, tableData }) {
     }, {
       title: '',
       key: 'intro',
-      // width: '42%',
+      width: '49%',
       render: (text, record) => (
 
         <span>

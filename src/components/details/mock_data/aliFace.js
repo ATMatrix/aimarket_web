@@ -2,7 +2,7 @@ import styles from '../../AIList/table.css'
 
 const profile = {
   creator: '阿里巴巴',
-  logoSrc: <img classname={styles.image_style} src={require('../../../assets/images/aliyun2.jpg')}/>,
+  logoSrc: <img classname={styles.image_style} src={require('../../../assets/images/aliyun.jpg')}/>,
   title: '阿里巴巴',
   host: 'https://www.faceplusplus.com.cn/beauty/',
   tag: 'Medical',

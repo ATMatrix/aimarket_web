@@ -25,12 +25,13 @@ app.model(require("./models/login"));
 app.model(require("./models/ai"));
 app.model(require("./models/censor"));
 app.model(require("./models/aiList"))
+app.model(require("./models/global"))
 app.model(require("./models/headerModal"))
 app.model(require("./models/userAccount"))
 app.model(require("./models/windowSize"));
 app.model(require("./models/voiceInput"));
 app.model(require("./models/chat"))
-app.model(require("./models/global"))
+app.model(require("./models/bill"))
 
 // 4. Router
 app.router(require('./router'));

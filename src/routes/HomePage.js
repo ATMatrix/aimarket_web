@@ -19,8 +19,8 @@ function HomePage ({ location }) {
         <Content className={styles.content_style}>
           <div>
             <h1>
-            AIs Market
-            
+            AI Market
+
             </h1>
 
             <h2>
@@ -29,7 +29,7 @@ function HomePage ({ location }) {
             <br/>
             <div className={styles.button_center}>
               <Link to = '/list'>
-              <Button type={"primary"} className={styles.button_style}><h3>EXPLORE AIS</h3></Button>
+              <Button type={"primary"} className={styles.button_style}><h3>EXPLORE AI Services</h3></Button>
               </Link>
             </div>
 

@@ -15,7 +15,7 @@ const fs = require('fs')
 
 
 let imgArray = [<img className={styles.image_style} src={require("../assets/images/microsoft.png")}/>,<img className={styles.image_style} src={require("../assets/images/ibm.jpg")}/>,
-<img className={styles.image_style} src={require("../assets/images/google.jpg")}/>,
+<img className={styles.image_style} src={require("../assets/images/google.jpg")}/>,<img className={styles.image_style} src={require("../assets/images/aws.png")}/>,
 <img className={styles.image_style} src={require("../assets/images/temp6.jpeg")}/>,
 <img className={styles.image_style} src={require("../assets/images/baidu.jpg")}/>, <img className={styles.image_style} src={require("../assets/images/baidu.jpg")}/>,
 <img className={styles.image_style} src={require("../assets/images/aliyun.jpg")}/>,

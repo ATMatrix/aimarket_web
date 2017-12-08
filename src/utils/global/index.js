@@ -12,14 +12,14 @@ import parameters from '../../components/MicroRaiden/microraiden/parameters.json
 export const proxy = new events.EventEmitter();
 
 //production
-const SOCKET_URL = "wss://demo.atn.io/";
-global.ServerURL = 'https://demo.atn.io/graphql/';
+// const SOCKET_URL = "wss://demo.atn.io/";
+// global.ServerURL = 'https://demo.atn.io/graphql/';
 //development
-// const SOCKET_URL = "wss://bogong.atmatrix.org/";
-// global.ServerURL = 'https://bogong.atmatrix.org/graphql/';
+// const SOCKET_URL = "ws://118.31.18.101:4000/";
+// global.ServerURL = 'http://118.31.18.101:4000/graphql/';
 //locate
-// const SOCKET_URL = "ws://127.0.0.1:4000/";
-// global.ServerURL = 'http://127.0.0.1:4000/graphql/';
+const SOCKET_URL = "ws://127.0.0.1:4000/";
+global.ServerURL = 'http://127.0.0.1:4000/graphql/';
 
 global.proxyGlobal = proxy;
 

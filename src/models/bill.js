@@ -1,6 +1,10 @@
 
 'use strict';
 
+import * as commonService from '../services/common_service';
+import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
+import {TRANSFER_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL} from '../utils/gql/gql_template/index';
+
 export default {
   namespace: 'bill',
 
@@ -8,6 +12,8 @@ export default {
     accounts: [],
     balance: null,
     channels: [],
+    useMM: false,
+    price: '...',
   },
 
   reducers: {
@@ -21,6 +27,10 @@ export default {
 
     saveBalance(state, { payload: { balance } }) {
       return { ...state, balance };
+    },
+
+    savePrice(state, { payload: { price } }) {
+      return { ...state, price };
     },
 
     saveChannels(state, { payload: { channels },
@@ -68,7 +78,49 @@ export default {
               payload: {channels}
             })
       }
+      let params = {};
+      Object.assign(params,{sender_addr:uraiden.channel.account, ai_id:"XIAO_I"});
+      params = JSON.stringify(params);
+      yield put({
+        type: 'getPrice',
+        payload: {params}
+      })
     },
+
+    * transfer ({ payload }, { put, call }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(TRANSFER_GQL, payload));
+      console.log(result);
+    },
+
+    * closeChannel ({ payload }, { put, call }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(CLOSECHANNEL_GQL, payload));
+      console.log(result);   
+      let close_signature = JSON.parse(result.data.closeChannel.content);
+      console.log(close_signature)
+      // if(result && result.data && result.data.closeChannel && result.data.closeChannel.code == '600001'){
+        let closeSign = close_signature.close_signature;
+        console.log(closeSign)
+        uraiden.closeChannel(closeSign, (err, res) => {
+          if (err) {
+            console.log("An error occurred trying to close the channel", err)
+          }
+          console.info("CLOSED", res);
+        });
+      // }
+    },
+
+    * getPrice ({ payload }, { put, call }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(GETPRICE_GQL, payload));
+      let price = result.data.getPrice.content;
+      yield put({
+        type: 'savePrice',
+        payload: {price}
+      })
+      console.log(result); 
+    }
   },
 
   subscriptions: {

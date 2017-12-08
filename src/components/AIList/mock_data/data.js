@@ -2,8 +2,12 @@
 import styles from '../table.css'
 
 // console.log("data.js baidu: ", baidu);
-let imgArray = [<img className={styles.image_style} src={require("../../../assets/images/baidu2.jpg")}/>, <img className={styles.image_style} src={require("../../../assets/images/aliyun2.jpg")}/>,
-<img className={styles.image_style} src={require('../../../assets/images/xunfei2.png')}/>,<img className={styles.image_style} src={require('../../../assets/images/hanwuji.png')}/>,
+let imgArray = [<img className={styles.image_style} src={require("../../../assets/images/microsoft.png")}/>,<img className={styles.image_style} src={require("../../../assets/images/ibm.jpg")}/>,
+<img className={styles.image_style} src={require("../../../assets/images/google.png")}/>,<img className={styles.image_style} src={require("../../../assets/images/baidu.jpg")}/>,
+<img className={styles.image_style} src={require("../../../assets/images/temp6.jpeg")}/>,
+  <img className={styles.image_style} src={require("../../../assets/images/baidu.jpg")}/>, <img className={styles.image_style} src={require("../../../assets/images/baidu.jpg")}/>,
+  <img className={styles.image_style} src={require("../../../assets/images/aliyun.jpg")}/>,
+<img className={styles.image_style} src={require('../../../assets/images/xunfei.png')}/>,<img className={styles.image_style} src={require('../../../assets/images/hanwuji.png')}/>,
 <img className={styles.image_style} src={require('../../../assets/images/tencent.png')}/>, <img className={styles.image_style} src={require('../../../assets/images/huawei.jpg')}/>]
 let arr1 = [{
   key: '1',

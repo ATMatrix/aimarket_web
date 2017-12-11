@@ -15,12 +15,12 @@ export default {
     *load({
       payload
     },{ put, call, select }) {
-      yield put ({
-        type: 'aiList/getAiListFromDb',
-        payload: {
-          params: ""
-        }
-      });
+        yield put ({
+          type: 'aiList/getAiListFromDb',
+          payload: {
+            params: ""
+          }
+        });
     }
   },
 

@@ -37,12 +37,11 @@ function TableDemo ({ dispatch, aiName, tableData }) {
   };
 
   function sortChange(value) {
-
     // console.log("value: " + value);
     // dispatch({
     //   type: 'aiList/setSortOrder',
     //   payload: value
-    //   });
+    // });
   }
 
 
@@ -170,7 +169,6 @@ function TableDemo ({ dispatch, aiName, tableData }) {
             Price Range:&nbsp;&nbsp;&nbsp;<Select defaultValue="All" className={styles.selector}  onSelect={filterChange}>
             <Select.Option value="All">All</Select.Option>
             <Select.Option value="Free">Free</Select.Option>
-            <Select.Option value="Freemium" >Freemium</Select.Option>
             <Select.Option value="Paid">Paid</Select.Option>
           </Select>
           </div>

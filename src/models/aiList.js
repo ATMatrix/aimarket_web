@@ -170,7 +170,7 @@ export default {
           tableData:tempData
         }
       });
-    } 
+    }
 
     ,
     * setcallAIResult ({
@@ -196,8 +196,9 @@ export default {
         const aiList = JSON.parse(result.data.getAiList.content);
         let tableData = [];
         for(let i in aiList) {
-          let dataTemp = {  
+          let dataTemp = {
             key: i + 1,
+            id: aiList[i].AI_ID,
             params: aiList[i].AI_NAME_EN,
             img: imgArray[i],
             name: aiList[i].AI_NAME_CN,
@@ -218,8 +219,8 @@ export default {
             tableData: tableData
           }
         });
-        
-    },    
+
+    },
 
   }
 ,

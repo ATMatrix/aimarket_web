@@ -10,7 +10,7 @@ import { connect } from 'dva';
 const tableDataBack = mock_data.tableData;
 
 function TableDemo ({ dispatch, aiName, tableData }) {
-  
+
   // dispatch({
   //   type: 'aiList/getAiListFromDb',
   //   payload: {
@@ -62,10 +62,10 @@ function TableDemo ({ dispatch, aiName, tableData }) {
 
   }
 
-  function renderToDetails(name) {
+  function renderToDetails(id) {
      dispatch({
-       type: 'ai/setAIName',
-       payload: name
+       type: 'ai/setAIId',
+       payload: {id}
        });
     }
 
@@ -80,7 +80,7 @@ function TableDemo ({ dispatch, aiName, tableData }) {
       dataIndex: 'img',
       key: 'img',
       render: (text, record) =>
-        <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+        <Link to='/details' onClick={renderToDetails.bind(null,record.id)}>
         <span className={styles.image_layout}><span className={styles.image_style2}>{text}</span></span>
         </Link>
         ,
@@ -91,7 +91,7 @@ function TableDemo ({ dispatch, aiName, tableData }) {
       render: (text, record) => (
 
         <span>
-        <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+        <Link to='/details' onClick={renderToDetails.bind(null,record.id)}>
           <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}>  by  </span>&nbsp;
         </Link>
           <a href={record.url} className={styles.author_style}>{record.author}</a><br />

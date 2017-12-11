@@ -7,7 +7,7 @@
 import { routerRedux } from 'dva/router';
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {CALLAI_GQL} from '../utils/gql/gql_template/index';
+import {CALLAI_GQL, GETAIDETAILS_GQL} from '../utils/gql/gql_template/index';
 
 export default {
   namespace: 'ai',
@@ -15,6 +15,7 @@ export default {
   state: {
     signupFlag: 'signupFlag_null',
     aiName: '',
+    AIDetails: '',
     requesting: false,
     callAIResult: '',
     callAILog: '',
@@ -39,12 +40,12 @@ export default {
       };
     },
 
-    saveAIName(state, {
-      payload: { aiName },
+    saveAIId(state, {
+      payload: { details },
     }) {
       return {
         ...state,
-        aiName,
+        AIDetails: details,
         callAIResult: '',
         callAILog: '',
         requesting: false,
@@ -137,13 +138,21 @@ export default {
       })
     },
 
-    * setAIName({ payload }, { put, call, select }) {
-      yield put({
-        type: 'saveAIName',
-        payload: {
-          aiName: payload,
-        },
-      });
+    * setAIId({ payload }, { put, call, select }) {
+      const result = yield call(commonService.service, gqlBody_builder(GETAIDETAILS_GQL, payload));
+      if (result && result.data && result.data.getAiDetails && result.data.getAiDetails.content) {
+        const details = result.data.getAiDetails.content;
+
+        console.log('++++++')
+        console.log(details)
+
+        yield put({
+          type: 'saveAIId',
+          payload: {details},
+        });
+      } else {
+        console.log("request fail!");
+      }
     },
 
     * setcallAIResult({ payload }, { put, call, select }) {

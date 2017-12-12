@@ -1,13 +1,13 @@
 import styles from '../../AIList/table.css'
 
 const profile = {
-  creator: '阿里巴巴',
-  logoSrc: <img classname={styles.image_style} src={require('../../../assets/images/aliyun2.jpg')}/>,
-  title: '阿里巴巴',
-  host: 'https://www.faceplusplus.com.cn/beauty/',
-  tag: 'Medical',
-  createAt: 'Created: April 2015',
-  describe: ' 本 api 支持对检测到的人脸直接进行分析，获得人脸的关键点和各类属性信息',
+  creator: '',
+  logoSrc: '',
+  title: '',
+  host: '',
+  tag: '',
+  createAt: '',
+  describe: '',
 };
 
 const fields = [
@@ -22,10 +22,6 @@ const fields = [
 
 const apis = {
   items: [
-    {
-      method: 'get',
-      title: '人脸分析',
-    },
   ],
 }
 
@@ -38,10 +34,10 @@ const forms = [
 
 
 const request = {
-  title: '人脸分析',
-  describe: '本 api 支持对检测到的人脸直接进行分析，获得人脸的关键点和各类属性信息',
-  type: 'aliface',
-  forms,
+  title: '',
+  describe: '',
+  type: '',
+  forms: [],
 }
 
 const response = ''
@@ -49,6 +45,5 @@ const response = ''
 export default {
   apis,
   request,
-  response,
   profile,
 }

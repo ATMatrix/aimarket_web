@@ -15,12 +15,12 @@ export default {
     *load({
       payload
     },{ put, call, select }) {
-      yield put ({
-        type: 'aiList/getAiListFromDb',
-        payload: {
-          params: ""
-        }
-      });
+        yield put ({
+          type: 'aiList/getAiListFromDb',
+          payload: {
+            params: ""
+          }
+        });
     }
   },
 
@@ -31,6 +31,10 @@ export default {
         if (pathname === '/list') {
           dispatch({ type: 'load' });
         }
+        // if (pathname === '/details') {
+        //   console.log('load details')
+        //   dispatch({ type: 'ai/setAIId', payload: {id: 1} });
+        // }
       });
     }
   }

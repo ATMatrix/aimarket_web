@@ -14,9 +14,12 @@ import styles from '../components/AIList/table.css'
 const fs = require('fs')
 
 
-let imgArray = [<img className={styles.image_style} src={require("../assets/images/baidu2.jpg")}/>, <img className={styles.image_style} src={require("../assets/images/baidu2.jpg")}/>,
-<img className={styles.image_style} src={require('../assets/images/xunfei2.png')}/>, <img className={styles.image_style} src={require('../assets/images/temp6.jpeg')}/>,
-<img className={styles.image_style} src={require("../assets/images/aliyun2.jpg")}/>, <img className={styles.image_style} src={require('../assets/images/hanwuji.png')}/>,
+let imgArray = [<img className={styles.image_style} src={require("../assets/images/microsoft.png")}/>,<img className={styles.image_style} src={require("../assets/images/ibm.jpg")}/>,
+<img className={styles.image_style} src={require("../assets/images/google.jpg")}/>,<img className={styles.image_style} src={require("../assets/images/aws.png")}/>,
+<img className={styles.image_style} src={require("../assets/images/temp6.jpeg")}/>,
+<img className={styles.image_style} src={require("../assets/images/baidu.jpg")}/>, <img className={styles.image_style} src={require("../assets/images/baidu.jpg")}/>,
+<img className={styles.image_style} src={require("../assets/images/aliyun.jpg")}/>,
+<img className={styles.image_style} src={require('../assets/images/xunfei.png')}/>,<img className={styles.image_style} src={require('../assets/images/hanwuji.png')}/>,
 <img className={styles.image_style} src={require('../assets/images/tencent.png')}/>, <img className={styles.image_style} src={require('../assets/images/huawei.jpg')}/>]
 
 
@@ -28,6 +31,7 @@ export default {
     sortedInfo:"",
     filteredInfo:"",
     tableData: [],
+    tableDataBack: [],
     callAIResult:{},
     value: "ALL",
     isCollected: "false"
@@ -35,6 +39,9 @@ export default {
   reducers: {
     saveTableData(state, { payload: { tableData } }) {
       return { ...state, tableData };
+    },
+    saveTableDataBack(state, { payload: { tableDataBack } }) {
+      return { ...state, tableDataBack };
     },
     saveCallAIResult(state, { payload: { callAIResult } }) {
       return { ...state, callAIResult };
@@ -64,8 +71,16 @@ export default {
     * setFilterInfo ({
                    payload
                  }, { put, call, select }) {
-      const tableDataBack = mock_data.tableData;
+      // const tableDataBack = mock_data.tableData;
+      yield put({
+        type: 'getAiListFromDb',
+        payload: {
+          params: ""          
+        }
+      });
+      let tableDataBack = _.cloneDeep(yield select(state => state.aiList.tableDataBack));  
       let value = payload.toString().toUpperCase();
+      console.log("price: ", value);
       if(value === "ALL") {
         yield put({
           type: 'saveTableData',
@@ -74,16 +89,15 @@ export default {
           }
         });
       }
-      // const val = `^${value}$`;
-      // const reg = new RegExp(val, 'gi')
-
       else {
         let tempData = [];
         for (let record in tableDataBack) {
+          console.log("tableDataBack[record].price", tableDataBack[record].price);
           if(tableDataBack[record].price === value) {
             tempData.push(tableDataBack[record])
           }
         }
+        console.log("tempdata: ", tempData)
         // let tempData = tableData.map((record) => {
         //   // console.log("record")
         //   // console.log(record)
@@ -108,13 +122,13 @@ export default {
     * setIsCollected ({
                       payload
                     }, { put, call, select }) {
-      const tableDataBack = mock_data.tableData;
+      const tableData = _.cloneDeep(yield select(state => state.aiList.tableData)); 
       let opt = payload;
       // console.log("=======opt:\n" + opt)
       let tempData = [];
-      for (let i in tableDataBack) {
-        tempData.push(tableDataBack[i])
-        if(tableDataBack[i].key === opt) {
+      for (let i in tableData) {
+        tempData.push(tableData[i])
+        if(tableData[i].key === opt) {
           tempData[i].isCollected = !tempData[i].isCollected;
         }
       }
@@ -141,7 +155,9 @@ export default {
     * setSortOrder ({
                       payload
                     }, { put, call, select }) {
-      let tableDataBack = mock_data.tableData;
+      console.log("fucker")
+      let tableDataBack = _.cloneDeep(yield select(state => state.aiList.tableDataBack))
+      console.log("setSortOrder", setSortOrder);
       let tempData = [];
       let field = '';
       if(payload === 'Popular') {
@@ -167,7 +183,7 @@ export default {
           tableData:tempData
         }
       });
-    } 
+    }
 
     ,
     * setcallAIResult ({
@@ -184,39 +200,50 @@ export default {
     * getAiListFromDb ({
                          payload
                        }, { put, call, select }) {
-
-        console.log("getAiListFromDb payload: ", payload);
-        console.log("getAiListFromDb gqlBody_builder:", gqlBody_builder(GETAILIST_GQL,payload))
-        const result = yield call(commonService.service, gqlBody_builder(GETAILIST_GQL, payload));
-        console.log("getAiListFromDb result: ", result);
-        // console.log("result: ", );
-        const aiList = JSON.parse(result.data.getAiList.content);
-        let tableData = [];
-        for(let i in aiList) {
-          let dataTemp = {  
-            key: i + 1,
-            params: aiList[i].AI_NAME_EN,
-            img: imgArray[i],
-            name: aiList[i].AI_NAME_CN,
-            author: aiList[i].AI_BELONG_COMPANY,
-            url: aiList[i].AI_INTRO_URL,
-            intro: aiList[i].AI_INTRO,
-            price: aiList[i].AI_BILLING_FORMULA,
-            developers: aiList[i].AI_DEVELOPERS,
-            followers: aiList[i].AI_FOLLOWERS,
-            uptime: aiList[i].AI_UPTIME,
-            isCollected: false
-          };
-          tableData.push(dataTemp);
-        }
-        yield put({
-          type: 'saveTableData',
-          payload: {
-            tableData: tableData
+        let tableData = _.cloneDeep(yield select(state => state.aiList.tableData)); 
+        console.log("global tableData", tableData); 
+        console.log(tableData.length);  
+        if(tableData.length === 0) {
+          console.log("getAiListFromDb payload: ", payload);
+          console.log("getAiListFromDb gqlBody_builder:", gqlBody_builder(GETAILIST_GQL,payload))
+          const result = yield call(commonService.service, gqlBody_builder(GETAILIST_GQL, payload));
+          console.log("getAiListFromDb result: ", result);
+          // console.log("result: ", );
+          const aiList = JSON.parse(result.data.getAiList.content);
+          let tableData = [];
+          for(let i in aiList) {
+            let dataTemp = {
+              key: i + 1,
+              id: aiList[i].AI_ID,
+              params: aiList[i].AI_NAME_EN,
+              img: imgArray[i],
+              name: aiList[i].AI_NAME_CN,
+              author: aiList[i].AI_BELONG_COMPANY,
+              url: aiList[i].AI_INTRO_URL,
+              intro: aiList[i].AI_INTRO,
+              price: aiList[i].AI_BILLING_FORMULA,
+              developers: aiList[i].AI_DEVELOPERS,
+              followers: aiList[i].AI_FOLLOWERS,
+              uptime: aiList[i].AI_UPTIME,
+              isCollected: false
+            };
+            tableData.push(dataTemp);
           }
-        });
-        
-    },    
+          yield put({
+            type: 'saveTableData',
+            payload: {
+              tableData: tableData
+            }
+          });
+          yield put({
+            type: 'saveTableDataBack',
+            payload: {
+              tableDataBack: tableData
+            }
+          });
+
+      }
+    }
 
   }
 ,

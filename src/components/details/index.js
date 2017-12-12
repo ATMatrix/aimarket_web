@@ -9,7 +9,7 @@ import HorizotalMenu from './components/horizontalMenu'
 import { HomeHeader } from '../Header/HeaderLight'
 import ContentRow from './components/contentRow'
 
-import mock from './mock_data'
+import initdata from './init'
 
 
 const {
@@ -37,19 +37,19 @@ class Profile extends React.Component {
               <div className={style.meta_data}>
                 <div>
                   <span><Icon type="user" /></span>
-                  <a href="www.google.com">{data.creator}</a>
+                  <a href={data.host}>{data.creator}</a>
                 </div>
                 <div>
                   <span><Icon type="global" /></span>
-                  <a href="www.google.com">{data.host}</a>
+                  <a href={data.host}>{data.host}</a>
                 </div>
                 <div>
                   <span><Icon type="tag" /></span>
-                  <a href="www.google.com">{data.tag}</a>
+                  <a href={data.host}></a>
                 </div>
                 <div>
                   <span><Icon type="clock-circle-o" /></span>
-                  <a href="www.google.com">{data.createAt}</a>
+                  <a href={data.host}>{data.createAt}</a>
                 </div>
               </div>
             </div>
@@ -64,10 +64,14 @@ class Profile extends React.Component {
 class Details extends React.Component {
   constructor(props) {
     super(props)
+    console.log('details props')
+    console.log(props)
   }
 
   render() {
-    const data = mock[this.props.name]
+    console.log('details data')
+    console.log(this.props.details)
+    const data = this.props.details ? JSON.parse(this.props.details) : initdata
     data.request.requesting = this.props.requesting
     return (
       <Layout style={{minHeight: '100%'}}>
@@ -101,6 +105,7 @@ const mapStateToProps = state => ({
   result: state.ai.callAIResult,
   log: state.ai.callAILog,
   name: state.ai.aiName,
+  details: state.ai.AIDetails,
   requesting: state.ai.requesting,
   step: state.ai.callStep,
 })

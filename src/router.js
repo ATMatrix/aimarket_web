@@ -12,6 +12,7 @@ import Details from './components/details';
 import { UserAccount } from './components/UserAccount/UserAccount'
 import { HomeHeader } from './components/Header/HeaderLight'
 import VideoRoom  from './routes/VideoRoom'
+import Billing  from './components/MicroRaiden/Billing'
 
 function RouterConfig({history}) {
     return (
@@ -24,6 +25,7 @@ function RouterConfig({history}) {
                 <Route path="/test" component={Tester} />
                 <Route path="/userAccount" component={UserAccount}/>
                 <Route path="/room" component={VideoRoom}/>
+                <Route path="/bill" component={Billing}/>
             </Switch>
         </Router>
     );

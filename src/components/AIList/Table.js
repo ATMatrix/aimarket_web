@@ -10,7 +10,7 @@ import { connect } from 'dva';
 const tableDataBack = mock_data.tableData;
 
 function TableDemo ({ dispatch, aiName, tableData }) {
-  
+
   // dispatch({
   //   type: 'aiList/getAiListFromDb',
   //   payload: {
@@ -37,12 +37,11 @@ function TableDemo ({ dispatch, aiName, tableData }) {
   };
 
   function sortChange(value) {
-
     // console.log("value: " + value);
     // dispatch({
     //   type: 'aiList/setSortOrder',
     //   payload: value
-    //   });
+    // });
   }
 
 
@@ -62,10 +61,10 @@ function TableDemo ({ dispatch, aiName, tableData }) {
 
   }
 
-  function renderToDetails(name) {
+  function renderToDetails(id) {
      dispatch({
-       type: 'ai/setAIName',
-       payload: name
+       type: 'ai/setAIId',
+       payload: {id}
        });
     }
 
@@ -80,18 +79,18 @@ function TableDemo ({ dispatch, aiName, tableData }) {
       dataIndex: 'img',
       key: 'img',
       render: (text, record) =>
-        <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+        <Link to='/details' onClick={renderToDetails.bind(null,record.id)}>
         <span className={styles.image_layout}><span className={styles.image_style2}>{text}</span></span>
         </Link>
         ,
     }, {
       title: '',
       key: 'intro',
-      // width: '42%',
+      width: '49%',
       render: (text, record) => (
 
         <span>
-        <Link to='/details' onClick={renderToDetails.bind(null,record.params)}>
+        <Link to='/details' onClick={renderToDetails.bind(null,record.id)}>
           <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}>  by  </span>&nbsp;
         </Link>
           <a href={record.url} className={styles.author_style}>{record.author}</a><br />
@@ -170,7 +169,6 @@ function TableDemo ({ dispatch, aiName, tableData }) {
             Price Range:&nbsp;&nbsp;&nbsp;<Select defaultValue="All" className={styles.selector}  onSelect={filterChange}>
             <Select.Option value="All">All</Select.Option>
             <Select.Option value="Free">Free</Select.Option>
-            <Select.Option value="Freemium" >Freemium</Select.Option>
             <Select.Option value="Paid">Paid</Select.Option>
           </Select>
           </div>

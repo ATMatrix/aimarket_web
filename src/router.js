@@ -20,7 +20,7 @@ function RouterConfig({history}) {
             <Switch>
                 <Route path="/" exact component={IndexPage}/>
                 <Route path="/list" exact component={List}/>
-                <Route path="/details" exact component={Details}/>
+                <Route path="/details/:id" exact component={Details}/>
                 <Route path="/users" component={Users}/>
                 <Route path="/test" component={Tester} />
                 <Route path="/userAccount" component={UserAccount}/>

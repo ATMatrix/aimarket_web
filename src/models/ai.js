@@ -139,7 +139,10 @@ export default {
     },
 
     * setAIId({ payload }, { put, call, select }) {
+      console.log("---------setAIId start----------");
+      console.log("payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(GETAIDETAILS_GQL, payload));
+      console.log("result: ", result);
       if (result && result.data && result.data.getAiDetails && result.data.getAiDetails.content) {
         const details = result.data.getAiDetails.content;
 

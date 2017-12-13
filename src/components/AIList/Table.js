@@ -74,12 +74,13 @@ function TableDemo ({ dispatch, aiName, tableData }) {
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
 
+
     const columns = [{
       title: '',
       dataIndex: 'img',
       key: 'img',
       render: (text, record) =>
-        <Link to='/details' onClick={renderToDetails.bind(null,record.id)}>
+        <Link to = {`/details/${record.id}`} >
         <span className={styles.image_layout}><span className={styles.image_style2}>{text}</span></span>
         </Link>
         ,
@@ -90,7 +91,7 @@ function TableDemo ({ dispatch, aiName, tableData }) {
       render: (text, record) => (
 
         <span>
-        <Link to='/details' onClick={renderToDetails.bind(null,record.id)}>
+        <Link to={`/details/${record.id}`} >
           <a className={styles.ai_name}>{record.name}</a>&nbsp;<span className={styles.by_style}>  by  </span>&nbsp;
         </Link>
           <a href={record.url} className={styles.author_style}>{record.author}</a><br />

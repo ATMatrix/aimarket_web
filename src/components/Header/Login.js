@@ -36,46 +36,57 @@ function Login({dispatch, form, loginFlag}) {
 //http://118.31.18.101:4000/graphql/
     
 
-  }
-
-  if(loginFlag == "loginFlag_fail") {
-    dispatch({
-      type: 'login/setLoginFlag',
-      payload: 'loginFlag_null'
-    })
-    message.error("Login failed, server is down! ", 2);   
-  }
-
-
-  if(loginFlag == "loginFlag_false") {
-    dispatch({
-      type: 'login/setLoginFlag',
-      payload: 'loginFlag_null'
-    })
-    message.error("Login failed, wrong username or password! ", 2);   
-  }
-
-   function handleSubmit(e) {
-     form.validateFields((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values);
-          }
-          user.username = values.username
-          user.password = values.password
-          user.email = ''
-          // console.log(user)
-          dispatch({
-            type: 'login/login',
-            payload: {user:user}
-          });
-
-        });
-     // dispatch(routerRedux.goBack())
     }
 
-  const { getFieldDecorator } = form
-  let loading = false;
-  
+    if(loginFlag == "loginFlag_fail") {
+      dispatch({
+        type: 'login/setLoginFlag',
+        payload: 'loginFlag_null'
+      })
+      message.error("Login failed, server is down! ", 2);   
+    }
+
+
+    if(loginFlag == "loginFlag_false") {
+      dispatch({
+        type: 'login/setLoginFlag',
+        payload: 'loginFlag_null'
+      })
+      message.error("Login failed, wrong username or password! ", 2);   
+    }
+
+    const popSignUp = () =>  {
+      dispatch({
+        type: 'headerModal/setLoginVisible',
+        payload: false
+      })
+      dispatch({
+        type: 'headerModal/setRegisterVisible',
+        payload: true
+      })
+    }
+
+    function handleSubmit(e) {
+      form.validateFields((err, values) => {
+            if (!err) {
+              console.log('Received values of form: ', values);
+            }
+            user.username = values.username
+            user.password = values.password
+            user.email = ''
+            // console.log(user)
+            dispatch({
+              type: 'login/login',
+              payload: {user:user}
+            });
+
+          });
+      // dispatch(routerRedux.goBack())
+    }
+
+    const { getFieldDecorator } = form
+    let loading = false;
+    
 
   // handleSubmit = (e) => {
   //   e.preventDefault();
@@ -110,9 +121,9 @@ function Login({dispatch, form, loginFlag}) {
                 <p> <Button type="primary" htmlType="submit" className={styles.login_form_button} onClick={handleSubmit.bind(this)}>
                   <span style={{color: "#FFFFFF"}}>LOGIN</span>
                 </Button></p>
-                <a className={styles.login_form_forgot} href="">Forgot password?</a>
+                {/*<a className={styles.login_form_forgot} href="">Forgot password?</a>*/}
                 <br/>
-                <p className={styles.login_form_sign_up}>Not a Atmatrixer?&nbsp;&nbsp;&nbsp;<a>Sign Up</a></p>
+              <p className={styles.login_form_sign_up}>Do not have an account?&nbsp;&nbsp;&nbsp;<a onClick={popSignUp}>Sign Up</a></p>
               </FormItem>
             </Form>
           </div>

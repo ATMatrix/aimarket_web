@@ -16,7 +16,7 @@ const {
 
 
 
-function List () {
+function List ({params}) {
 
         return (
             <Layout className={styles.layout_size}>

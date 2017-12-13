@@ -31,10 +31,17 @@ export default {
         if (pathname === '/list') {
           dispatch({ type: 'load' });
         }
-        // if (pathname === '/details') {
-        //   console.log('load details')
-        //   dispatch({ type: 'ai/setAIId', payload: {id: 1} });
-        // }
+        const regex = /details\/(\d+)/;
+        if (pathname.match(regex) !== null) {
+          console.log("==========regex: ", pathname.match(regex));          
+          console.log('load details')
+          dispatch({
+            type: 'ai/setAIId',
+            payload: {
+              id: pathname.match(regex)[1]
+            }
+          });
+        }
       });
     }
   }

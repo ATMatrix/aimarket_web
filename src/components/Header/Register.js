@@ -58,24 +58,35 @@ function Register({dispatch, form, signupFlag}) {
     message.error("Sign up failed, Duplicate username! ", 1);   
   }
 
-   function handleSubmit(e) {
-     form.validateFields((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values);
-          }
-          let user = {}
-          user.username = values.username
-          user.email = values.email
-          user.password = values.password
-          console.log(user)
-          dispatch({
-            type: 'signup/signup',
-            payload: {user:user}
-          });
+  const popLogin = () =>  {
+    dispatch({
+      type: 'headerModal/setLoginVisible',
+      payload: true
+    })
+    dispatch({
+      type: 'headerModal/setRegisterVisible',
+      payload: false
+    })
+  }
 
+  function handleSubmit(e) {
+   form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+        }
+        let user = {}
+        user.username = values.username
+        user.email = values.email
+        user.password = values.password
+        console.log(user)
+        dispatch({
+          type: 'signup/signup',
+          payload: {user:user}
         });
+
+      });
      // dispatch(routerRedux.goBack())
-    }
+  }
 
 
 
@@ -120,7 +131,7 @@ function Register({dispatch, form, signupFlag}) {
                   <div style={{color: "#FFFFFF"}}>Sign Up</div>
                 </Button></p>
                 <br/>
-                <p className={styles.login_form_sign_up}>Have an account?&nbsp;&nbsp;&nbsp;<a>Log in</a></p>
+                <p className={styles.login_form_sign_up}>Have an account?&nbsp;&nbsp;&nbsp;<a onClick={popLogin}>Log in</a></p>
               </FormItem>
             </Form>
           </div>

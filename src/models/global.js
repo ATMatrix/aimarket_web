@@ -15,12 +15,12 @@ export default {
     *load({
       payload
     },{ put, call, select }) {
-      yield put ({
-        type: 'aiList/getAiListFromDb',
-        payload: {
-          params: ""
-        }
-      });
+        yield put ({
+          type: 'aiList/getAiListFromDb',
+          payload: {
+            params: ""
+          }
+        });
     }
   },
 
@@ -30,6 +30,17 @@ export default {
       return history.listen(({ pathname }) => {
         if (pathname === '/list') {
           dispatch({ type: 'load' });
+        }
+        const regex = /details\/(\d+)/;
+        if (pathname.match(regex) !== null) {
+          console.log("==========regex: ", pathname.match(regex));          
+          console.log('load details')
+          dispatch({
+            type: 'ai/setAIId',
+            payload: {
+              id: pathname.match(regex)[1]
+            }
+          });
         }
       });
     }

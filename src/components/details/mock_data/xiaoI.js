@@ -40,7 +40,7 @@ const forms = [
 const request = {
   title: '对话机器人',
   describe: '以人工智能技术为基础，通过网页、即时通讯工具、社交媒体工具等形式，实现一对多7X24小时服务',
-  type: 'xiaoi',
+  type: 'XIAO_I',
   forms,
 }
 

@@ -15,8 +15,8 @@ export const proxy = new events.EventEmitter();
 // const SOCKET_URL = "wss://demo.atn.io/";
 // global.ServerURL = 'https://demo.atn.io/graphql/';
 //development
-// const SOCKET_URL = "wss://bogong.atmatrix.org/";
-// global.ServerURL = 'https://bogong.atmatrix.org/graphql/';
+// const SOCKET_URL = "ws://118.31.18.101:4000/";
+// global.ServerURL = 'http://118.31.18.101:4000/graphql/';
 //locate
 const SOCKET_URL = "ws://127.0.0.1:4000/";
 global.ServerURL = 'http://127.0.0.1:4000/graphql/';
@@ -44,7 +44,7 @@ global.getWeb3 = () => {
 if (!global.Cookies) global.Cookies = new Map();
 
 global.initUraiden = () => {
-    let cnt = 20;  
+    let cnt = 20;
     const pollingId = setInterval(() => {
       if (Cookies.get("RDN-Insufficient-Confirmations")) {
         Cookies.delete("RDN-Insufficient-Confirmations");

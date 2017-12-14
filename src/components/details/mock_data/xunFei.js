@@ -2,7 +2,7 @@ import styles from '../../AIList/table.css'
 
 const profile = {
   creator: '科大讯飞',
-  logoSrc: <img className={styles.image_style} src={require('../../../assets/images/xunfei2.png')}/>,
+  logoSrc: <img className={styles.image_style} src={require('../../../assets/images/xunfei.png')}/>,
   title: 'AIUI',
   host: 'http://aiui.xfyun.cn/default/index',
   tag: 'Medical',
@@ -39,7 +39,7 @@ const forms = [
 const request = {
   title: '语义理解',
   describe: '人工智能语义理解能力，例如天气、音乐、闲聊、智能家居等',
-  type: 'xunfei',
+  type: 'XUN_FEI',
   forms,
 }
 

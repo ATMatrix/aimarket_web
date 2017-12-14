@@ -3,16 +3,18 @@
 
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {TRANSFER_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL} from '../utils/gql/gql_template/index';
+import {TRANSFER_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, OPENCHANNEL_GQL, GETCHANNELS_GQL, TOPUPCHANNEL_GQL} from '../utils/gql/gql_template/index';
+import { SETTLECHANNEL_GQL } from '../utils/gql/gql_template/bill_gql';
+
 
 export default {
   namespace: 'bill',
 
   state: {
-    accounts: [],
+    accounts: ["0x47d1ba802dca4c88871dc594249905c42b7d21b7"],
     balance: null,
     channels: [],
-    useMM: false,
+    defaultChannel: {},
     price: '...',
   },
 
@@ -43,15 +45,10 @@ export default {
   },
 
   effects: {
-    * getInfo({ payload }, { put, call }) {
-      const accounts = uraiden.getAccounts();
+    * getInfo({ payload }, { put, call, select}) {
+      const accounts = yield select(state => state.bill.accounts);      
       console.log(accounts)
-      yield put({
-        type: 'saveAcounts',
-        payload: { accounts },
-      })
       const account = accounts[0] || "";
-      uraiden.loadStoredChannel(account, uRaidenParams.receiver);  
       var res = yield uraiden.getTokenInfo(account);
       console.log("res:",res);      
       let {balance} = res;
@@ -59,56 +56,28 @@ export default {
         type: 'saveBalance',
         payload: { balance }
       })    
-
-      if (uraiden.isChannelValid() &&
-          uraiden.channel.account === account &&
-          uraiden.channel.receiver === uRaidenParams.receiver){
-            let info = yield uraiden.getChannelInfo();
-            console.log("info",info)
-            let channel = uraiden.channel;
-            let remaining = 0;
-            if (info.deposit > 0 && channel && !isNaN(channel.balance)) {
-              remaining = info.deposit - channel.balance;
-            }
-            Object.assign(channel, {state: info.state, deposit: info.deposit, remaining, key:'0'});            
-            let channels = [channel];
-            console.log(channels)
-            yield put({
-              type: 'saveChannels',
-              payload: {channels}
-            })
-      }
+      
       let params = {};
-      Object.assign(params,{sender_addr:uraiden.channel.account, ai_id:"XIAO_I"});
+      Object.assign(params,{sender_addr:account});
+      params = JSON.stringify(params);
+      yield put({
+        type: 'getChannels',
+        payload:{ params }
+      });
+      params = {};
+      Object.assign(params,{sender_addr:account, ai_id:"XIAO_I"});
       params = JSON.stringify(params);
       yield put({
         type: 'getPrice',
-        payload: {params}
-      })
+        payload: { params }
+      });
     },
 
     * transfer ({ payload }, { put, call }) {
       console.log(payload);
       const result = yield call(commonService.service, gqlBody_builder(TRANSFER_GQL, payload));
       console.log(result);
-    },
-
-    * closeChannel ({ payload }, { put, call }) {
-      console.log(payload);
-      const result = yield call(commonService.service, gqlBody_builder(CLOSECHANNEL_GQL, payload));
-      console.log(result);   
-      let close_signature = JSON.parse(result.data.closeChannel.content);
-      console.log(close_signature)
-      // if(result && result.data && result.data.closeChannel && result.data.closeChannel.code == '600001'){
-        let closeSign = close_signature.close_signature;
-        console.log(closeSign)
-        uraiden.closeChannel(closeSign, (err, res) => {
-          if (err) {
-            console.log("An error occurred trying to close the channel", err)
-          }
-          console.info("CLOSED", res);
-        });
-      // }
+      console.log(result.data.transfer.content);
     },
 
     * getPrice ({ payload }, { put, call }) {
@@ -120,7 +89,98 @@ export default {
         payload: {price}
       })
       console.log(result); 
-    }
+    },
+
+    * getChannels({ payload }, { put, call, select }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(GETCHANNELS_GQL, payload));
+      let channels = JSON.parse(result.data.getChannels.content); 
+      console.log((channels));
+      let accounts = yield select(state => state.bill.accounts);
+      channels.map((c, i=0) => {
+        Object.assign(c, { 
+          key: i++,
+          account: c.sender_address,
+          receiver: uRaidenParams.receiver,
+          remaining: uraiden.bal2num(c.deposit) - c.balance,
+          block: c.open_block,
+          deposit: uraiden.bal2num(c.deposit),
+          balance: c.balance
+         })
+      });      
+      yield put({
+        type: 'saveChannels',
+        payload: {channels}
+      })
+    },
+
+    * openChannel({ payload }, { put, call, select }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(OPENCHANNEL_GQL, payload));
+      let openChannel = JSON.parse(result.data.openChannel.content);
+      console.log(openChannel)
+      if(openChannel){
+        let params = {};
+        let accounts = yield select(state => state.bill.accounts);        
+        Object.assign(params,{sender_addr:accounts[0]});
+        params = JSON.stringify(params);
+        yield put({
+          type: 'getChannels',
+          payload:{ params }
+        });
+      }
+    },
+
+    * closeChannel ({ payload }, { put, call, select }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(CLOSECHANNEL_GQL, payload));
+      let closeChannel = JSON.parse(result.data.closeChannel.content);
+      console.log(closeChannel)
+      if(closeChannel){
+        let params = {};
+        let accounts = yield select(state => state.bill.accounts);        
+        Object.assign(params,{sender_addr:accounts[0]});
+        params = JSON.stringify(params);
+        yield put({
+          type: 'getChannels',
+          payload:{ params }
+        });
+      }
+    },
+
+    * topUpChannel ({ payload }, { put, call, select }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(TOPUPCHANNEL_GQL, payload));
+      let topUpChannel = JSON.parse(result.data.topUpChannel.content);
+      console.log(topUpChannel)
+      if(topUpChannel){
+        let params = {};
+        let accounts = yield select(state => state.bill.accounts);        
+        Object.assign(params,{sender_addr:accounts[0]});
+        params = JSON.stringify(params);
+        yield put({
+          type: 'getChannels',
+          payload:{ params }
+        });
+      }
+    },
+
+    * settleChannel ({ payload }, { put, call, select }) {
+      console.log(payload);
+      const result = yield call(commonService.service, gqlBody_builder(SETTLECHANNEL_GQL, payload));
+      let settleChannel = JSON.parse(result.data.settleChannel.content);
+      console.log(settleChannel)
+      if(settleChannel){
+        let params = {};
+        let accounts = yield select(state => state.bill.accounts);        
+        Object.assign(params,{sender_addr:accounts[0]});
+        params = JSON.stringify(params);
+        yield put({
+          type: 'getChannels',
+          payload:{ params }
+        });
+      }
+    },
   },
 
   subscriptions: {

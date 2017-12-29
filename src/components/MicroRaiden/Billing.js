@@ -83,6 +83,7 @@ function Billing({
 
   const SetDefault = (channel) => {
     defaultChannel = channel;
+    uraiden.setChannel(defaultChannel);
     console.log(defaultChannel);
   }
 
@@ -93,16 +94,22 @@ function Billing({
     if (deposit <= 0) 
       return;
     
-    let params = {};
-    Object.assign(params, {
-      receiver_addr: channel.receiver,
-      block_number: channel.block,
-      deposit
-    });
-    params = JSON.stringify(params);
-    dispatch({type: 'bill/topUpChannel', payload: {
-        params
-      }});
+      uraiden.topUpChannel(deposit, (err, deposit) => {
+        if (err) {
+          console.error(err);
+          message.error("An error ocurred trying to deposit to channel", err);
+        }
+        console.log("deposit",deposit);
+        message.info(deposit);
+        uraiden.channel.deposit = deposit;
+        uraiden.channel.remaining = deposit - uraiden.channel.balance;
+        let channels = [uraiden.channel];
+        console.log(channels)
+        dispatch({
+          type: 'bill/saveChannels',
+          payload: {channels}
+        })
+      });
 
   }
 
@@ -124,19 +131,24 @@ function Billing({
   }
 
   const Close = (channel) => {
+    uraiden.setChannel(channel)
     let title = `Do you Want to ${CLOSE} the channel?`;
     showConfirm(title, (flag) => {
       if (flag) {
-        let params = {};
-        Object.assign(params, {
-          receiver_addr: channel.receiver,
-          block_number: channel.block,
-          balance: channel.balance
+        uraiden.signBalance(null, (err, sign) => {
+          if (err) {
+            console.log("An error occurred trying to get balance signature", err);
+            message.error("An error occurred trying to get balance signature", err);
+            return ;
+          }
+          let params = {};
+          Object.assign(params,{receiver_addr:uraiden.channel.account, block_number:uraiden.channel.block, balance: uraiden.channel.balance, key: channel.key});
+          params = JSON.stringify(params);
+          dispatch({
+            type: 'bill/closeChannel',
+            payload: {params}
+          })
         });
-        params = JSON.stringify(params);
-        dispatch({type: 'bill/closeChannel', payload: {
-            params
-          }});
       }
     });
   }
@@ -148,16 +160,51 @@ function Billing({
     if (deposit <= 0) 
       return;
     const account = accounts[0];
-    let params = {};
-    Object.assign(params, {
-      receiver_addr: uRaidenParams.receiver,
-      deposit
+    uraiden.openChannel(account, uRaidenParams.receiver, deposit, (err, channel) => {
+      if (err) {
+        console.error(err);
+        message.error("An error ocurred trying to open a channel", err);
+      }
+      // Cookies.delete("RDN-Nonexisting-Channel");
+      // console.log(Cookies)
+      console.log("======Deposit channel: ======", channel);
+      let newKey = 0; 
+      console.log(">>>>channels: ", channels);
+      if(channels !== null && channels !== undefined)
+        newKey = channels.length;
+      let temp = channels;
+      Object.assign(channel, {sender_address: channel.account, open_block: channel.block, key: newKey, state: "open", deposit: deposit, remaining: parseFloat(deposit) - channel.balance});    
+      // console.log(">>>>>>>>channel: ", channel);                          
+      temp.push(channel);
+      console.log("------Deposit channels: ------", temp)
+      // channel = JSON.stringify(channel)
+      // console.log("~~~~~~channel: ", channel);
+      dispatch({
+        type: 'bill/addChannel',
+        payload: {
+          channel
+        }
+      })
     });
-    params = JSON.stringify(params);
-    dispatch({type: 'bill/openChannel', payload: {
-        params
-      }});
   }
+
+  // const Deposit = () => {
+  //   const deposit = document
+  //     .getElementById("depositAmount")
+  //     .value;
+  //   if (deposit <= 0) 
+  //     return;
+  //   const account = accounts[0];
+  //   let params = {};
+  //   Object.assign(params, {
+  //     receiver_addr: uRaidenParams.receiver,
+  //     deposit
+  //   });
+  //   params = JSON.stringify(params);
+  //   dispatch({type: 'bill/openChannel', payload: {
+  //       params
+  //     }});
+  // }
 
   const Mint = () => {
     const account = accounts[0];
@@ -186,24 +233,45 @@ function Billing({
   const CallAI = () => {
     let title = `this request will cost ${price} ATT`;
     showConfirm(title, (flag) => {
-      if (flag) {
-        let params = {};
-        Object.assign(params, {
-          ai_id: "XIAO_I",
-          input: "你好！",
-          sender_addr: defaultChannel.account,
-          receiver_addr: defaultChannel.receiver,
-          block_number: defaultChannel.block,
-          balance: defaultChannel.balance,
-          price
-        });
-        params = JSON.stringify(params);
-        dispatch({
-          type: 'bill/transfer',
-          payload: {
-            params
+      if(flag){
+        console.log("CallAI start uraiden: ", uraiden);
+        uraiden.incrementBalanceAndSign(price, (err, sign) => {//消费token并签名
+          console.log("CallAI err: ", err);
+          if (err && err.message && err.message.includes('Insuficient funds')) {
+            console.error("CallAI err", err);
+            const current = +(err.message.match(/current ?= ?([\d.,]+)/i)[1]);
+            const required = +(err.message.match(/required ?= ?([\d.,]+)/i)[1]) - current;
+            console.log("current",current);
+            console.log("required",required);
+            console.log("remaining",current - uraiden.channel.balance);
+            return;
+          } else if (err && err.message && err.message.includes('User denied message signature')) {
+            console.error(err);
+            return;
+          } else if (err) {
+            console.error(err);
+            return;
           }
-        })
+          console.log("SIGNED!", sign);
+          // Cookies.set("RDN-Sender-Address", uraiden.channel.account);
+          // Cookies.set("RDN-Open-Block", uraiden.channel.block);
+          // Cookies.set("RDN-Sender-Balance", uraiden.channel.balance);
+          // Cookies.set("RDN-Balance-Signature", sign);
+          // Cookies.delete("RDN-Nonexisting-Channel");
+          let params = {};
+          Object.assign(params,{ai_id:"XIAO_I", input:"你好！", sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
+          params = JSON.stringify(params);
+          console.log("-----params: ", params);
+          dispatch({
+            type: 'bill/transfer',
+            payload: {params}
+          })
+
+          console.log("~~~getinfo~~~");
+          dispatch({
+            type: 'bill/getInfo'
+          })
+        }); 
       }
     });
   }

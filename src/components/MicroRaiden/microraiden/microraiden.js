@@ -35,6 +35,7 @@ class MicroRaiden {
     }
     contractAddr = contractAddr || window["RDNcontractAddr"];
     contractABI = contractABI || window["RDNcontractABI"];
+    console.log("this.contract: ", contractAddr);
     this.contract = this.web3.eth.contract(contractABI).at(contractAddr);
 
     tokenAddr = tokenAddr || window["RDNtokenAddr"];
@@ -219,11 +220,14 @@ class MicroRaiden {
               "deposit": 0
             });
           }
+          console.log("this.channel.account: ", this.channel.account);
+          console.log("this.channel.receiver: ", this.channel.receiver);
+          console.log("this.channel.block: ", this.channel.block);
           this.contract.getChannelInfo.call(
-            this.channel.account,
-            this.channel.receiver,
-            this.channel.block, {
-              from: this.channel.account
+            this.channel.account.toString(),
+            this.channel.receiver.toString(),
+            parseInt(this.channel.block),{
+              from: this.channel.account.toString()
             },
             (err, info) => {
               if (err) {
@@ -244,6 +248,7 @@ class MicroRaiden {
   }
 
   openChannel(account, receiver, deposit, callback) {
+    console.log("____openchannel start____")
     if (this.isChannelValid()) {
       console.warn("Already valid channel will be forgotten:", this.channel);
     }
@@ -291,7 +296,7 @@ class MicroRaiden {
     }
 
     // first, check if there's enough balance
-    return this.token.balanceOf.call(
+    return this.token.balanceOf(
       account, {
         from: account
       },
@@ -319,17 +324,21 @@ class MicroRaiden {
                 return callback(err);
               }
               // call getChannelInfo to be sure channel was created
-              return this.contract.getChannelInfo.call(
-                account,
-                receiver,
-                receipt.blockNumber, {
-                  from: account
+              console.log("openchannel account: ", account);
+              console.log("openchannel receiver: ", receiver);
+              console.log("openchannel blockNumber: ", receipt.blockNumber);
+              
+              return this.contract.getChannelInfo(
+                account.toString(),
+                receiver.toString(),
+                parseInt(receipt.blockNumber), {
+                  from: account.toString()
                 },
                 (err, info) => {
                   if (err) {
                     return callback(err);
                   } else if (!(info[1] > 0)) {
-                    return callback(new Error("No deposit found!"));
+                    // return callback(new Error("No deposit found!"));
                   }
                   console.log("channelInfo", info)
                   this.setChannel({
@@ -338,7 +347,7 @@ class MicroRaiden {
                     block: receipt.blockNumber,
                     balance: 0
                   });
-                  // return channel
+                  console.log("microraiden new channels: ", this.channel);
                   return callback(null, this.channel);
                 });
             });
@@ -587,33 +596,33 @@ class MicroRaiden {
     if (!this.isChannelValid()) {
       return callback(new Error("No valid channelInfo"));
     }
-    const newBalance = this.channel.balance + +amount;
+    const newBalance = +this.channel.balance + +amount;
     // get current deposit
     console.log("newBalance", newBalance)
-    return this.getChannelInfo()
-      .then((info => {
-        if (info.state !== "opened") {
-          callback(new Error("Tried signing on closed channel"));
-        } else if (newBalance > info.deposit) {
-          callback(new Error(`Insuficient funds: current = ${info.deposit} , required = ${newBalance}`));
-        }
+    // return this.getChannelInfo()
+    //   .then((info => {
+    //     if (info.state !== "opened") {
+    //       callback(new Error("Tried signing on closed channel"));
+    //     } else if (newBalance > info.deposit) {
+    //       callback(new Error(`Insuficient funds: current = ${info.deposit} , required = ${newBalance}`));
+    //     }
         // get hash for new balance proof
         return this.signBalance(newBalance, (err, sign) => {
           if (err) {
             return callback(err);
           }
-          this.setChannel(Object.assign({},
-            this.channel, {
-              balance: newBalance,
-              sign
-            }
-          ));
+          // this.setChannel(Object.assign({},
+          //   this.channel, {
+          //     balance: newBalance,
+          //     sign
+          //   }
+          // ));
           return callback(null, sign);
         });
-      }))
-      .catch((err) => {
-        callback(err);
-      })
+      // }))
+      // .catch((err) => {
+      //   callback(err);
+      // })
   }
 
   waitTx(txHash, confirmations, callback) {

@@ -15,7 +15,7 @@ export default {
     balance: null,
     channels: [],
     defaultChannel: {},
-    price: '...',
+    price: '1',
   },
 
   reducers: {
@@ -37,6 +37,7 @@ export default {
 
     saveChannels(state, { payload: { channels },
     }) {
+      console.log("!!!!!!!saveChannels: ", channels);
       if(channels.length == 0){
         channels = null;
       }
@@ -45,6 +46,19 @@ export default {
   },
 
   effects: {
+
+    * addChannel({ payload }, { put, call, select}) {
+      let temp = yield select(state => state.bill.channels);   
+      console.log("channles: ", temp)   
+      console.log("payload: ", payload);
+      temp.push(payload.channel);
+      console.log("~~~~~~~~channles: ", temp);
+      yield put({
+        type: 'saveChannels',
+        payload: { channels: temp }
+      }) 
+    },
+
     * getInfo({ payload }, { put, call, select}) {
       const accounts = yield select(state => state.bill.accounts);      
       console.log(accounts)
@@ -74,10 +88,10 @@ export default {
     },
 
     * transfer ({ payload }, { put, call }) {
-      console.log(payload);
+      console.log("model bill transfer payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(TRANSFER_GQL, payload));
       console.log(result);
-      console.log(result.data.transfer.content);
+      // console.log(result.data.transfer.content);
     },
 
     * getPrice ({ payload }, { put, call }) {
@@ -98,7 +112,7 @@ export default {
       console.log((channels));
       let accounts = yield select(state => state.bill.accounts);
       channels.map((c, i=0) => {
-        Object.assign(c, { 
+        Object.assign(c, {
           key: i++,
           account: c.sender_address,
           receiver: uRaidenParams.receiver,
@@ -132,21 +146,36 @@ export default {
     },
 
     * closeChannel ({ payload }, { put, call, select }) {
-      console.log(payload);
+      let temp = yield select(state => state.bill.channels);   
+      // console.log("close channel temp: ", temp);
+      let key = JSON.parse(payload.params).key;
+      // console.log("key", key);
+      // delete payload['key'];
+      console.log("close channel payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(CLOSECHANNEL_GQL, payload));
-      let closeChannel = JSON.parse(result.data.closeChannel.content);
-      console.log(closeChannel)
-      if(closeChannel){
-        let params = {};
-        let accounts = yield select(state => state.bill.accounts);        
-        Object.assign(params,{sender_addr:accounts[0]});
-        params = JSON.stringify(params);
+      console.log("close channel result: ", result);   
+      let close_signature = JSON.parse(result.data.closeChannel.content);
+      console.log("close channel close_signature: ", close_signature)
+      // if(result && result.data && result.data.closeChannel && result.data.closeChannel.code == '600001'){
+        let closeSign = close_signature.close_signature;
+        console.log(closeSign)
+        console.info("CLOSED", JSON.parse(payload.params).block_number);
+        // uraiden.closeChannel(closeSign, (err, res) => {
+          // if (err) {
+            // console.log("An error occurred trying to close the channel", err)
+          // }
+          // console.info("CLOSED", res);
+        // });
+        let newChannels = [];
+        for(let i = 0; i < temp.length; i++) {
+          if(temp[i].key !== key)newChannels.push(temp[i]);
+        }
+        // console.log("~~~~~~~~~newChannels:", newChannels)
         yield put({
-          type: 'getChannels',
-          payload:{ params }
+          type: 'saveChannels',
+          payload:{ channels: newChannels }
         });
-      }
-    },
+      },
 
     * topUpChannel ({ payload }, { put, call, select }) {
       console.log(payload);

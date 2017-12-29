@@ -70,7 +70,7 @@ function loadURaiden(json) {
     if (!window.uRaidenParams && Cookies.get("RDN-Price")) {
       window.uRaidenParams = {
         contract: Cookies.get("RDN-Contract-Address"),
-        token: Cookies.get("RDN-Token-Address"),
+        token: Cookies.get("RDN-Token-AddressRDN-Token-Address"),
         receiver: Cookies.get("RDN-Receiver-Address"),
         amount: +(Cookies.get("RDN-Price")),
       };

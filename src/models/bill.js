@@ -91,7 +91,7 @@ export default {
       console.log("model bill transfer payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(TRANSFER_GQL, payload));
       console.log(result);
-      // console.log(result.data.transfer.content);
+      console.log(result.data.transfer.content);
     },
 
     * getPrice ({ payload }, { put, call }) {

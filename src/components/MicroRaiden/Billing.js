@@ -259,7 +259,7 @@ function Billing({
           // Cookies.set("RDN-Balance-Signature", sign);
           // Cookies.delete("RDN-Nonexisting-Channel");
           let params = {};
-          Object.assign(params,{ai_id:"XIAO_I", input:"你好！", sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
+          Object.assign(params,{ai_id:"xiaoi", input:"你好！", sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
           params = JSON.stringify(params);
           console.log("-----params: ", params);
           dispatch({

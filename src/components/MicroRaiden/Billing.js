@@ -26,6 +26,7 @@ const {Content} = Layout;
 import {Link} from 'dva/router';
 import styles from './Billing.css';
 import {remove} from '../../services/users';
+import { query } from '../../services/example';
 
 function Billing({
   dispatch,
@@ -33,7 +34,8 @@ function Billing({
   balance,
   channels,
   price,
-  defaultChannel
+  defaultChannel,
+  xiaoiResult
 }) {
 
   const TOPUP = 'TopUP';
@@ -206,30 +208,6 @@ function Billing({
   //     }});
   // }
 
-  const Mint = () => {
-    const account = accounts[0];
-    uraiden.buyToken(account, (err, res) => {
-      if (err) {
-        console.error(err);
-        message.error("An error ocurred trying to buy tokens", err);
-      }
-      console.info(res);
-      uraiden
-        .token
-        .balanceOf
-        .call(account, (err, balance) => {
-          if (err) {
-            console.error(err);
-          }
-          balance = uraiden.bal2num(balance);
-          console.log(balance)
-          dispatch({type: 'bill/saveBalance', payload: {
-              balance
-            }})
-        });
-    });
-  }
-
   const CallAI = () => {
     let title = `this request will cost ${price} ATT`;
     showConfirm(title, (flag) => {
@@ -259,7 +237,9 @@ function Billing({
           // Cookies.set("RDN-Balance-Signature", sign);
           // Cookies.delete("RDN-Nonexisting-Channel");
           let params = {};
-          Object.assign(params,{ai_id:"xiaoi", input:"你好！", sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
+          let question = document.getElementById("question").value;
+          console.log("====question====", question);
+          Object.assign(params,{ai_id:"xiaoi", input:question, sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
           params = JSON.stringify(params);
           console.log("-----params: ", params);
           dispatch({
@@ -395,11 +375,6 @@ function Billing({
                   value={balance}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span className={styles.ether}>ATN</span>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button
-                  type={"primary"}
-                  onClick={Mint.bind()}
-                  className={styles.button_style}
-                  id="mintButton">Mint</Button>
               </p>
             </Card>
             <br/>
@@ -416,7 +391,7 @@ function Billing({
               </p>
               <br/>
               <InputNumber
-                className={styles.input}
+                className={styles.input2}
                 id="depositAmount"
                 min={0}
                 max={100000000}
@@ -428,6 +403,19 @@ function Billing({
                 className={styles.button_style}
                 id="depositButton">Deposit</Button>
 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <br/>
+              <br/>
+              <Input
+                className={styles.input3}
+                id="question"
+                defaultValue={"你好"}/>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Input
+                className={styles.input}
+                id="question"
+                disabled="true"
+                value={xiaoiResult}/>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button
                 type={"primary"}
@@ -445,8 +433,8 @@ function Billing({
 }
 
 function mapStateToProps(state) {
-  const {accounts, balance, channels, price, defaultChannel} = state.bill;
-  return {accounts, balance, channels, price, defaultChannel}
+  const {accounts, balance, channels, price, defaultChannel, xiaoiResult} = state.bill;
+  return {accounts, balance, channels, price, defaultChannel, xiaoiResult}
 }
 
 export default connect(mapStateToProps)(Billing);

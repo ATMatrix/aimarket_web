@@ -16,6 +16,7 @@ export default {
     channels: [],
     defaultChannel: {},
     price: '1',
+    xiaoiResult: ""
   },
 
   reducers: {
@@ -42,6 +43,10 @@ export default {
         channels = null;
       }
       return { ...state, channels };
+    },
+
+    saveXiaoiResult(state, { payload: { xiaoiResult } }) {
+      return { ...state, xiaoiResult };
     },
   },
 
@@ -90,8 +95,14 @@ export default {
     * transfer ({ payload }, { put, call }) {
       console.log("model bill transfer payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(TRANSFER_GQL, payload));
-      console.log(result);
+      console.log("00000",result);
       console.log(result.data.transfer.content);
+      yield put({
+        type: 'saveXiaoiResult',
+        payload: {
+          xiaoiResult: result.data.transfer.content
+        }
+      })
     },
 
     * getPrice ({ payload }, { put, call }) {

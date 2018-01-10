@@ -35,7 +35,10 @@ function Billing({
   channels,
   price,
   defaultChannel,
-  xiaoiResult
+  xiaoiResult,
+  windowWidth,
+  windowHeight,
+  messages
 }) {
 
   const TOPUP = 'TopUP';
@@ -43,6 +46,23 @@ function Billing({
   const SETTLE = 'Settle';
   const DEFAULT = 'Set Default';
   const confirm = Modal.confirm;
+
+
+  window.addEventListener('resize', handleResize);
+
+  function handleResize(e) {
+    window.removeEventListener('resize', handleResize);
+
+    dispatch({
+      type: 'windowSize/saveWindowSize',
+      payload: {
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight
+      }
+    });
+    console.log("windowWidth: ", windowWidth);
+    console.log("windowHeight: ", windowHeight);
+  }
 
   const showConfirm = (title, callback) => {
     confirm({
@@ -390,42 +410,32 @@ function Billing({
                 </span>
               </p>
               <br/>
-              <InputNumber
-                className={styles.input2}
-                id="depositAmount"
-                min={0}
-                max={100000000}
-                defaultValue={0}/>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button
-                type={"primary"}
-                onClick={Deposit.bind()}
-                className={styles.button_style}
-                id="depositButton">Deposit</Button>
 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <br/>
-              <br/>
-              <Input
-                className={styles.input3}
-                id="question"
-                defaultValue={"你好"}/>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Input
-                className={styles.input}
-                id="question"
-                disabled="true"
-                value={xiaoiResult}/>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button
-                type={"primary"}
-                onClick={CallAI.bind()}
-                className={styles.button_style}
-                id="depositButton">CallXiaoi</Button>
+              <div>
+              <Content className={styles.table_style}>
+                <table style={{ width: windowWidth * 0.25, height: windowHeight*0.30, background: '#FFFFFF' }} className={styles.table} >
+                  {messages}
+                </table>
+              
+                <div className={styles.callai_style}>
+                  <Input id="input" className={styles.callai_input} >
+                  
+                  </Input>
+                  
+                    <Button type={"primary"} id="sendButton" onClick={CallAI.bind()} >Send</Button>
+                </div>
+              </Content>
+            </div>
+
+             
             </Card>
             <br/>
             <br/>
+
+
+
           </div>
+
         </Content>
       </Layout>
     </Layout>
@@ -433,8 +443,9 @@ function Billing({
 }
 
 function mapStateToProps(state) {
-  const {accounts, balance, channels, price, defaultChannel, xiaoiResult} = state.bill;
-  return {accounts, balance, channels, price, defaultChannel, xiaoiResult}
+  const {accounts, balance, channels, price, defaultChannel, xiaoiResult, messages} = state.bill;
+  const {windowWidth, windowHeight} = state.windowSize;
+  return {accounts, balance, channels, price, defaultChannel, xiaoiResult, windowWidth, windowHeight, messages}
 }
 
 export default connect(mapStateToProps)(Billing);

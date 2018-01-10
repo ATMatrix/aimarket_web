@@ -137,3 +137,31 @@ Card[title] {
   font-size: 15px;
 }
 
+.table {
+  border:1px solid #D9D9D9;
+  display: flex;
+  align-items: flex-start;       
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow-x: auto; overflow-y: auto;
+}
+
+
+.table_style {
+  display: flex;
+  align-items: center;       
+  justify-content: center;
+  flex-direction: column;
+}
+
+.callai_style {
+  display: flex;
+  align-items: center;       
+  justify-content: center;
+  width: 100%;
+}
+
+.callai_input {
+  width: 23.5%;
+  height: 34px;
+}

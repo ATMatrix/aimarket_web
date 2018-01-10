@@ -38,7 +38,6 @@ export default {
 
     saveChannels(state, { payload: { channels },
     }) {
-      console.log("!!!!!!!saveChannels: ", channels);
       if(channels.length == 0){
         channels = null;
       }

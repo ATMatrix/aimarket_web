@@ -44,6 +44,11 @@ export default {
       return { ...state, channels };
     },
 
+    saveDefaultChannel( state, { payload: { defaultChannel } } ) {
+      console.log("saveDefaultChannel",defaultChannel)
+      return { ...state, defaultChannel };
+    },
+
     saveXiaoiResult(state, { payload: { xiaoiResult } }) {
       return { ...state, xiaoiResult };
     },
@@ -136,6 +141,21 @@ export default {
         type: 'saveChannels',
         payload: {channels}
       })
+
+      let defaultChannel = yield select(state => state.bill.defaultChannel);
+      console.log("defaultChannel.key",defaultChannel)
+      if (defaultChannel.key) {
+        for( let channel of channels ) {
+          if(channel.key == defaultChannel.key) {
+            defaultChannel = channel;
+            yield put({
+              type: 'saveDefaultChannel',
+              payload: {defaultChannel}
+            })
+          }
+        }
+      }
+
     },
 
     * openChannel({ payload }, { put, call, select }) {

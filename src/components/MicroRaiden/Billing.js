@@ -105,6 +105,10 @@ function Billing({
 
   const SetDefault = (channel) => {
     defaultChannel = channel;
+    dispatch({
+      type: 'bill/saveDefaultChannel',
+      payload: {defaultChannel}
+    })
     uraiden.setChannel(defaultChannel);
     console.log(defaultChannel);
   }
@@ -233,6 +237,8 @@ function Billing({
     showConfirm(title, (flag) => {
       if(flag){
         console.log("CallAI start uraiden: ", uraiden);
+        console.log("defaultChannel",defaultChannel);
+        uraiden.channel = defaultChannel;        
         uraiden.incrementBalanceAndSign(price, (err, sign) => {//消费token并签名
           console.log("CallAI err: ", err);
           if (err && err.message && err.message.includes('Insuficient funds')) {
@@ -251,11 +257,6 @@ function Billing({
             return;
           }
           console.log("SIGNED!", sign);
-          // Cookies.set("RDN-Sender-Address", uraiden.channel.account);
-          // Cookies.set("RDN-Open-Block", uraiden.channel.block);
-          // Cookies.set("RDN-Sender-Balance", uraiden.channel.balance);
-          // Cookies.set("RDN-Balance-Signature", sign);
-          // Cookies.delete("RDN-Nonexisting-Channel");
           let params = {};
           let question = document.getElementById("question").value;
           console.log("====question====", question);
@@ -297,9 +298,9 @@ function Billing({
       <Menu.Item key={record.key + CLOSE}>
         <a >Close</a>
       </Menu.Item>
-      <Menu.Item key={record.key + SETTLE}>
+      {/* <Menu.Item key={record.key + SETTLE}>
         <a >Settle</a>
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
 

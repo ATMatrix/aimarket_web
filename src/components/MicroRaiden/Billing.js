@@ -209,7 +209,7 @@ function Billing({
   // }
 
   const CallAI = () => {
-    let title = `this request will cost ${price} ATT`;
+    let title = `this request will cost ${price} ATN`;
     showConfirm(title, (flag) => {
       if(flag){
         console.log("CallAI start uraiden: ", uraiden);

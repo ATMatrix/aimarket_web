@@ -5,6 +5,7 @@ import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {TRANSFER_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, OPENCHANNEL_GQL, GETCHANNELS_GQL, TOPUPCHANNEL_GQL} from '../utils/gql/gql_template/index';
 import { SETTLECHANNEL_GQL } from '../utils/gql/gql_template/bill_gql';
+import styles from '../components/MicroRaiden/Billing.css';
 
 
 export default {
@@ -16,7 +17,8 @@ export default {
     channels: [],
     defaultChannel: {},
     price: '1',
-    xiaoiResult: ""
+    xiaoiResult: "",
+    messages: []
   },
 
   reducers: {
@@ -51,6 +53,10 @@ export default {
 
     saveXiaoiResult(state, { payload: { xiaoiResult } }) {
       return { ...state, xiaoiResult };
+    },
+
+    saveMessages(state, { payload: { messages } }) {
+      return { ...state, messages };
     },
   },
 
@@ -100,12 +106,14 @@ export default {
       console.log("model bill transfer payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(TRANSFER_GQL, payload));
       console.log("00000",result);
-      console.log(result.data.transfer.content);
+      let xiaoiResult = result.data.transfer.content;
+      console.log("xiaoiResult", xiaoiResult);
+      let reply = <tr className={styles.xiaoi_reply}><td style={{width: 500, wordWrap: "break-word", display: "flex", alignItems: "flex-end", justifyContent: "flex-end"}}><span className={styles.input_style}>{xiaoiResult}&nbsp;&nbsp;&nbsp;</span></td><td className={styles.name_style}> <img className={styles.image_style} src={require('../assets/images/right.jpeg')}/>&nbsp;&nbsp;&nbsp;</td></tr>;
+
+      console.log("reply", reply);
       yield put({
-        type: 'saveXiaoiResult',
-        payload: {
-          xiaoiResult: result.data.transfer.content
-        }
+        type: 'setMessages',
+        payload: reply
       })
     },
 
@@ -239,6 +247,23 @@ export default {
           payload:{ params }
         });
       }
+    },
+
+    * setMessages ({
+                         payload
+                       }, { put, call, select }) {
+      let msg = _.cloneDeep(yield select(state => state.bill.messages));
+
+      console.log("original msg: ", msg);
+      msg.push(payload);
+      // msg += (payload + '\n');
+      console.log("msg: ", msg);
+      yield put({
+        type: 'saveMessages',
+        payload: {
+          messages: msg
+        }
+      });
     },
   },
 

@@ -140,10 +140,13 @@ Card[title] {
 .table {
   border:1px solid #D9D9D9;
   display: flex;
-  align-items: flex-start;       
-  justify-content: flex-start;
   flex-direction: column;
-  overflow-x: auto; overflow-y: auto;
+  overflow-y: auto;
+  width: 750px;
+  height: 500px;
+  max-width: 100%;
+  overflow-x: hidden;
+  table-layout: fixed;
 }
 
 
@@ -152,16 +155,44 @@ Card[title] {
   align-items: center;       
   justify-content: center;
   flex-direction: column;
+
 }
 
 .callai_style {
   display: flex;
-  align-items: center;       
-  justify-content: center;
-  width: 100%;
+  align-items: flex-start;       
+  justify-content: flex-start;
 }
 
-.callai_input {
-  width: 23.5%;
-  height: 34px;
+.callai_send {
+  width: 60px;
+  height: 36px;
+}
+
+
+.name_style {
+  color: #8D9921;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.image_style {
+  height: 30px;
+  width: 30px;
+}
+
+.input_style {
+  font-size: 15px;
+}
+
+.question {
+  display: flex;
+  align-items: space-around;       
+  justify-content: space-around;
+}
+
+.xiaoi_reply {
+  display: flex;
+  align-items: flex-start;       
+  justify-content: flex-end;
 }

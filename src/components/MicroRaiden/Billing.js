@@ -47,23 +47,6 @@ function Billing({
   const DEFAULT = 'Set Default';
   const confirm = Modal.confirm;
 
-
-  window.addEventListener('resize', handleResize);
-
-  function handleResize(e) {
-    window.removeEventListener('resize', handleResize);
-
-    dispatch({
-      type: 'windowSize/saveWindowSize',
-      payload: {
-        windowWidth: window.innerWidth,
-        windowHeight: window.innerHeight
-      }
-    });
-    console.log("windowWidth: ", windowWidth);
-    console.log("windowHeight: ", windowHeight);
-  }
-
   const showConfirm = (title, callback) => {
     confirm({
       title,
@@ -260,6 +243,14 @@ function Billing({
           let params = {};
           let question = document.getElementById("question").value;
           console.log("====question====", question);
+
+          let value = <tr><td><span className={styles.input_style}><span className={styles.name_style}>&nbsp;&nbsp;&nbsp;<img className={styles.image_style} src={require('../../assets/images/left.jpeg')}/></span>&nbsp;&nbsp;&nbsp;{question}</span></td><br/></tr>;
+          console.log("value: ", value);
+          dispatch({
+            type: 'bill/setMessages',
+            payload: value
+          })
+
           Object.assign(params,{ai_id:"xiaoi", input:question, sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
           params = JSON.stringify(params);
           console.log("-----params: ", params);
@@ -268,10 +259,13 @@ function Billing({
             payload: {params}
           })
 
+
           console.log("~~~getinfo~~~");
           dispatch({
             type: 'bill/getInfo'
           })
+
+          document.getElementById("question").value = "";
         }); 
       }
     });
@@ -414,16 +408,14 @@ function Billing({
 
               <div>
               <Content className={styles.table_style}>
-                <table style={{ width: windowWidth * 0.25, height: windowHeight*0.30, background: '#FFFFFF' }} className={styles.table} >
+                <table className={styles.table} >
                   {messages}
                 </table>
               
                 <div className={styles.callai_style}>
-                  <Input id="input" className={styles.callai_input} >
+                  <Input id="question" style={{width: 690, height: 34}}  />
                   
-                  </Input>
-                  
-                    <Button type={"primary"} id="sendButton" onClick={CallAI.bind()} >Send</Button>
+                    <Button type={"primary"} id="sendButton" onClick={CallAI.bind()} style={{width: 60, height: 34}}>Send</Button>
                 </div>
               </Content>
             </div>

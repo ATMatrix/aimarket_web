@@ -67,7 +67,7 @@ export default {
       console.log("channles: ", channels)   
       console.log("payload: ", payload);
       channels.push(payload.channel);
-      console.log("~~~~~~~~channles: ", temp);
+      // console.log("~~~~~~~~channles: ", temp);
       yield put({
         type: 'saveChannels',
         payload: { channels }

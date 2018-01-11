@@ -63,14 +63,14 @@ export default {
   effects: {
 
     * addChannel({ payload }, { put, call, select}) {
-      let temp = yield select(state => state.bill.channels);   
-      console.log("channles: ", temp)   
+      let channels = yield select(state => state.bill.channels);   
+      console.log("channles: ", channels)   
       console.log("payload: ", payload);
-      temp.push(payload.channel);
+      channels.push(payload.channel);
       console.log("~~~~~~~~channles: ", temp);
       yield put({
         type: 'saveChannels',
-        payload: { channels: temp }
+        payload: { channels }
       }) 
     },
 

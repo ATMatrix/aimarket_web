@@ -406,6 +406,30 @@ function Billing({
               </p>
               <br/>
 
+              <InputNumber
+                style={{width: 500, height: 34}}
+                id="depositAmount"
+                min={0}
+                max={100000000}
+                defaultValue={0}/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button
+              type={"primary"}
+              onClick={Deposit.bind()}
+              className={styles.button_style}
+              id="depositButton">Deposit</Button>
+
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <p>
+                <span className={styles.icon}>
+                  <Icon type="global"/>&nbsp;&nbsp;CallXiaoI
+                </span>
+              </p>
+              <br/>
+              <br/>
               <div>
               <Content className={styles.table_style}>
                 <table className={styles.table} >

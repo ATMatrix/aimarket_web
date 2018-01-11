@@ -181,11 +181,11 @@ function Billing({
       console.log(">>>>channels: ", channels);
       if(channels !== null && channels !== undefined)
         newKey = channels.length;
-      let temp = channels;
+      // let temp = channels;
       Object.assign(channel, {sender_address: channel.account, open_block: channel.block, key: newKey, state: "open", deposit: deposit, remaining: parseFloat(deposit) - channel.balance});    
       // console.log(">>>>>>>>channel: ", channel);                          
-      temp.push(channel);
-      console.log("------Deposit channels: ------", temp)
+      // temp.push(channel);
+      // console.log("------Deposit channels: ------", temp)
       // channel = JSON.stringify(channel)
       // console.log("~~~~~~channel: ", channel);
       dispatch({

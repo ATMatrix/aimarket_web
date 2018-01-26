@@ -105,7 +105,7 @@ const columns = [
 class Request extends React.Component {
 
   constructor(props) {
-    console.log(web3.eth.accounts[0]);
+    // console.log(web3.eth.accounts[0]);
     // console.log("fucker", uraiden.getChannelInfo("0x47d1ba802dca4c88871dc594249905c42b7d21b7", "0x9765E2D8467334198b402e4D4551Dd49e63327Ec", 5537346));
     super(props)
     this.handleCallAI = this.handleCallAI.bind(this)
@@ -132,12 +132,17 @@ class Request extends React.Component {
     // console.log("0000 uraiden", uraiden);
     // console.log("uraiden getchannel info", uraiden.getChannelInfo("0x47d1ba802dca4c88871dc594249905c42b7d21b7", "0x9765E2D8467334198b402e4D4551Dd49e63327Ec", 5537346));
     console.log("open channel start");
+    if(!window.web3 || window.web3 === undefined) {
+      message.error("Please install metamask extension first and unlock test account");
+      return;
+    }
     const deposit = document
     .getElementById("depositAmount")
     .value;
     if (deposit <= 0) 
       return;
-    console.log(web3.eth.accounts);
+    // console.log(web3.eth.accounts);
+
     const account = web3.eth.accounts[0];
     // web3.personal.unlockAccount(web3.eth.accounts[7], '123456');
     uraiden.openChannel(account, uRaidenParams.receiver, deposit, (err, channel) => {
@@ -165,6 +170,11 @@ class Request extends React.Component {
   }
 
   topUpChannel() {
+
+    if(!window.web3 || window.web3 === undefined) {
+      message.error("Please install metamask extension first and unlock test account");
+      return;
+    }
     const topUpAmount = document.getElementById("topUpAmount").value;
     if(topUpAmount <= 0)return;
 
@@ -192,6 +202,12 @@ class Request extends React.Component {
   }
 
   closeChannel() {
+
+    console.log(window.web3);
+    if(!window.web3 || window.web3 === undefined) {
+      message.error("Please install metamask extension first and unlock test account");
+      return;
+    }
     uraiden.setChannel(this.props.channel);
     let title = `Do you Want to close the channel?`;
     showConfirm(title, (flag) => {
@@ -216,6 +232,11 @@ class Request extends React.Component {
   }
 
   raidenCallAI() {
+
+    if(!window.web3 || window.web3 === undefined) {
+      message.error("Please install metamask extension first and unlock test account");
+      return;
+    }
     console.log("raidenCallAI this.props", this.props);
 
     let params = {};

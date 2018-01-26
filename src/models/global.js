@@ -49,7 +49,7 @@ export default {
 
           dispatch({
             type: 'ai/getChannel',
-            payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
+            payload: { params : JSON.stringify({account: "0x47d1ba802dca4c88871dc594249905c42b7d21b7", aiId: +aiId}) },
           })
 
           dispatch({

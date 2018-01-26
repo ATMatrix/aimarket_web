@@ -33,6 +33,8 @@ class MicroRaiden {
     } else if (typeof web3url === 'string') {
       this.web3 = new Web3(new Web3.providers.HttpProvider(web3url));
     }
+    //metamask切换到私有kovan节点需要tempWeb3
+    this.tempWeb3 = new Web3(new Web3.providers.HttpProvider("https://bogong.atmatrix.org/remix"));
     contractAddr = contractAddr || window["RDNcontractAddr"];
     contractABI = contractABI || window["RDNcontractABI"];
     console.log("this.contract: ", contractAddr);
@@ -52,7 +54,7 @@ class MicroRaiden {
     this.tokenT = ATT.at(tokenAddr);
     this.contractT = URAIDEN.at(contractAddr);
 
-    this.decimals = 0;
+    this.decimals = 18;
   }
 
   // "static" methods/utils
@@ -139,8 +141,10 @@ class MicroRaiden {
 
   getTokenInfo(account) {
     const nameDefer = new Promise((resolve, reject) => {
-      this.token.name.call((err, name) =>
-        err ? reject(err) : resolve(name));
+      this.token.name.call((err, name) => {
+        console.log("err", err);
+        err ? reject(err) : resolve(name);
+      })
     });
     const symbolDefer = new Promise((resolve, reject) => {
       this.token.symbol.call((err, symbol) =>
@@ -309,6 +313,7 @@ class MicroRaiden {
         }
         console.log('Token balance', this.token.address, this.bal2num(balance));
         // call transfer to make the deposit, automatic support for ERC20/223 token
+        console.log("openchannel deposit", deposit);
         return transfer(
           deposit,
           receiver,
@@ -418,6 +423,7 @@ class MicroRaiden {
         }
         console.log('Token balance', this.token.address, this.bal2num(balance));
         // send 'transfer' transaction
+        console.log("topupchannel deposit", deposit);
         return transfer(
           deposit,
           this.channel.receiver,
@@ -573,6 +579,7 @@ class MicroRaiden {
         from: this.channel.account
       },
       (err, msg) => {
+        console.log(">>>>>>>>msg<<<<<<<<", msg);
         if (err) {
           return callback(err);
         }
@@ -633,19 +640,22 @@ class MicroRaiden {
     let blockCounter = 30;
     confirmations = +confirmations || 0;
     // Wait for tx to be finished
-    let filter = this.web3.eth.filter('latest');
+    let filter = this.tempWeb3.eth.filter('latest');
+    console.log("tempWeb3", this.tempWeb3);
+    // console.log("filter", filter);
     filter.watch((err, blockHash) => {
+      console.log("txHash", blockHash);
       if (blockCounter <= 0) {
         if (filter) {
           filter.stopWatching();
           filter = null;
         }
-        console.warn('!! Tx expired !!', txHash);
-        return callback(new Error("Tx expired: " + txHash));
+        console.info('!! Tx expired !!', blockHash);
+        return callback(new Error("Tx expired: " + blockHash));
       }
       // Get info about latest Ethereum block
       return this.web3.eth.getTransactionReceipt(txHash, (err, receipt) => {
-        console.log(receipt)
+        console.log("receipt", receipt)
         if (err) {
           if (filter) {
             filter.stopWatching();

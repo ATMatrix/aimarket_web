@@ -41,6 +41,21 @@ export default {
               id: pathname.match(regex)[1]
             }
           });
+          let aiId = pathname.match(regex)[1];
+          dispatch({
+            type: 'ai/saveAIId',
+            payload: {aiId}
+          })
+
+          dispatch({
+            type: 'ai/getChannel',
+            payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
+          })
+
+          dispatch({
+            type: 'ai/getAiInfo',
+            payload: { params: JSON.stringify({aiId: +aiId}) }
+          })
         }
       });
     }

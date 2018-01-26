@@ -33,10 +33,17 @@ export const GETAILIST_GQL = `query  getAiListFunc($params: String) {
 
 
 export const GETAIDETAILS_GQL = `query  getAiDetailsFunc($id: Int!) {
-                                getAiDetails(id:$id) {
-                                              code
-                                              type
-                                              content
-                                            }
-                                        }`;
+                                  getAiDetails(id:$id) {
+                                                code
+                                                type
+                                                content
+                                              }
+                                          }`;
 
+export const GETAIINFO_GQL = `query  getAiInfoFunc($params: String!) {
+                                getAiInfo(params: $params) {
+                                          code
+                                          type
+                                          content
+                                        }
+                                    }`;

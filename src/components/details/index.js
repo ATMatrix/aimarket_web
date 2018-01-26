@@ -69,8 +69,8 @@ class Details extends React.Component {
   }
 
   render() {
-    console.log('details data')
-    console.log(this.props.details)
+    // console.log('details data')
+    // console.log(this.props.details)
     const data = this.props.details ? JSON.parse(this.props.details) : initdata
     data.request.requesting = this.props.requesting
     return (
@@ -93,6 +93,15 @@ class Details extends React.Component {
                 log: this.props.log,
               }}
               step={this.props.step}
+              channel={this.props.channel}
+              aiId={this.props.aiId}
+              openChannelBtn={this.props.openChannelBtn}
+              callAIBtn={this.props.callAIBtn}
+              topUpBtn={this.props.topUpBtn}
+              closeChannelBtn={this.props.closeChannelBtn}
+              price={this.props.price}
+              aiNameEnShort={this.props.aiNameEnShort}
+              raidenRequesting={this.props.raidenRequesting}
             />
           </Content>
         </Layout>
@@ -108,6 +117,15 @@ const mapStateToProps = state => ({
   details: state.ai.AIDetails,
   requesting: state.ai.requesting,
   step: state.ai.callStep,
+  channel: state.ai.channel,
+  aiId: state.ai.aiId,
+  openChannelBtn: state.ai.openChannelBtn,
+  callAIBtn: state.ai.callAIBtn,
+  topUpBtn: state.ai.topUpBtn,
+  closeChannelBtn: state.ai.closeChannelBtn,
+  price: state.ai.price,
+  aiNameEnShort: state.ai.aiNameEnShort,
+  raidenRequesting: state.ai.raidenRequesting,
 })
 
 export default connect(mapStateToProps)(Details)

@@ -3,8 +3,8 @@
 
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {TRANSFER_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, OPENCHANNEL_GQL, GETCHANNELS_GQL, TOPUPCHANNEL_GQL} from '../utils/gql/gql_template/index';
-import { SETTLECHANNEL_GQL } from '../utils/gql/gql_template/bill_gql';
+import {TRANSFER_GQL, GETPRICE_GQL, GETCHANNELS_GQL, TOPUPCHANNEL_GQL} from '../utils/gql/gql_template/index';
+import { SETTLECHANNEL_GQL, CLOSECHANNEL_GQL, OPENCHANNEL_GQL } from '../utils/gql/gql_template/bill_gql';
 import styles from '../components/MicroRaiden/Billing.css';
 
 
@@ -78,8 +78,10 @@ export default {
       const accounts = yield select(state => state.bill.accounts);      
       console.log(accounts)
       const account = accounts[0] || "";
+      console.log("uraiden", uraiden);
       var res = yield uraiden.getTokenInfo(account);
-      console.log("res:",res);      
+      console.log("final res:",res);      
+       
       let {balance} = res;
       yield put({
         type: 'saveBalance',
@@ -94,12 +96,12 @@ export default {
         payload:{ params }
       });
       params = {};
-      Object.assign(params,{sender_addr:account, ai_id:"XIAO_I"});
+      Object.assign(params,{sender_addr:account, ai_id:"xiaoi"});
       params = JSON.stringify(params);
       yield put({
         type: 'getPrice',
         payload: { params }
-      });
+      }); 
     },
 
     * transfer ({ payload }, { put, call }) {

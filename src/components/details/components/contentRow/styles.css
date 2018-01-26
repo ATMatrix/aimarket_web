@@ -218,3 +218,25 @@
   margin-bottom: 10px;
   font-weight: bold;
 }
+
+.table {
+    margin-left: 10px;
+    width: 67%;
+}
+
+.button {
+    width: 110px;
+}
+
+.raiden {
+    display: flex;
+    justify-content: flex-end;
+    align-content: flex-end;
+}
+
+.raiden_operate {
+    margin-left: 33%;
+    display:  flex;
+    justify-content: flex-start;
+    align-items: center;
+}

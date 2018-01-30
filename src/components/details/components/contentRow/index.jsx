@@ -124,7 +124,9 @@ class Request extends React.Component {
     //   type: 'ai/getChannel',
     //   payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +this.aiId}) },
     // })
+
     console.log("this.props.channel", this.props);
+
   }
 
   openChannel() {
@@ -239,75 +241,94 @@ class Request extends React.Component {
     }
     console.log("raidenCallAI this.props", this.props);
 
-    let params = {};
-    Object.assign(params,{sender_addr: this.props.account, ai_id: this.props.aiNameEnShort});
-    params = JSON.stringify(params);
-    this.props.dispatch({
-      type: 'ai/getPrice',
-      payload: { params }
-    }); 
-    // console.log("raidenCallAI price", this.props.price);
+    console.log("raidenCallAI price", this.props);
     let price = this.props.price;
-    let title = `this request will cost ${price} ATN`;
+    let title;
+    let freeFlag = false;
+    if(price && price !== undefined && price !== '0') {
+      title = `this request will cost ${price} ATN`;
+    }
+    else if(price && price !== undefined && price === '0') {
+      title = `this AI is free to use`;
+      freeFlag = true;
+    }
+    else {
+      message.error("can't get AI's price, please check the server!");
+      return;
+    }
     // console.log(title);
-    showConfirm(title, (flag) => {
-      if(flag){
-        console.log("CallAI start uraiden: ", uraiden);
-        // console.log("defaultChannel",defaultChannel);
-        uraiden.channel = this.props.channel; 
-        if(uraiden.channel.remaining < price) {
-          message.error("Tokens not enough!")
-          return;
-        }       
-        uraiden.incrementBalanceAndSign(price, (err, sign) => {//消费token并签名
-          console.log("CallAI err: ", err);
-          if (err && err.message && err.message.includes('Insuficient funds')) {
-            console.error("CallAI err", err);
-            const current = +(err.message.match(/current ?= ?([\d.,]+)/i)[1]);
-            const required = +(err.message.match(/required ?= ?([\d.,]+)/i)[1]) - current;
-            console.log("current",current);
-            console.log("required",required);
-            console.log("remaining",current - uraiden.channel.balance);
+    if(!freeFlag) {
+      showConfirm(title, (flag) => {
+        if(flag){
+          console.log("CallAI start uraiden: ", uraiden);
+          // console.log("defaultChannel",defaultChannel);
+          uraiden.channel = this.props.channel; 
+          if(uraiden.channel.remaining < +price) {
+            message.error("Tokens not enough!")
             return;
-          } else if (err && err.message && err.message.includes('User denied message signature')) {
-            console.error(err);
-            return;
-          } else if (err) {
-            console.error(err);
-            return;
-          }
-          console.log("SIGNED!", sign);
-          let params = {};
-          // let question = document.getElementById("question").value;
-          // console.log("====question====", question);
-          console.log("uraiden balance", uraiden.channel.balance);
-          Object.assign(params,{ai_id: this.props.aiNameEnShort, account: uraiden.channel.account, receiver: uRaidenParams.receiver,  block: uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, remaining: uraiden.channel.remaining, price: parseFloat(price), aiId: this.props.aiId});
-          params = JSON.stringify(params);
-          console.log("-----params: ", params);
-          this.props.dispatch({
-            type: 'ai/deduct',
-            payload: {params}
-          })
-
+          }       
+          uraiden.incrementBalanceAndSign(price, (err, sign) => {//消费token并签名
+            console.log("CallAI err: ", err);
+            if (err && err.message && err.message.includes('Insuficient funds')) {
+              console.error("CallAI err", err);
+              const current = +(err.message.match(/current ?= ?([\d.,]+)/i)[1]);
+              const required = +(err.message.match(/required ?= ?([\d.,]+)/i)[1]) - current;
+              console.log("current",current);
+              console.log("required",required);
+              console.log("remaining",current - uraiden.channel.balance);
+              return;
+            } else if (err && err.message && err.message.includes('User denied message signature')) {
+              console.error(err);
+              return;
+            } else if (err) {
+              console.error(err);
+              return;
+            }
+            console.log("SIGNED!", sign);
+            let params = {};
+            // let question = document.getElementById("question").value;
+            // console.log("====question====", question);
+            console.log("uraiden balance", uraiden.channel.balance);
+            Object.assign(params,{ai_id: this.props.aiNameEnShort, account: uraiden.channel.account, receiver: uRaidenParams.receiver,  block: uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, remaining: uraiden.channel.remaining, price: parseFloat(price), aiId: this.props.aiId});
+            params = JSON.stringify(params);
+            console.log("-----params: ", params);
+            this.props.dispatch({
+              type: 'ai/deduct',
+              payload: {params}
+            })
+  
+            // console.log("~~~getinfo~~~");
+            // this.props.dispatch({
+            //   type: 'bill/getInfo'
+            // })
+  
+          }); 
           this.handleCallAIRaiden();
-          // console.log("~~~getinfo~~~");
-          // this.props.dispatch({
-          //   type: 'bill/getInfo'
-          // })
+        }
+      })
+    }
+    else {
+      showConfirm(title, (flag) => {
+        if(flag) {
+          this.handleCallAIRaiden();
+        }
+        
+      })
+    }
+    
 
-        }); 
-      }
-    })
   } 
 
   handleCallAI() {
+    console.log("this.props.aiNameEnShort", this.props.aiNameEnShort);
+
     this.props.dispatch({
       type: 'ai/callai',
       payload: 'default',
     })
 
     const params = {
-      aiID: this.props.data.type,
+      aiID: this.props.aiNameEnShort,
       args: {},
     }
     const formFields = document.querySelectorAll('.CallAIInputData input')
@@ -333,7 +354,7 @@ class Request extends React.Component {
     })
 
     const params = {
-      aiID: this.props.data.type,
+      aiID: this.props.aiNameEnShort,
       args: {},
     }
     const formFields = document.querySelectorAll('.CallAIInputData input')

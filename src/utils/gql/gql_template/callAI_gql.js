@@ -40,8 +40,8 @@ export const GETAIDETAILS_GQL = `query  getAiDetailsFunc($id: Int!) {
                                               }
                                           }`;
 
-export const GETAIINFO_GQL = `query  getAiInfoFunc($params: String!) {
-                                getAiInfo(params: $params) {
+export const GETAILISTINFO_GQL = `query  getAiListInfoFunc($params: String!) {
+                                  getAiListInfo(params: $params) {
                                           code
                                           type
                                           content

@@ -27,6 +27,10 @@ export default {
   subscriptions: {
     setup({ history, dispatch }) {
       // 监听 history 变化，当进入 `/` 时触发 `load` action
+      if(!window.web3 || window.web3 === undefined) {
+        message.error("Please install metamask extension first and unlock test account");
+        return;
+      }
       return history.listen(({ pathname }) => {
         if (pathname === '/list') {
           dispatch({ type: 'load' });
@@ -49,13 +53,14 @@ export default {
 
           dispatch({
             type: 'ai/getChannel',
-            payload: { params : JSON.stringify({account: "0x47d1ba802dca4c88871dc594249905c42b7d21b7", aiId: +aiId}) },
+            payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
           })
 
           dispatch({
-            type: 'ai/getAiInfo',
+            type: 'ai/getAiListInfo',
             payload: { params: JSON.stringify({aiId: +aiId}) }
           })
+
         }
       });
     }

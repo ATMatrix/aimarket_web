@@ -7,7 +7,7 @@
 import { routerRedux } from 'dva/router';
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {CALLAI_GQL, GETAIDETAILS_GQL, GETCHANNEL_GQL, OPENCHANNEL_GQL, TOPUPCHANNEL_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, GETAIINFO_GQL, DEDUCT_GQL, SETCHANNEL_GQL} from '../utils/gql/gql_template/index';
+import {CALLAI_GQL, GETAIDETAILS_GQL, GETCHANNEL_GQL, OPENCHANNEL_GQL, TOPUPCHANNEL_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, GETAILISTINFO_GQL, DEDUCT_GQL, SETCHANNEL_GQL} from '../utils/gql/gql_template/index';
 import { isDate } from 'util';
 
 
@@ -28,7 +28,7 @@ export default {
     callAIBtn: false,
     topUpBtn: false,
     closeChannelBtn: false,
-    price: '1',
+    price: '',
     aiNameEnShort: '',
     raidenRequesting: false,
   },
@@ -130,6 +130,7 @@ export default {
     },
 
     savePrice(state, { payload: { price } }) {
+      console.log("savePrice price", price);
       return { ...state, price };
     },
 
@@ -388,6 +389,7 @@ export default {
         console.log(payload);
         const result = yield call(commonService.service, gqlBody_builder(GETPRICE_GQL, payload));
         let price = result.data.getPrice.content;
+        console.log("getPrice", price);
         yield put({
           type: 'savePrice',
           payload: {price}
@@ -395,21 +397,30 @@ export default {
         console.log("ai get price result", result); 
     },
 
-    * getAiInfo ({ payload }, { put, call }) {
-        console.log("getAiInfo payload", payload);
-        const result = yield call(commonService.service, gqlBody_builder(GETAIINFO_GQL, payload));
-        console.log("getAiInfo result", result);
-        if(result && result.data && result.data.getAiInfo && result.data.getAiInfo.content) {
-          let aiNameEnShort = JSON.parse(result.data.getAiInfo.content)[0].AI_NAME_EN_SHORT;
+    * getAiListInfo ({ payload }, { put, call }) {
+        console.log("getAiListInfo payload", payload);
+        const result = yield call(commonService.service, gqlBody_builder(GETAILISTINFO_GQL, payload));
+        console.log("getAiListInfo result", result);
+        if(result && result.data && result.data.getAiListInfo && result.data.getAiListInfo.content) {
+          let aiNameEnShort = JSON.parse(result.data.getAiListInfo.content)[0].AI_NAME_EN_SHORT;
           console.log("aiNameEnShort", aiNameEnShort);
           yield put ({
             type: 'saveAiNameEnShort',
             payload: {aiNameEnShort}
           })
-          return result.data.getAiInfo.content;
+
+          let params = {};
+          Object.assign(params,{ai_id: aiNameEnShort, sender_addr: web3.eth.accounts[0]});
+          params = JSON.stringify(params);
+          yield put({
+            type: 'getPrice',
+            payload: { params }
+          }); 
+
+          return result.data.getAiListInfo.content;
         }
         else {
-          console.log("getAiInfo failed");
+          console.log("getAiListInfo failed");
         }
 
     },

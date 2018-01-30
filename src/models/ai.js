@@ -410,7 +410,7 @@ export default {
           })
 
           let params = {};
-          Object.assign(params,{ai_id: aiNameEnShort, sender_addr: web3.eth.accounts[0]});
+          Object.assign(params,{ai_id: aiNameEnShort, sender_addr: "0x47d1ba802dca4c88871dc594249905c42b7d21b7"});
           params = JSON.stringify(params);
           yield put({
             type: 'getPrice',

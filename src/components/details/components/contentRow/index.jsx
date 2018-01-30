@@ -376,7 +376,7 @@ class Request extends React.Component {
   render() {
 
     const data = this.props.data;
-    console.log("this.props.raidenRequesting", this.props.raidenRequesting);
+    // console.log("this.props.raidenRequesting", this.props.raidenRequesting);
     //table's data need an array
     // console.log("========this.props====", this.props.openChannelBtn);
     // console.log("contentRow channel", this.props.channel)
@@ -395,6 +395,7 @@ class Request extends React.Component {
       )
     })
 
+    // console.log("forms:", forms);
     return (
       <Col span={12} className={style.request} type="flex">
         <div>

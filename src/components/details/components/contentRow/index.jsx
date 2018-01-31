@@ -113,7 +113,7 @@ class Request extends React.Component {
     this.topUpChannel = this.topUpChannel.bind(this)
     this.closeChannel = this.closeChannel.bind(this)
     this.raidenCallAI = this.raidenCallAI.bind(this)
-    this.handleCallAIRaiden = this.handleCallAIRaiden.bind(this)
+    // this.handleCallAIRaiden = this.handleCallAIRaiden.bind(this)
 
     this.aiId = this.props.aiId;
     console.log("Request aiId", this.aiId);

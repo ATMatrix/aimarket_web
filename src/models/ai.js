@@ -7,7 +7,7 @@
 import { routerRedux } from 'dva/router';
 import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
-import {CALLAI_GQL, GETAIDETAILS_GQL, GETCHANNEL_GQL, OPENCHANNEL_GQL, TOPUPCHANNEL_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, GETAILISTINFO_GQL, DEDUCT_GQL, SETCHANNEL_GQL} from '../utils/gql/gql_template/index';
+import {CALLAI_GQL, GETAIDETAILS_GQL, GETCHANNEL_GQL, OPENCHANNEL_GQL, TOPUPCHANNEL_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, GETAILISTINFO_GQL, DEDUCT_GQL, SETCHANNEL_GQL, TRANSFER_GQL} from '../utils/gql/gql_template/index';
 import { isDate } from 'util';
 
 
@@ -429,23 +429,32 @@ export default {
       console.log("ai deduct payload: ", payload);
       const result = yield call(commonService.service, gqlBody_builder(DEDUCT_GQL, payload));
       console.log("00000",result);
-      if(result && result.data && result.data.deduct && result.data.deduct.content) {
+      if(result && result.data && result.data.deduct && result.data.deduct.type) {
 
-        let isDeduct = result.data.deduct.content;
+        let isDeduct = result.data.deduct.type;
         console.log("isDeduct ", isDeduct);
-        if(isDeduct === 'true') {
+        let content = '';
+        if(result.data.deduct.content)content = result.data.deduct.content;
+        console.log("content", content);
+
+        if(isDeduct === 'deduct') {
           let temp = JSON.parse(payload.params);
           console.log("deduct temp", temp)
           let params = {}
           Object.assign(params, {balance: temp.balance + temp.price, remaining: temp.remaining - temp.price, block: temp.block});
           params = JSON.stringify(params);
+          console.log("setChannel, params", params);
           const result = yield call(commonService.service, gqlBody_builder(SETCHANNEL_GQL, {params}));
           console.log("set channel result", result);
 
-          
           yield put({
             type: 'getChannel',
             payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +temp.aiId}) },
+          })
+
+          yield put({
+            type: 'saveCallAIResult',
+            payload: JSON.stringify(content, null ,2)
           })
         }
         else {
@@ -457,6 +466,7 @@ export default {
         console.log("deduct failed");
       }
     },
+
 
   },
 }

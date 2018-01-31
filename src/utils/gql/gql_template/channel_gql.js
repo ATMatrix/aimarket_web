@@ -62,3 +62,11 @@ export const SETCHANNEL_GQL = `query  setChannelFunc($params: String!) {
                                               content
                                             }
                                         }`;                                       
+
+export const TRANSFER_GQL = `query  transferFunc($params: String!) {
+                                      transfer(params:$params) {
+                                            code
+                                            type
+                                            content
+                                          }
+                                      }`;                                        

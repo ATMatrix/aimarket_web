@@ -289,7 +289,15 @@ class Request extends React.Component {
             // let question = document.getElementById("question").value;
             // console.log("====question====", question);
             console.log("uraiden balance", uraiden.channel.balance);
-            Object.assign(params,{ai_id: this.props.aiNameEnShort, account: uraiden.channel.account, receiver: uRaidenParams.receiver,  block: uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, remaining: uraiden.channel.remaining, price: parseFloat(price), aiId: this.props.aiId});
+
+            let tempParms = {input: {},};
+            const formFields = document.querySelectorAll('.CallAIInputData input')
+            for (let i = 0; i < formFields.length; i++) {
+              const field = formFields[i]
+              tempParms.input[field.name] = field.value
+            }
+
+            Object.assign(params,{input: tempParms.input, ai_id: this.props.aiNameEnShort, account: uraiden.channel.account, receiver: uRaidenParams.receiver,  block: uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, remaining: uraiden.channel.remaining, price: parseFloat(price), aiId: this.props.aiId});
             params = JSON.stringify(params);
             console.log("-----params: ", params);
             this.props.dispatch({
@@ -297,20 +305,29 @@ class Request extends React.Component {
               payload: {params}
             })
   
-            // console.log("~~~getinfo~~~");
-            // this.props.dispatch({
-            //   type: 'bill/getInfo'
-            // })
-  
+
           }); 
-          this.handleCallAIRaiden();
         }
       })
     }
     else {
       showConfirm(title, (flag) => {
         if(flag) {
-          this.handleCallAIRaiden();
+          let sign = "free";
+          let params = {};
+          let tempParms = {input: {},};
+            const formFields = document.querySelectorAll('.CallAIInputData input')
+            for (let i = 0; i < formFields.length; i++) {
+              const field = formFields[i]
+              tempParms.input[field.name] = field.value
+            }
+          Object.assign(params,{input: tempParms.input, ai_id: this.props.aiNameEnShort,  balance_signature: sign, aiId: this.props.aiId});
+          params = JSON.stringify(params);
+          console.log("-----params: ", params);
+          this.props.dispatch({
+            type: 'ai/deduct',
+            payload: {params}
+          })
         }
         
       })
@@ -347,31 +364,45 @@ class Request extends React.Component {
     socket.emit('callAI', params)
   }
 
-  handleCallAIRaiden() {
-    this.props.dispatch({
-      type: 'ai/callai',
-      payload: 'raiden',
-    })
+  // handleCallAIRaiden(sign) {
+  //   this.props.dispatch({
+  //     type: 'ai/callai',
+  //     payload: 'raiden',
+  //   })
 
-    const params = {
-      aiID: this.props.aiNameEnShort,
-      args: {},
-    }
-    const formFields = document.querySelectorAll('.CallAIInputData input')
-    for (let i = 0; i < formFields.length; i++) {
-      const field = formFields[i]
-      params.args[field.name] = field.value
-    }
+  //   let params = {input: {},};
+  //   const formFields = document.querySelectorAll('.CallAIInputData input')
+  //   for (let i = 0; i < formFields.length; i++) {
+  //     const field = formFields[i]
+  //     params.input[field.name] = field.value
+  //   }
+  //   Object.assign(params,{ai_id: this.props.aiNameEnShort, input: params.input, sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(this.props.price)});
+  //   params = JSON.stringify(params);
+  //   console.log("-----params: ", params);
+  //   this.props.dispatch({
+  //     type: 'ai/transfer',
+  //     payload: {params}
+  //   })
 
-    const socket = newSocket()
-    socket.on('message', (msg) => {
-      this.props.dispatch({
-        type: 'ai/nextStep',
-        payload: msg,
-      })
-    })
-    socket.emit('callAI', params)
-  }
+  //   // const params = {
+  //   //   aiID: this.props.aiNameEnShort,
+  //   //   args: {},
+  //   // }
+  //   // const formFields = document.querySelectorAll('.CallAIInputData input')
+  //   // for (let i = 0; i < formFields.length; i++) {
+  //   //   const field = formFields[i]
+  //   //   params.args[field.name] = field.value
+  //   // }
+
+  //   // const socket = newSocket()
+  //   // socket.on('message', (msg) => {
+  //   //   this.props.dispatch({
+  //   //     type: 'ai/nextStep',
+  //   //     payload: msg,
+  //   //   })
+  //   // })
+  //   // socket.emit('callAI', params)
+  // }
 
   render() {
 

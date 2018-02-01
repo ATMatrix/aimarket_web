@@ -52,13 +52,14 @@ export default {
             payload: { params: JSON.stringify({aiId: +aiId}) }
           })
 
-          // if(!window.web3 || window.web3 === undefined) {
-          //   message.error("Please install metamask extension first and unlock test account");
-          //   return;
-          // }
+          if(!window.web3 || window.web3 === undefined) {
+            message.error("Please install metamask extension first and unlock test account");
+            return;
+          }
+          // console.log(" web3.eth.accounts[0]",  web3.eth.accounts[0]);
           dispatch({
             type: 'ai/getChannel',
-            payload: { params : JSON.stringify({account: "0x47d1ba802dca4c88871dc594249905c42b7d21b7", aiId: +aiId}) },
+            payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
           })
 
         }

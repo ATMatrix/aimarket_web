@@ -141,8 +141,11 @@ class Request extends React.Component {
     const deposit = document
     .getElementById("depositAmount")
     .value;
-    if (deposit <= 0) 
+    if (deposit <= 0) {
+      message.error("Please set deposit number, must > 0");
       return;
+    }
+      
     // console.log(web3.eth.accounts);
 
     const account = web3.eth.accounts[0];

@@ -301,7 +301,10 @@ export default {
         if(result && result.data && result.data.topUpChannel && result.data.topUpChannel.content) {
           console.log("topup channel success!");
           let aiId = JSON.parse(payload.params).aiId;
-
+          if(!window.web3 || window.web3 === undefined) {
+            message.error("Please install metamask extension first and unlock test account");
+            return;
+          }
           yield put({
             type: 'ai/getChannel',
             payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
@@ -327,7 +330,10 @@ export default {
 
           console.log("close channel success!");
           let aiId = JSON.parse(payload.params).aiId;
-
+          if(!window.web3 || window.web3 === undefined) {
+            message.error("Please install metamask extension first and unlock test account");
+            return;
+          }
           yield put({
             type: 'ai/getChannel',
             payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
@@ -409,13 +415,17 @@ export default {
             payload: {aiNameEnShort}
           })
 
-          let params = {};
-          Object.assign(params,{ai_id: aiNameEnShort, sender_addr: "0x47d1ba802dca4c88871dc594249905c42b7d21b7"});
-          params = JSON.stringify(params);
-          yield put({
-            type: 'getPrice',
-            payload: { params }
-          }); 
+          if(window.web3 && window.web3 !== undefined) {
+            message.error("Please install metamask extension first and unlock test account");
+            let params = {};
+            Object.assign(params,{ai_id: aiNameEnShort, sender_addr: web3.eth.accounts[0]})
+            params = JSON.stringify(params);
+            yield put({
+              type: 'getPrice',
+              payload: { params }
+            }); 
+          }
+          
 
           return result.data.getAiListInfo.content;
         }
@@ -447,6 +457,10 @@ export default {
           const result = yield call(commonService.service, gqlBody_builder(SETCHANNEL_GQL, {params}));
           console.log("set channel result", result);
 
+          if(!window.web3 || window.web3 === undefined) {
+            message.error("Please install metamask extension first and unlock test account");
+            return;
+          }
           yield put({
             type: 'getChannel',
             payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +temp.aiId}) },

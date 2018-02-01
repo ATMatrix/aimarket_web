@@ -9,6 +9,8 @@ import * as commonService from '../services/common_service';
 import {gqlBody_builder} from '../utils/gql/gqlBody_builder';
 import {CALLAI_GQL, GETAIDETAILS_GQL, GETCHANNEL_GQL, OPENCHANNEL_GQL, TOPUPCHANNEL_GQL, CLOSECHANNEL_GQL, GETPRICE_GQL, GETAILISTINFO_GQL, DEDUCT_GQL, SETCHANNEL_GQL, TRANSFER_GQL} from '../utils/gql/gql_template/index';
 import { isDate } from 'util';
+import { message, Modal } from 'antd'
+
 
 
 export default {

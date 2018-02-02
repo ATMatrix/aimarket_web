@@ -418,7 +418,6 @@ export default {
           })
 
           if(window.web3 && window.web3 !== undefined) {
-            message.error("Please install metamask extension first and unlock test account");
             let params = {};
             Object.assign(params,{ai_id: aiNameEnShort, sender_addr: web3.eth.accounts[0]})
             params = JSON.stringify(params);
@@ -426,6 +425,9 @@ export default {
               type: 'getPrice',
               payload: { params }
             }); 
+          }
+          else {
+            message.error("Please install metamask extension first and unlock test account");
           }
           
 

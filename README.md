@@ -10,14 +10,6 @@ The following instructions overview the process of getting the code, building it
 brew install node
 ```
 
-## Docker
-
-```
-docker build -f Dockerfile -t aimarket_web .
-
-docker run -it --rm --name aimarket_web -d -p 8000:8000 aimarket_web
-```
-
 ## Installing
 
 Clone project

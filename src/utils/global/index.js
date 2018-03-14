@@ -15,11 +15,11 @@ export const proxy = new events.EventEmitter();
 // const SOCKET_URL = "wss://demo.atn.io/";
 // global.ServerURL = 'https://demo.atn.io/graphql/';
 //development
-// const SOCKET_URL = "ws://118.31.18.101:4000/";
-// global.ServerURL = 'http://118.31.18.101:4000/graphql/';
+const SOCKET_URL = "ws://118.31.18.101:4000/";
+global.ServerURL = 'http://118.31.18.101:4000/graphql/';
 //locate
-const SOCKET_URL = "ws://127.0.0.1:4000/";
-global.ServerURL = 'http://127.0.0.1:4000/graphql/';
+// const SOCKET_URL = "ws://127.0.0.1:4000/";
+// global.ServerURL = 'http://127.0.0.1:4000/graphql/';
 
 global.proxyGlobal = proxy;
 
@@ -33,6 +33,7 @@ global.newSocket = () => {
 
 global.getWeb3 = () => {
   if (typeof web3 !== 'undefined') {
+    // window.web3 = new Web3(new Web3.providers.HttpProvider("http://118.31.18.101:4045"));
     window.web3 = new Web3(web3.currentProvider);
   } else {
     console.log('No web3? You should consider trying MetaMask!')
@@ -70,7 +71,7 @@ function loadURaiden(json) {
     if (!window.uRaidenParams && Cookies.get("RDN-Price")) {
       window.uRaidenParams = {
         contract: Cookies.get("RDN-Contract-Address"),
-        token: Cookies.get("RDN-Token-Address"),
+        token: Cookies.get("RDN-Token-AddressRDN-Token-Address"),
         receiver: Cookies.get("RDN-Receiver-Address"),
         amount: +(Cookies.get("RDN-Price")),
       };

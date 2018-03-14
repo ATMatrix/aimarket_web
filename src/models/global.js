@@ -1,4 +1,5 @@
 'use strict';
+import { message, Modal } from 'antd'
 
 export default {
   namespace: 'global',
@@ -41,6 +42,26 @@ export default {
               id: pathname.match(regex)[1]
             }
           });
+          let aiId = pathname.match(regex)[1];
+          dispatch({
+            type: 'ai/saveAIId',
+            payload: {aiId}
+          })
+          dispatch({
+            type: 'ai/getAiListInfo',
+            payload: { params: JSON.stringify({aiId: +aiId}) }
+          })
+
+          if(!window.web3 || window.web3 === undefined) {
+            message.error("Please install metamask extension first and unlock test account");
+            return;
+          }
+          // console.log(" web3.eth.accounts[0]",  web3.eth.accounts[0]);
+          dispatch({
+            type: 'ai/getChannel',
+            payload: { params : JSON.stringify({account: web3.eth.accounts[0], aiId: +aiId}) },
+          })
+
         }
       });
     }

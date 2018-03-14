@@ -25,14 +25,26 @@ import {HomeHeader} from '../Header/HeaderDark'
 const {Content} = Layout;
 import {Link} from 'dva/router';
 import styles from './Billing.css';
-import { remove } from '../../services/users';
+import {remove} from '../../services/users';
+import { query } from '../../services/example';
 
-function Billing({dispatch, accounts, balance, channels, price, useMM}) {
+function Billing({
+  dispatch,
+  accounts,
+  balance,
+  channels,
+  price,
+  defaultChannel,
+  xiaoiResult,
+  windowWidth,
+  windowHeight,
+  messages
+}) {
 
   const TOPUP = 'TopUP';
   const CLOSE = 'Close';
-  const FORGET = 'Forget';
-
+  const SETTLE = 'Settle';
+  const DEFAULT = 'Set Default';
   const confirm = Modal.confirm;
 
   const showConfirm = (title, callback) => {
@@ -46,80 +58,92 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
       onCancel() {
         console.log('Cancel');
         callback(false);
-      },
+      }
     });
   }
 
-  const Actions = ({ item, key, keyPath }) => {
+  const Actions = ({item, key, keyPath}) => {
     console.log(key)
-    if (key.indexOf(TOPUP) >= 0){
-      let index = key.replace(TOPUP,'');
+    if (key.indexOf(TOPUP) >= 0) {
+      let index = key.replace(TOPUP, '');
       let channel = channels[index];
-      TopUp(channel); 
+      TopUp(channel);
     } else if (key.indexOf(CLOSE) >= 0) {
-      let index = key.replace(CLOSE,'');
+      let index = key.replace(CLOSE, '');
       let channel = channels[index];
-      Close(channel); 
-    } else if (key.indexOf(FORGET) >= 0) {
-      let index = key.replace(FORGET,'');
+      Close(channel);
+    } else if (key.indexOf(SETTLE) >= 0) {
+      let index = key.replace(SETTLE, '');
       let channel = channels[index];
-      Forget(channel); 
+      Settle(channel);
+    } else if (key.indexOf(DEFAULT) >= 0) {
+      let index = key.replace(DEFAULT, '');
+      let channel = channels[index];
+      SetDefault(channel);
     } else {
       console.log("Unknown key");
       message.error("Unknown key");
     }
   }
 
+  const SetDefault = (channel) => {
+    defaultChannel = channel;
+    dispatch({
+      type: 'bill/saveDefaultChannel',
+      payload: {defaultChannel}
+    })
+    uraiden.setChannel(defaultChannel);
+    console.log(defaultChannel);
+  }
+
   const TopUp = (channel) => {
     const deposit = document
       .getElementById("depositAmount")
       .value;
-    if (deposit <= 0)
+    if (deposit <= 0) 
       return;
-    uraiden.topUpChannel(deposit, (err, deposit) => {
-      if (err) {
-        console.error(err);
-        message.error("An error ocurred trying to deposit to channel", err);
-      }
-      console.log("deposit",deposit);
-      message.info(deposit);
-      uraiden.channel.deposit = deposit;
-      uraiden.channel.remaining = deposit - uraiden.channel.balance;
-      let channels = [uraiden.channel];
-      console.log(channels)
-      dispatch({
-        type: 'bill/saveChannels',
-        payload: {channels}
-      })
-    });
-  }
-
-  const Forget = (channel) => {
-    let title = `Do you Want to ${FORGET} the channel?`;
-    showConfirm(title, (flag) => {
-      if(flag){
-        Cookies.delete("RDN-Sender-Address");
-        Cookies.delete("RDN-Open-Block");
-        Cookies.delete("RDN-Sender-Balance");
-        Cookies.delete("RDN-Balance-Signature");
-        Cookies.delete("RDN-Nonexisting-Channel");
-        uraiden.forgetStoredChannel();
-        let pos = channels.indexOf(channel);
-        console.log("pos",pos)
-        let removed =  channels.splice(pos,1);
-        console.log("removed",removed);
+    
+      uraiden.topUpChannel(deposit, (err, deposit) => {
+        if (err) {
+          console.error(err);
+          message.error("An error ocurred trying to deposit to channel", err);
+        }
+        console.log("deposit",deposit);
+        message.info(deposit);
+        uraiden.channel.deposit = deposit;
+        uraiden.channel.remaining = deposit - uraiden.channel.balance;
+        let channels = [uraiden.channel];
+        console.log(channels)
         dispatch({
           type: 'bill/saveChannels',
           payload: {channels}
         })
+      });
+
+  }
+
+  const Settle = (channel) => {
+    let title = `Do you Want to ${SETTLE} the channel?`;
+    showConfirm(title, (flag) => {
+      if (flag) {
+        let params = {};
+        Object.assign(params, {
+          receiver_addr: channel.receiver,
+          block_number: channel.block
+        });
+        params = JSON.stringify(params);
+        dispatch({type: 'bill/settleChannel', payload: {
+            params
+          }});
       }
     });
   }
 
   const Close = (channel) => {
-    let title = `Do you Want to ${CLOSE} the channel?`;    
+    uraiden.setChannel(channel)
+    let title = `Do you Want to ${CLOSE} the channel?`;
     showConfirm(title, (flag) => {
-      if(flag){
+      if (flag) {
         uraiden.signBalance(null, (err, sign) => {
           if (err) {
             console.log("An error occurred trying to get balance signature", err);
@@ -127,7 +151,7 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
             return ;
           }
           let params = {};
-          Object.assign(params,{sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance: uraiden.channel.balance});
+          Object.assign(params,{receiver_addr:uraiden.channel.account, block_number:uraiden.channel.block, balance: uraiden.channel.balance, key: channel.key});
           params = JSON.stringify(params);
           dispatch({
             type: 'bill/closeChannel',
@@ -150,47 +174,58 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
         console.error(err);
         message.error("An error ocurred trying to open a channel", err);
       }
-      Cookies.delete("RDN-Nonexisting-Channel");
-      console.log(Cookies)      
-      Object.assign(channel, {state: "opened", deposit: deposit, remaining: 0, key:'0'});                              
-      let channels = [channel];
-      console.log(channels)
+      // Cookies.delete("RDN-Nonexisting-Channel");
+      // console.log(Cookies)
+      console.log("======Deposit channel: ======", channel);
+      let newKey = 0; 
+      console.log(">>>>channels: ", channels);
+      if(channels !== null && channels !== undefined)
+        newKey = channels.length;
+      // let temp = channels;
+      Object.assign(channel, {sender_address: channel.account, open_block: channel.block, key: newKey, state: "open", deposit: deposit, remaining: parseFloat(deposit) - channel.balance});    
+      // console.log(">>>>>>>>channel: ", channel);                          
+      // temp.push(channel);
+      // console.log("------Deposit channels: ------", temp)
+      // channel = JSON.stringify(channel)
+      // console.log("~~~~~~channel: ", channel);
       dispatch({
-        type: 'bill/saveChannels',
-        payload: {channels}
+        type: 'bill/addChannel',
+        payload: {
+          channel
+        }
       })
     });
   }
 
-  const Mint = () => {
-    const account = accounts[0];
-    uraiden.buyToken(account, (err, res) => {
-      if (err) {
-        console.error(err);
-        message.error("An error ocurred trying to buy tokens", err);
-      }
-      console.info(res);
-      uraiden.token.balanceOf.call(account, (err, balance) => {
-        if(err) {
-          console.error(err);
-        }
-        balance = uraiden.bal2num(balance);
-        console.log(balance)
-        dispatch({
-          type: 'bill/saveBalance',
-          payload: {balance}
-        })
-      });
-    });
-  }
+  // const Deposit = () => {
+  //   const deposit = document
+  //     .getElementById("depositAmount")
+  //     .value;
+  //   if (deposit <= 0) 
+  //     return;
+  //   const account = accounts[0];
+  //   let params = {};
+  //   Object.assign(params, {
+  //     receiver_addr: uRaidenParams.receiver,
+  //     deposit
+  //   });
+  //   params = JSON.stringify(params);
+  //   dispatch({type: 'bill/openChannel', payload: {
+  //       params
+  //     }});
+  // }
 
   const CallAI = () => {
-    let title = `this request will cost ${price} ATT`;
+    let title = `this request will cost ${price} ATN`;
     showConfirm(title, (flag) => {
       if(flag){
-        uraiden.incrementBalanceAndSign(uRaidenParams.amount, (err, sign) => {//消费token并签名
+        console.log("CallAI start uraiden: ", uraiden);
+        console.log("defaultChannel",defaultChannel);
+        uraiden.channel = defaultChannel;        
+        uraiden.incrementBalanceAndSign(price, (err, sign) => {//消费token并签名
+          console.log("CallAI err: ", err);
           if (err && err.message && err.message.includes('Insuficient funds')) {
-            console.error(err);
+            console.error("CallAI err", err);
             const current = +(err.message.match(/current ?= ?([\d.,]+)/i)[1]);
             const required = +(err.message.match(/required ?= ?([\d.,]+)/i)[1]) - current;
             console.log("current",current);
@@ -205,30 +240,37 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
             return;
           }
           console.log("SIGNED!", sign);
-          Cookies.set("RDN-Sender-Address", uraiden.channel.account);
-          Cookies.set("RDN-Open-Block", uraiden.channel.block);
-          Cookies.set("RDN-Sender-Balance", uraiden.channel.balance);
-          Cookies.set("RDN-Balance-Signature", sign);
-          Cookies.delete("RDN-Nonexisting-Channel");
-          let remaining = uraiden.channel.deposit - uraiden.channel.balance;
-          Object.assign(uraiden.channel,{remaining});
-          let channels = [uraiden.channel];
-          console.log(channels)
-          dispatch({
-            type: 'bill/saveChannels',
-            payload: {channels}
-          })
           let params = {};
-          Object.assign(params,{ai_id:"XIAO_I", input:"你好！", sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance});
+          let question = document.getElementById("question").value;
+          console.log("====question====", question);
+
+          let value = <tr><td><span className={styles.input_style}><span className={styles.name_style}>&nbsp;&nbsp;&nbsp;<img className={styles.image_style} src={require('../../assets/images/left.jpeg')}/></span>&nbsp;&nbsp;&nbsp;{question}</span></td><br/></tr>;
+          console.log("value: ", value);
+          dispatch({
+            type: 'bill/setMessages',
+            payload: value
+          })
+
+          Object.assign(params,{ai_id:"xiaoi", input:question, sender_addr:uraiden.channel.account, opening_block:uraiden.channel.block, balance_signature: sign, balance: uraiden.channel.balance, price: parseFloat(price)});
           params = JSON.stringify(params);
+          console.log("-----params: ", params);
           dispatch({
             type: 'bill/transfer',
             payload: {params}
           })
+
+
+          console.log("~~~getinfo~~~");
+          dispatch({
+            type: 'bill/getInfo'
+          })
+
+          document.getElementById("question").value = "";
         }); 
       }
     });
   }
+
 
   const attribute = {
     bordered: true,
@@ -241,15 +283,18 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
 
   const menu = (record) => (
     <Menu onClick={Actions.bind()}>
+      <Menu.Item key={record.key + DEFAULT}>
+        <a >Set Default</a>
+      </Menu.Item>
       <Menu.Item key={record.key + TOPUP}>
         <a >TopUP</a>
       </Menu.Item>
       <Menu.Item key={record.key + CLOSE}>
         <a >Close</a>
       </Menu.Item>
-      <Menu.Item key={record.key + FORGET}>
-        <a >Forget</a>
-      </Menu.Item>
+      {/* <Menu.Item key={record.key + SETTLE}>
+        <a >Settle</a>
+      </Menu.Item> */}
     </Menu>
   );
 
@@ -259,8 +304,7 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
       dataIndex: 'key',
       key: 'key',
       width: 100
-    },
-    {
+    }, {
       title: 'Account',
       dataIndex: 'account',
       key: 'account',
@@ -270,17 +314,17 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
       dataIndex: 'receiver',
       key: 'receiver',
       width: 200
-    },{
+    }, {
       title: 'Deposit',
       dataIndex: 'deposit',
       key: 'deposit',
-      width: 100  
-    },{
+      width: 100
+    }, {
       title: 'Balance',
       dataIndex: 'balance',
       key: 'balance',
       width: 100
-    },{
+    }, {
       title: 'Remaining',
       dataIndex: 'remaining',
       key: 'remaining',
@@ -299,9 +343,9 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
       title: 'Action',
       key: 'actions',
       width: 100,
-      render:(text, record) => (
+      render: (text, record) => (
         <Dropdown overlay={menu(record)}>
-          <a className="ant-dropdown-link" >
+          <a className="ant-dropdown-link">
             Hover me
             <Icon type="down"/>
           </a>
@@ -310,7 +354,6 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
     }
   ];
 
- 
   return (
     <Layout className={styles.layout_size}>
       <HomeHeader/>
@@ -345,13 +388,8 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
                   placeholder=""
                   disabled={true}
                   value={balance}/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span className={styles.ether}>ATT</span>
+                <span className={styles.ether}>ATN</span>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button
-                  type={"primary"}
-                  onClick={Mint.bind()}
-                  className={styles.button_style}
-                  id="mintButton">Mint</Button>
               </p>
             </Card>
             <br/>
@@ -367,29 +405,54 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
                 </span>
               </p>
               <br/>
+
               <InputNumber
-                className={styles.input}
+                style={{width: 500, height: 34}}
                 id="depositAmount"
                 min={0}
                 max={100000000}
                 defaultValue={0}/>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button
-                type={"primary"}
-                onClick={Deposit.bind()}
-                className={styles.button_style}
-                id="depositButton">Deposit</Button>
+              type={"primary"}
+              onClick={Deposit.bind()}
+              className={styles.button_style}
+              id="depositButton">Deposit</Button>
 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button
-                type={"primary"}
-                onClick={CallAI.bind()}
-                className={styles.button_style}
-                id="depositButton">CallXiaoi</Button>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <p>
+                <span className={styles.icon}>
+                  <Icon type="global"/>&nbsp;&nbsp;CallXiaoI
+                </span>
+              </p>
+              <br/>
+              <br/>
+              <div>
+              <Content className={styles.table_style}>
+                <table className={styles.table} >
+                  {messages}
+                </table>
+              
+                <div className={styles.callai_style}>
+                  <Input id="question" style={{width: 690, height: 34}}  />
+                  
+                    <Button type={"primary"} id="sendButton" onClick={CallAI.bind()} style={{width: 60, height: 34}}>Send</Button>
+                </div>
+              </Content>
+            </div>
+
+             
             </Card>
             <br/>
             <br/>
+
+
+
           </div>
+
         </Content>
       </Layout>
     </Layout>
@@ -397,8 +460,9 @@ function Billing({dispatch, accounts, balance, channels, price, useMM}) {
 }
 
 function mapStateToProps(state) {
-  const {accounts, balance, channels, price, useMM} = state.bill;
-  return {accounts, balance, channels, price, useMM}
+  const {accounts, balance, channels, price, defaultChannel, xiaoiResult, messages} = state.bill;
+  const {windowWidth, windowHeight} = state.windowSize;
+  return {accounts, balance, channels, price, defaultChannel, xiaoiResult, windowWidth, windowHeight, messages}
 }
 
 export default connect(mapStateToProps)(Billing);
